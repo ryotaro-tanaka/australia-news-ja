@@ -1,12 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-
-export interface NewsItem {
-  title: string;
-  link: string;
-  firstLine: string;
-  title_ja: string;
-  firstLine_ja: string;
-}
+import { NewsItem } from '../types/news';
 
 interface NewsState {
   items: NewsItem[];
