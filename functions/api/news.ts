@@ -1,15 +1,25 @@
-interface Env {
-  AI: Ai;
+async function translateText(text: string): Promise<string> {
+  if (!text) return "";
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(text)}`;
+    const response = await fetch(url);
+    const data = await response.json() as any;
+    // Google Translate のレスポンス形式: [[["訳文", "原文", ...]]]
+    return data[0].map((item: any) => item[0]).join("") || text;
+  } catch (e) {
+    console.error("Translation error:", e);
+    return text;
+  }
 }
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export const onRequest: PagesFunction = async (context) => {
   const RSS_URL = "https://www.abc.net.au/news/feed/2942460/rss.xml";
 
   try {
     const response = await fetch(RSS_URL);
     const xml = await response.text();
 
-    // 簡易的なパース（MVPのため。後ほどより堅牢なパーサーを検討）
+    // 簡易的なパース
     const items = xml.match(/<item>([\s\S]*?)<\/item>/g) || [];
     
     const rawNews = items.slice(0, 10).map(item => {
@@ -24,29 +34,19 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       return { title, link, firstLine };
     });
 
-    // 翻訳処理（バッチ処理が理想だが、まずはループで。Workers AI の無料枠内で動作）
+    // Google Translate で翻訳
     const translatedNews = await Promise.all(
       rawNews.map(async (news) => {
-        try {
-          const translationTitle = await context.env.AI.run("@cf/meta/m2m100-1.2b", {
-            text: news.title,
-            source_lang: "english",
-            target_lang: "japanese",
-          });
-          const translationLine = await context.env.AI.run("@cf/meta/m2m100-1.2b", {
-            text: news.firstLine,
-            source_lang: "english",
-            target_lang: "japanese",
-          });
+        const [titleJa, lineJa] = await Promise.all([
+          translateText(news.title),
+          translateText(news.firstLine)
+        ]);
 
-          return {
-            ...news,
-            title_ja: translationTitle.translated_text || news.title,
-            firstLine_ja: translationLine.translated_text || news.firstLine,
-          };
-        } catch (e) {
-          return { ...news, title_ja: news.title, firstLine_ja: news.firstLine };
-        }
+        return {
+          ...news,
+          title_ja: titleJa,
+          firstLine_ja: lineJa,
+        };
       })
     );
 

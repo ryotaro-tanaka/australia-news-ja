@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { NewsItem } from '../types/news';
+import type { NewsItem } from '../types/news';
 
 interface NewsState {
   items: NewsItem[];
