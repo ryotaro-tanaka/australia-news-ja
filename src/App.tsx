@@ -8,7 +8,6 @@ function App() {
       <div className="container">
         <header>
           <h1>豪州ニュース</h1>
-          <p className="subtitle">ABC News (日本語訳)</p>
         </header>
 
         <NewsList />

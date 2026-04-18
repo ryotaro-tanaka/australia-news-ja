@@ -36,13 +36,13 @@ header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 1rem 0;
-  border-bottom: 2px solid #005eb8; /* ABCっぽい青色 */
+  border-bottom: 2px solid #052962; /* The Guardianっぽい濃い紺色 */
 }
 
 header h1 {
   margin: 0;
   font-size: 1.8rem;
-  color: #005eb8;
+  color: #052962;
 }
 
 .subtitle {

@@ -11,7 +11,7 @@
 ### 技術スタック
 - **Frontend**: Vite + React (TypeScript)
 - **Backend**: Cloudflare Pages Functions
-- **AI**: Workers AI (`@cf/meta/m2m100-1.2b`) による自動翻訳
+- **translate**: Google翻訳API
 - **Styling**: Vanilla CSS (モバイルフレンドリー重視)
 
 ### 優先事項
