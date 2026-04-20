@@ -14,8 +14,8 @@ async function translateText(text: string): Promise<string> {
 function cleanHtml(html: string): string {
   if (!html) return "";
   return html
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1') // CDATAの中身を取り出す
-    .replace(/<[^>]*>?/gm, '') // 残ったタグを削除
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/<[^>]*>?/gm, '')
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&quot;/g, '"')
@@ -34,76 +34,121 @@ function extractTagContent(itemXml: string, tagName: string): string {
   return "";
 }
 
+function extractThumbnail(itemXml: string): string {
+  // media:thumbnail url="..."
+  const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
+  if (thumbMatch) return thumbMatch[1];
+  
+  // media:content url="..." medium="image"
+  const contentMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["'][^>]*medium=["']image["']/i);
+  if (contentMatch) return contentMatch[1];
+
+  return "";
+}
+
 export const onRequest: PagesFunction = async (context) => {
-  // キャッシュ機能は一時的に完全に無効化
-  const RSS_URL = "https://www.theguardian.com/au/rss";
+  const cache = (caches as any).default;
+  const url = new URL(context.request.url);
+  
+  // キャッシュキーの正規化（nocacheパラメータを除去）
+  const cacheUrl = new URL(url.toString());
+  const isNoCache = cacheUrl.searchParams.has('nocache');
+  cacheUrl.searchParams.delete('nocache');
+  const cacheKey = new Request(cacheUrl.toString(), context.request);
+  
+  if (!isNoCache) {
+    try {
+      let cachedResponse = await cache.match(cacheKey);
+      if (cachedResponse) return cachedResponse;
+    } catch (e) {
+      console.warn("Cache match failed:", e);
+    }
+  }
+
+  const FEEDS = [
+    "https://www.abc.net.au/news/feed/51892/rss.xml", // Business
+    "https://www.abc.net.au/news/feed/1042/rss.xml"  // Politics
+  ];
 
   try {
-    const rssResponse = await fetch(RSS_URL, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-      }
-    });
+    const rssResponses = await Promise.all(FEEDS.map(f => fetch(f, {
+      headers: { "User-Agent": "Mozilla/5.0" }
+    })));
 
-    if (!rssResponse.ok) {
-      throw new Error(`RSS fetch failed: ${rssResponse.status} ${rssResponse.statusText}`);
+    const allItemsXml: string[] = [];
+    for (const res of rssResponses) {
+      if (!res.ok) continue;
+      const xml = await res.text();
+      const items = xml.match(/<item[^>]*>([\s\S]*?)<\/item>/gi) || [];
+      allItemsXml.push(...items);
     }
 
-    const xml = await rssResponse.text();
-
-    // アイテム抽出
-    const items = xml.match(/<item[^>]*>([\s\S]*?)<\/item>/gi) || [];
-    
-    if (items.length === 0) {
-      throw new Error("RSS items not found");
-    }
-
-    const rawNews = items.slice(0, 10).map(itemXml => {
+    const parsedItems = allItemsXml.map(itemXml => {
       const title = cleanHtml(extractTagContent(itemXml, "title"));
       const link = extractTagContent(itemXml, "link");
       const descriptionRaw = extractTagContent(itemXml, "description");
+      const pubDate = extractTagContent(itemXml, "pubDate");
+      const category = cleanHtml(extractTagContent(itemXml, "category"));
+      const thumbnail = extractThumbnail(itemXml);
       
-      const firstParagraphMatch = descriptionRaw.match(/<p>([\s\S]*?)<\/p>/i);
-      const rawFirstLine = firstParagraphMatch ? firstParagraphMatch[1] : descriptionRaw;
-      const firstLine = cleanHtml(rawFirstLine);
+      const firstLine = cleanHtml(descriptionRaw.split(/[.!?]/)[0] || "") + '.';
 
-      return { title, link, firstLine };
-    }).filter(news => news.title !== "" && news.link !== "");
+      return { 
+        title, 
+        link, 
+        firstLine, 
+        pubDate: new Date(pubDate).getTime(),
+        displayDate: pubDate,
+        category,
+        thumbnail
+      };
+    })
+    .filter(item => item.title && item.link)
+    .sort((a, b) => b.pubDate - a.pubDate) // 新しい順
+    .slice(0, 15);
 
-    if (rawNews.length === 0) {
-      throw new Error("Parsed news list is empty");
-    }
+    if (parsedItems.length === 0) throw new Error("No items parsed");
 
     // 翻訳処理
     const translatedNews = await Promise.all(
-      rawNews.map(async (news) => {
+      parsedItems.map(async (item) => {
         const [titleJa, lineJa] = await Promise.all([
-          translateText(news.title),
-          translateText(news.firstLine)
+          translateText(item.title),
+          translateText(item.firstLine)
         ]);
 
         return {
-          ...news,
+          title: item.title,
+          link: item.link,
+          firstLine: item.firstLine,
           title_ja: titleJa,
           firstLine_ja: lineJa,
+          thumbnail: item.thumbnail,
+          category: item.category,
+          pubDate: item.displayDate
         };
       })
     );
 
-    // キャッシュを一切行わずレスポンスを返す
-    return new Response(JSON.stringify(translatedNews), {
+    const resultResponse = new Response(JSON.stringify(translatedNews), {
       headers: { 
         "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "no-store, no-cache, must-revalidate"
+        "Cache-Control": "public, s-maxage=3600"
       }
     });
 
+    if (translatedNews.length > 0) {
+      try {
+        context.waitUntil(cache.put(cacheKey, resultResponse.clone()));
+      } catch (e) {
+        console.warn("Cache put failed:", e);
+      }
+    }
+
+    return resultResponse;
+
   } catch (error) {
-    console.error("Backend error:", error);
-    return new Response(JSON.stringify({ 
-      error: "Failed to fetch news",
-      details: error instanceof Error ? error.message : String(error)
-    }), {
+    return new Response(JSON.stringify({ error: "Failed to fetch news" }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
