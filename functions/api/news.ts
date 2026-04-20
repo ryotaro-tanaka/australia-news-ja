@@ -3,8 +3,8 @@ async function translateText(text: string): Promise<string> {
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(text)}`;
     const response = await fetch(url);
-    const data = await response.json() as any;
-    return data[0].map((item: any) => item[0]).join("") || text;
+    const data = await response.json() as [string[][], null, string];
+    return data[0].map((item) => item[0]).join("") || text;
   } catch (e) {
     console.error("Translation error:", e);
     return text;
@@ -53,7 +53,7 @@ function extractThumbnail(itemXml: string): string {
 }
 
 export const onRequest: PagesFunction = async (context) => {
-  const cache = (caches as any).default;
+  const cache = (caches as { default: Cache }).default;
   const url = new URL(context.request.url);
   const isNoCache = url.searchParams.has('nocache');
   const cacheUrl = new URL(url.toString());
@@ -62,7 +62,7 @@ export const onRequest: PagesFunction = async (context) => {
   
   if (!isNoCache) {
     try {
-      let cachedResponse = await cache.match(cacheKey);
+      const cachedResponse = await cache.match(cacheKey);
       if (cachedResponse) return cachedResponse;
     } catch (e) {
       console.warn("Cache match failed:", e);
@@ -74,7 +74,6 @@ export const onRequest: PagesFunction = async (context) => {
     "https://www.abc.net.au/news/feed/1042/rss.xml"  // Politics
   ];
 
-  // フィルタリング設定
   const EXCLUDED_KEYWORDS = ["music", "arts", "fiction", "book", "movie", "film", "statue", "entertainment", "culture", "festival", "sculpture", "theatre"];
   const CRITICAL_KEYWORDS = ["visa", "immigration", "inflation", "rba", "interest rate", "medicare", "housing", "rent", "permanent resid", "working holiday"];
 
@@ -102,15 +101,12 @@ export const onRequest: PagesFunction = async (context) => {
       const fullDescription = cleanHtml(descriptionRaw);
       const firstLine = fullDescription.length > 300 ? fullDescription.substring(0, 300) + "..." : fullDescription;
 
-      // フィルタリングロジック
       const lowercaseTitle = title.toLowerCase();
       const lowercaseCats = categories.map(c => c.toLowerCase());
       
-      // 最重要キーワードがタイトルに含まれる場合は無条件でパス（救済措置）
       const isCritical = CRITICAL_KEYWORDS.some(k => lowercaseTitle.includes(k));
       
       if (!isCritical) {
-        // 除外キーワードがカテゴリのいずれかに含まれる場合はスキップ
         const isExcluded = EXCLUDED_KEYWORDS.some(k => 
           lowercaseCats.some(cat => cat.includes(k)) || lowercaseTitle.includes(k)
         );
