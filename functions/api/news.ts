@@ -35,14 +35,10 @@ function extractTagContent(itemXml: string, tagName: string): string {
 }
 
 function extractThumbnail(itemXml: string): string {
-  // media:thumbnail url="..."
   const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
   if (thumbMatch) return thumbMatch[1];
-  
-  // media:content url="..." medium="image"
   const contentMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["'][^>]*medium=["']image["']/i);
   if (contentMatch) return contentMatch[1];
-
   return "";
 }
 
@@ -51,15 +47,17 @@ export const onRequest: PagesFunction = async (context) => {
   const url = new URL(context.request.url);
   
   // キャッシュキーの正規化（nocacheパラメータを除去）
+  const isNoCache = url.searchParams.has('nocache');
   const cacheUrl = new URL(url.toString());
-  const isNoCache = cacheUrl.searchParams.has('nocache');
   cacheUrl.searchParams.delete('nocache');
   const cacheKey = new Request(cacheUrl.toString(), context.request);
   
   if (!isNoCache) {
     try {
       let cachedResponse = await cache.match(cacheKey);
-      if (cachedResponse) return cachedResponse;
+      if (cachedResponse) {
+        return cachedResponse;
+      }
     } catch (e) {
       console.warn("Cache match failed:", e);
     }
@@ -104,12 +102,11 @@ export const onRequest: PagesFunction = async (context) => {
       };
     })
     .filter(item => item.title && item.link)
-    .sort((a, b) => b.pubDate - a.pubDate) // 新しい順
+    .sort((a, b) => b.pubDate - a.pubDate)
     .slice(0, 15);
 
     if (parsedItems.length === 0) throw new Error("No items parsed");
 
-    // 翻訳処理
     const translatedNews = await Promise.all(
       parsedItems.map(async (item) => {
         const [titleJa, lineJa] = await Promise.all([
@@ -130,10 +127,11 @@ export const onRequest: PagesFunction = async (context) => {
       })
     );
 
+    // 30分間キャッシュ (1800秒)
     const resultResponse = new Response(JSON.stringify(translatedNews), {
       headers: { 
         "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "public, s-maxage=3600"
+        "Cache-Control": "public, s-maxage=1800"
       }
     });
 
@@ -148,6 +146,7 @@ export const onRequest: PagesFunction = async (context) => {
     return resultResponse;
 
   } catch (error) {
+    console.error("Backend error:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch news" }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
