@@ -6,11 +6,9 @@ function App() {
   return (
     <NewsProvider>
       <div className="container">
-        <header>
-          <h1>豪州ニュース</h1>
-        </header>
-
-        <NewsList />
+        <main>
+          <NewsList />
+        </main>
 
         <footer>
           <p>&copy; 2024 豪州生活ニュース</p>
