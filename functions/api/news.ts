@@ -89,7 +89,10 @@ export const onRequest: PagesFunction = async (context) => {
       const category = cleanHtml(extractTagContent(itemXml, "category"));
       const thumbnail = extractThumbnail(itemXml);
       
-      const firstLine = cleanHtml(descriptionRaw.split(/[.!?]/)[0] || "") + '.';
+      const fullDescription = cleanHtml(descriptionRaw);
+      const firstLine = fullDescription.length > 300 
+        ? fullDescription.substring(0, 300) + "..." 
+        : fullDescription;
 
       return { 
         title, 
