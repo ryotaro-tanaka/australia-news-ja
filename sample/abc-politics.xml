@@ -1,0 +1,1683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">
+  <!-- This is a rebuild of News RSS. If you notice any issues please contact DG-NewsWeb@abc.net.au -->
+  <channel>
+    <title>ABC News</title>
+    <category>Australian Broadcasting Corporation: All content</category>
+    <link>https://www.abc.net.au</link>
+    <atom:link href="https://www.abc.net.au" rel="self" type="application/rss+xml" />
+    <description>
+    </description>
+    <language>en-AU</language>
+    <copyright>Copyright 2026, Australian Broadcasting Corporation. All Rights Reserved.</copyright>
+    <pubDate>Thu, 16 Apr 2026 18:44:15 +0000</pubDate>
+    <lastBuildDate>Thu, 16 Apr 2026 18:44:15 +0000</lastBuildDate>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <managingEditor>Newson1ine@abc.net.au (ABC News)</managingEditor>
+    <image>
+      <title>ABC News</title>
+      <url>https://live-production.wcms.abc-cdn.net.au/6f61ef606af0bbbcbdaa7c6173a677e2?impolicy=wcms_crop_resize&amp;cropH=144&amp;cropW=144&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=862</url>
+      <link>https://www.abc.net.au</link>
+    </image>
+    <item>
+      <title>Some Australians fear lockdowns. Economists say stagflation is the bigger risk</title>
+      <link>https://www.abc.net.au/news/2026-04-17/fears-of-another-lockdown-amid-fuel-shortages-recession-risk/106568312</link>
+      <description>
+        <![CDATA[As fuel costs surge and supply fears grow, businesses and households say the economic shock from the war in the Middle East is already hitting home.]]>
+      </description>
+      <dc:creator>Nassim Khadem</dc:creator>
+      <pubDate>Thu, 16 Apr 2026 18:44:15 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-04-17/fears-of-another-lockdown-amid-fuel-shortages-recession-risk/106568312</guid>
+      <category>Recession</category>
+      <category>Cost of Living</category>
+      <category>Economic Growth</category>
+      <category>Economy</category>
+      <category>Inflation</category>
+      <category>Interest Rates</category>
+      <category>Small Businesses</category>
+      <category>Unemployment</category>
+      <category>Work</category>
+      <category>Federal Government</category>
+      <category>Budget</category>
+      <category>COVID-19</category>
+      <category>Epidemics and Pandemics</category>
+      <category>War</category>
+      <media:group>
+        <media:description>Speedway Granville petrol station</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1447&amp;cropW=2573&amp;xPos=0&amp;yPos=134&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1716&amp;cropW=1716&amp;xPos=429&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1715&amp;cropW=2573&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1716&amp;cropW=1287&amp;xPos=643&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1716&amp;cropW=2288&amp;xPos=143&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1716&amp;cropW=965&amp;xPos=804&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/ae44b271b4b37abddcd6cbd7aa7aae15?impolicy=wcms_crop_resize&amp;cropH=1716&amp;cropW=1287&amp;xPos=643&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Unemployment rate remains at 4.3pc in 'calm before the storm'</title>
+      <link>https://www.abc.net.au/news/2026-04-16/unemployment-rate-steady-march-2026-australia/106570400</link>
+      <description>
+        <![CDATA[Australia's unemployment rate remained at 4.3 per cent in March, but economists say cracks could start appearing in coming months.]]>
+      </description>
+      <dc:creator>Gareth Hutchens</dc:creator>
+      <pubDate>Thu, 16 Apr 2026 01:37:44 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-04-16/unemployment-rate-steady-march-2026-australia/106570400</guid>
+      <category>Employment Statistics</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <category>Economic Growth</category>
+      <category>Inflation</category>
+      <category>Unrest, Conflict and War</category>
+      <media:group>
+        <media:description>Employment increased by 17,900 people in March and unemployment decreased by 3,700 people.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1488&amp;cropW=2645&amp;xPos=0&amp;yPos=276&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1764&amp;xPos=440&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1763&amp;cropW=2645&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1323&amp;xPos=661&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=2352&amp;xPos=147&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=992&amp;xPos=826&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1323&amp;xPos=661&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Unemployment rate rises to 4.3pc as full-time jobs decline</title>
+      <link>https://www.abc.net.au/news/2026-03-19/australian-unemployment-rate-rises-february/106471570</link>
+      <description>
+        <![CDATA[Australia's unemployment rate rose to 4.3 per cent in February, up from 4.1 per cent, in seasonally adjusted terms.]]>
+      </description>
+      <dc:creator>Emily Stewart</dc:creator>
+      <pubDate>Thu, 19 Mar 2026 02:49:38 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-03-19/australian-unemployment-rate-rises-february/106471570</guid>
+      <category>Unemployment</category>
+      <category>Interest Rates</category>
+      <media:group>
+        <media:description>People looking to enter the workforce accounted for part of the increase in the unemployment rate.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=3172&amp;xPos=158&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=1784&amp;xPos=375&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=2676&amp;xPos=237&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=1338&amp;xPos=1075&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=2379&amp;xPos=375&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=1003&amp;xPos=1243&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/19d5a1b61ce6849e9359b9bd799c9158?impolicy=wcms_crop_resize&amp;cropH=1784&amp;cropW=1338&amp;xPos=1075&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Is Australia about to end its experiment with low unemployment?</title>
+      <link>https://www.abc.net.au/news/2026-03-15/australia-interest-rates-goodbye-to-low-unemployment-experiment/106445522</link>
+      <description>
+        <![CDATA[If war in the Middle East sends global inflation surging, will Australia have to say goodbye to its experiment with low unemployment?Â ]]>
+      </description>
+      <dc:creator>Gareth Hutchens</dc:creator>
+      <pubDate>Sat, 14 Mar 2026 18:57:45 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-03-15/australia-interest-rates-goodbye-to-low-unemployment-experiment/106445522</guid>
+      <category>Monetary Policy</category>
+      <category>Unemployment</category>
+      <category>Inflation</category>
+      <category>Economic Trends and Indicators</category>
+      <category>Economic Growth</category>
+      <media:group>
+        <media:description>Reserve Bank governor Michele Bullock is facing another major wave of supply-driven inflation, emanating from the global energy sector.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1080&amp;cropW=1920&amp;xPos=0&amp;yPos=48&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=1280&amp;xPos=320&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=1920&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=960&amp;xPos=527&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=1707&amp;xPos=107&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=720&amp;xPos=769&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/008aeef8d0bc44ac049b50ce2dc3ada3?impolicy=wcms_crop_resize&amp;cropH=1280&amp;cropW=960&amp;xPos=527&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>'Gutted' workers at Tahmoor Colliery confront mass redundancies</title>
+      <link>https://www.abc.net.au/news/2026-03-14/tahmoor-colliery-redundant-miners-grapple-with-future/106452550</link>
+      <description>
+        <![CDATA[After 238 jobs are cut following the court-ordered liquidation, workers describe despair, shattered routines and the end of decades-long careers.]]>
+      </description>
+      <dc:creator>Kelly Fuller and Brooke Chandler</dc:creator>
+      <pubDate>Fri, 13 Mar 2026 19:00:00 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-03-14/tahmoor-colliery-redundant-miners-grapple-with-future/106452550</guid>
+      <category>Coal</category>
+      <category>Regional Communities</category>
+      <category>Unions</category>
+      <category>Unemployment</category>
+      <category>Industrial Relations</category>
+      <media:group>
+        <media:description>Jimmy Baker, a 22-year veteran of Tahmoor Colliery, was at work when an email arrived confirming his redundancy.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=2268&amp;cropW=4032&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=3024&amp;xPos=390&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=2688&amp;cropW=4032&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=768&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=4032&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=1701&amp;xPos=1052&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/4d9db31364295899086008c0e06b3d1a?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=768&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>WiseTech to slash 2,000 jobs as AI ends era of 'manually writing code'</title>
+      <link>https://www.abc.net.au/news/2026-02-25/wisetech-job-losses-losing-2000-over-next-two-years-coding-era/106387486</link>
+      <description>
+        <![CDATA[The company says almost one third of staff across 40 countries would be affected by the redundancies as a move towards AI sees a reshaping of its workforce.Â ]]>
+      </description>
+      <dc:creator>Stephanie Chalmers</dc:creator>
+      <pubDate>Wed, 25 Feb 2026 07:20:41 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-02-25/wisetech-job-losses-losing-2000-over-next-two-years-coding-era/106387486</guid>
+      <category>AI</category>
+      <category>Information Technology Industry</category>
+      <category>Business and Industry Regulation</category>
+      <category>Unemployment</category>
+      <media:group>
+        <media:description>WiseTech will cut 2,000 roles as its boss hails the end of the era of manual coding thanks to AI.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=2016&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=1134&amp;xPos=437&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=1701&amp;xPos=196&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=851&amp;xPos=486&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=1512&amp;xPos=252&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=638&amp;xPos=490&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/2161285d808f7eaff3bd877a6a0597b0?impolicy=wcms_crop_resize&amp;cropH=1134&amp;cropW=851&amp;xPos=486&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Unemployment rate remains at 4.1pc, leading to talk of another rate rise</title>
+      <link>https://www.abc.net.au/news/2026-02-19/unemployment-rate-australia-january-2026-steady/106362428</link>
+      <description>
+        <![CDATA[Australia's unemployment rate remained at 4.1 per cent in January, with 17,800 more employed people.]]>
+      </description>
+      <dc:creator>Gareth Hutchens and David Taylor</dc:creator>
+      <pubDate>Thu, 19 Feb 2026 00:44:42 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-02-19/unemployment-rate-australia-january-2026-steady/106362428</guid>
+      <category>Employment Statistics</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <media:group>
+        <media:description>The unemployment rate remained steady in January, with 17,800 people finding employment and unemployment declining by 1,900 people.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1152&amp;cropW=2048&amp;xPos=0&amp;yPos=214&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1366&amp;cropW=1366&amp;xPos=320&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1365&amp;cropW=2048&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1366&amp;cropW=1025&amp;xPos=490&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1366&amp;cropW=1821&amp;xPos=92&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1366&amp;cropW=768&amp;xPos=867&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/d9f22e2c86cada0764677c34a3f9a166?impolicy=wcms_crop_resize&amp;cropH=1366&amp;cropW=1025&amp;xPos=490&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Here's what's really causing millions of mortgage borrowers grief</title>
+      <link>https://www.abc.net.au/news/2026-02-11/what-are-capacity-constraints-economic-growth-inflation-rba/106322390</link>
+      <description>
+        <![CDATA[It may sound boring, but "capacity constraints" are to blame for your higher mortgage repayments.]]>
+      </description>
+      <dc:creator>David Taylor</dc:creator>
+      <pubDate>Tue, 10 Feb 2026 19:15:43 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-02-11/what-are-capacity-constraints-economic-growth-inflation-rba/106322390</guid>
+      <category>Economic Growth</category>
+      <category>Inflation</category>
+      <category>Mortgages</category>
+      <category>Labour Market</category>
+      <category>Unemployment</category>
+      <media:group>
+        <media:description>The Reserve Bank says there is a gap between demand in the economy and the amount businesses are able to produce without increasing costs.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2041&amp;cropW=3628&amp;xPos=0&amp;yPos=169&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=2379&amp;xPos=625&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=3569&amp;xPos=30&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1784&amp;xPos=922&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=3172&amp;xPos=228&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1338&amp;xPos=1145&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1784&amp;xPos=922&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Alpine town struggles with identity as logging industry packs up</title>
+      <link>https://www.abc.net.au/news/2026-02-10/swifts-creek-future-as-logging-industry-closes/105904130</link>
+      <description>
+        <![CDATA[Job losses mean Swifts Creek in Victoria's High Country is facing an identity crisis, but it is not the only small town undergoing a transformation.Â ]]>
+      </description>
+      <dc:creator>Madeleine Stuchbery</dc:creator>
+      <pubDate>Mon, 09 Feb 2026 20:31:23 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-02-10/swifts-creek-future-as-logging-industry-closes/105904130</guid>
+      <category>Forestry, Logging and Timber Industry</category>
+      <category>Regional Development and Planning</category>
+      <category>Regional Communities</category>
+      <category>Unemployment</category>
+      <category>State and Territory Government</category>
+      <media:group>
+        <media:description>Swifts Creek residents are remaining positive about the town's future.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=2268&amp;cropW=4032&amp;xPos=0&amp;yPos=751&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=3024&amp;xPos=504&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=2688&amp;cropW=4032&amp;xPos=0&amp;yPos=333&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=882&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=4032&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=1701&amp;xPos=1166&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/239bba94663377a8affdb52fd8eb6695?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=882&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Amazon accidentally announces further 16,000 layoffs in AI pivot</title>
+      <link>https://www.abc.net.au/news/2026-01-29/amazon-accidentally-announces-layoffs/106280800</link>
+      <description>
+        <![CDATA[A misfired internal email was the first time many employees found out about a second round of job cuts in just six months.]]>
+      </description>
+      <pubDate>Wed, 28 Jan 2026 15:32:36 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-01-29/amazon-accidentally-announces-layoffs/106280800</guid>
+      <category>Business, Economics and Finance</category>
+      <category>Science and Technology</category>
+      <category>Computer Science</category>
+      <category>Work</category>
+      <category>Company News</category>
+      <category>Information Technology Industry</category>
+      <category>Industry</category>
+      <category>Unemployment</category>
+      <media:group>
+        <media:description>Amazon is laying off another 16,000 workers and further embracing artificial intelligence in its latest round of cuts.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=2813&amp;cropW=5000&amp;xPos=0&amp;yPos=260&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=3333&amp;xPos=834&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=5000&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=4444&amp;xPos=278&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=1875&amp;xPos=1563&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/01ff800a830d8a633fb2a75838948f60?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Inflation, tariffs, EVs: What the ABC's business experts are watching in 2026</title>
+      <link>https://www.abc.net.au/news/2026-01-05/economy-markets-predictions-2026-business-experts/106156688</link>
+      <description>
+        <![CDATA[What are you watching in 2026 when it comes to the economy or markets? That's the question we put to the ABC's experts.]]>
+      </description>
+      <dc:creator>Kirsten Aiken, Michael Janda, Daniel Ziffer, Gareth Hutchens, Alicia Barry, David Taylor, Stephanie Chalmers, and Emilia Terzon</dc:creator>
+      <pubDate>Sun, 04 Jan 2026 18:30:00 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2026-01-05/economy-markets-predictions-2026-business-experts/106156688</guid>
+      <category>Economic Trends and Indicators</category>
+      <category>Business, Economics and Finance</category>
+      <category>Monetary Policy</category>
+      <category>COVID-19</category>
+      <category>Unemployment</category>
+      <category>International Financial Crisis</category>
+      <category>Government and Politics</category>
+      <category>Small Businesses</category>
+      <category>Credit and Lending</category>
+      <media:group>
+        <media:description>The Reserve Bank Governor Michele Bullock has already indicated the quarter's trimmed mean (or core inflation) will be key to the RBA's deliberations for interest rates in early February.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=2813&amp;cropW=5000&amp;xPos=0&amp;yPos=260&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=3333&amp;xPos=834&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=5000&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=4444&amp;xPos=278&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=1875&amp;xPos=1563&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/bcc4c97f6adba683c933668c29fc8bdb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Unemployment rate steady but employment falls in 'nasty' jobs report</title>
+      <link>https://www.abc.net.au/news/2025-12-11/australia-unemployment-rate-november-2025/106129300</link>
+      <description>
+        <![CDATA[Australia's unemployment rate holds steady at 4.3 per cent in November, but the underemployment rate jumps to 12-month high.]]>
+      </description>
+      <dc:creator>Gareth Hutchens</dc:creator>
+      <pubDate>Thu, 11 Dec 2025 00:51:17 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-12-11/australia-unemployment-rate-november-2025/106129300</guid>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <category>Employment Statistics</category>
+      <category>Business, Economics and Finance</category>
+      <media:group>
+        <media:description>Full-time employment fell by 57,000 people in November, partially offset by part-time employment rising by 35,000.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1680&amp;cropW=2983&amp;xPos=17&amp;yPos=120&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1980&amp;cropW=1980&amp;xPos=600&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1984&amp;cropW=2973&amp;xPos=13&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1972&amp;cropW=1482&amp;xPos=1080&amp;yPos=8&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1984&amp;cropW=2645&amp;xPos=177&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1984&amp;cropW=1116&amp;xPos=942&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/6801b5d7a0e9e521a27cad1dfe91570e?impolicy=wcms_crop_resize&amp;cropH=1972&amp;cropW=1482&amp;xPos=1080&amp;yPos=8&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>'Shocked' employees ponder bleak Christmas after collapse of caravan manufacturer</title>
+      <link>https://www.abc.net.au/news/2025-12-02/shocked-employees-sudden-collapse-zone-rv-caravans/106091752</link>
+      <description>
+        <![CDATA[Questions are being asked about why Zone RV fell into administration, leaving hundreds of workers unemployed and customers in limbo.]]>
+      </description>
+      <dc:creator>Josh Dye and Jessica Ross</dc:creator>
+      <pubDate>Tue, 02 Dec 2025 07:51:43 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-12-02/shocked-employees-sudden-collapse-zone-rv-caravans/106091752</guid>
+      <category>Work</category>
+      <category>Business, Economics and Finance</category>
+      <category>Unemployment</category>
+      <category>Industry</category>
+      <category>Company News</category>
+      <category>Manufacturing</category>
+      <category>Small Businesses</category>
+      <media:group>
+        <media:description>Caravans lined up at Zone RV on the Sunshine Coast after the company collapsed into administration.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=2213&amp;cropW=3934&amp;xPos=98&amp;yPos=572&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=3024&amp;xPos=504&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=2421&amp;cropW=3632&amp;xPos=400&amp;yPos=391&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=882&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=4032&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=1701&amp;xPos=1166&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/98d2c4781357f2675a5887569dafce8c?impolicy=wcms_crop_resize&amp;cropH=3024&amp;cropW=2268&amp;xPos=882&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Australia's unemployment rate slips to 4.3 per cent</title>
+      <link>https://www.abc.net.au/news/2025-11-13/australia-unemployment-rate-october-2025/106004258</link>
+      <description>
+        <![CDATA[The unemployment rate fell to 4.3 per cent in October, down from 4.5 per cent in September, as the number of people in employment increased by 42,200.]]>
+      </description>
+      <dc:creator>Gareth Hutchens</dc:creator>
+      <pubDate>Thu, 13 Nov 2025 00:39:18 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-11-13/australia-unemployment-rate-october-2025/106004258</guid>
+      <category>Employment Statistics</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <category>Inflation</category>
+      <category>Monetary Policy</category>
+      <media:group>
+        <media:description>The national unemployment rate slipped to 4.3 per cent in October, down from 4.5 per cent in September.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1488&amp;cropW=2645&amp;xPos=0&amp;yPos=276&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1764&amp;xPos=440&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1763&amp;cropW=2645&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1323&amp;xPos=661&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=2352&amp;xPos=147&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=992&amp;xPos=826&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/61d6d45253364af63ceb0d24e9c14090?impolicy=wcms_crop_resize&amp;cropH=1764&amp;cropW=1323&amp;xPos=661&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Why interest rates will not fall again until someone pays the price</title>
+      <link>https://www.abc.net.au/news/2025-11-01/interest-rates-will-fall-again-when-inflation-returns-to-target/105959070</link>
+      <description>
+        <![CDATA[And until someone â€” redundant workers, big business, the RBA or government â€” foots the bill, interest rates are unlikely to budge from here.Â ]]>
+      </description>
+      <dc:creator>David Taylor</dc:creator>
+      <pubDate>Fri, 31 Oct 2025 20:28:59 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-11-01/interest-rates-will-fall-again-when-inflation-returns-to-target/105959070</guid>
+      <category>Monetary Policy</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <category>Federal Government</category>
+      <category>Work</category>
+      <category>Industry</category>
+      <media:group>
+        <media:description>The underlying inflation, which had gradually declined over the past three years, has risen again.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2041&amp;cropW=3628&amp;xPos=0&amp;yPos=169&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=2379&amp;xPos=625&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=3569&amp;xPos=30&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1784&amp;xPos=922&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=3172&amp;xPos=228&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1338&amp;xPos=1145&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/3f09f5c3c4c6206fbdf2a1973a758c5e?impolicy=wcms_crop_resize&amp;cropH=2379&amp;cropW=1784&amp;xPos=922&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Price of poverty hurts us all, yet research reveals an easy fix</title>
+      <link>https://www.abc.net.au/news/2025-10-28/cheaper-to-end-poverty-increase-jobseeker-than-maintain-hardship/105866692</link>
+      <description>
+        <![CDATA[In 2020, Australia massively increased welfare payments and conducted a live experiment in ending poverty, but when the subsidy was removed, many were thrown back into hardship. Leaving aside the moral dimension, would it be cheaper to end poverty than to maintain it?]]>
+      </description>
+      <dc:creator>Daniel Ziffer and Gareth Hutchens</dc:creator>
+      <pubDate>Mon, 27 Oct 2025 18:36:59 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-10-28/cheaper-to-end-poverty-increase-jobseeker-than-maintain-hardship/105866692</guid>
+      <category>Poverty</category>
+      <category>Unemployment</category>
+      <category>Tax</category>
+      <category>Cost of Living</category>
+      <category>Social Policy</category>
+      <category>Welfare</category>
+      <media:group>
+        <media:description>Melissa Fisher says policies based on "this idea that those in poverty have to be punished" keep people like her poor.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=2813&amp;cropW=5000&amp;xPos=0&amp;yPos=203&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=3219&amp;xPos=890&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=4829&amp;xPos=86&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=2414&amp;xPos=1293&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=4292&amp;xPos=354&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=1811&amp;xPos=1595&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/a11aadc5da9f907b5678863cc2a840ed?impolicy=wcms_crop_resize&amp;cropH=3219&amp;cropW=2414&amp;xPos=1293&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>'Might all end in tears': Central bankers watching global markets</title>
+      <link>https://www.abc.net.au/news/2025-10-27/rba-governor-michele-bullock-interest-rates-jobless-rate/105937584</link>
+      <description>
+        <![CDATA[The Reserve Bank governor tells a Sydney gathering of economists she and her overseas counterparts are perplexed by what they call "sanguine" financial markets. They question is whether it will "all end in tears".]]>
+      </description>
+      <dc:creator>David Taylor</dc:creator>
+      <pubDate>Mon, 27 Oct 2025 09:02:41 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-10-27/rba-governor-michele-bullock-interest-rates-jobless-rate/105937584</guid>
+      <category>Interest Rates</category>
+      <category>Reserve Bank Of Australia</category>
+      <category>Monetary Policy</category>
+      <category>Inflation</category>
+      <category>Unemployment</category>
+      <media:group>
+        <media:description>Michele Bullock speaking at the Australian Business Economists' annual dinner.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=992&amp;cropW=1763&amp;xPos=0&amp;yPos=11&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=1175&amp;xPos=294&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=1763&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=881&amp;xPos=441&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=1567&amp;xPos=98&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=661&amp;xPos=551&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/8d059d6d541795c6df67010532cd6c05?impolicy=wcms_crop_resize&amp;cropH=1175&amp;cropW=881&amp;xPos=441&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Chance of a November rate cut doubles after shock unemployment jump</title>
+      <link>https://www.abc.net.au/news/2025-10-16/australia-unemployment-rate-rises-september-2025/105898244</link>
+      <description>
+        <![CDATA[Australia's unemployment rate jumped to 4.5 per cent in September, up from 4.3 per cent in August.]]>
+      </description>
+      <dc:creator>Gareth Hutchens</dc:creator>
+      <pubDate>Thu, 16 Oct 2025 01:01:36 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-10-16/australia-unemployment-rate-rises-september-2025/105898244</guid>
+      <category>Labour Market</category>
+      <category>Employment Statistics</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <media:group>
+        <media:description>The unemployment rate is the highest in seasonally adjusted terms since November 2021.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=2813&amp;cropW=5000&amp;xPos=0&amp;yPos=260&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=3333&amp;xPos=834&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=5000&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=4444&amp;xPos=278&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=1874&amp;xPos=1563&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/d75e09618f8390a4310140a1e9e34feb?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=1250&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>A big change from Trump has prompted China to act. Not everyone is happy</title>
+      <link>https://www.abc.net.au/news/2025-10-02/china-k-visa-draws-fierce-criticism/105840312</link>
+      <description>
+        <![CDATA[The new visa is designed to attract top global STEM talent but has sparked fierce backlash, with critics warning it could squeeze Chinese nationals out of the graduate job market.]]>
+      </description>
+      <dc:creator>Kai Feng</dc:creator>
+      <pubDate>Thu, 02 Oct 2025 02:35:51 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-10-02/china-k-visa-draws-fierce-criticism/105840312</guid>
+      <category>Migration Policy</category>
+      <category>Business, Economics and Finance</category>
+      <category>Immigration</category>
+      <category>Work</category>
+      <category>Education</category>
+      <category>Universities</category>
+      <category>World Politics</category>
+      <category>Unemployment</category>
+      <media:group>
+        <media:description>Experts note that the introduction of China's K visa coincides with the US significantly raising fees for its H-1B work visas.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=1024&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=576&amp;xPos=224&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=864&amp;xPos=80&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=432&amp;xPos=296&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=768&amp;xPos=128&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=324&amp;xPos=350&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/9c987d2d8fb79b94beb63c972cb2ed74?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=432&amp;xPos=296&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Money for everyone an option as AI opens the door for basic income</title>
+      <link>https://www.abc.net.au/news/2025-09-24/will-we-need-a-universal-basic-income-to-deal-with-ai-job-losses/105747954</link>
+      <description>
+        <![CDATA[COVID showed just how "fragile" our economic security is. As artificial intelligence potentially takes jobs from humans, a universal basic income might be a solution.]]>
+      </description>
+      <dc:creator>Daniel Ziffer</dc:creator>
+      <pubDate>Tue, 23 Sep 2025 18:52:58 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-09-24/will-we-need-a-universal-basic-income-to-deal-with-ai-job-losses/105747954</guid>
+      <category>Welfare</category>
+      <category>Tax</category>
+      <category>Unemployment</category>
+      <category>Work</category>
+      <category>Economy</category>
+      <media:group>
+        <media:description>Could automation remove the jobs few of us want to do anyway?</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=1830&amp;cropW=3254&amp;xPos=1&amp;yPos=162&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2448&amp;cropW=2448&amp;xPos=16&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2170&amp;cropW=3255&amp;xPos=1&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2448&amp;cropW=1836&amp;xPos=322&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2443&amp;cropW=3258&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2448&amp;cropW=1377&amp;xPos=552&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/2f5db49f7cbb6e4a2587805f4e49015d?impolicy=wcms_crop_resize&amp;cropH=2448&amp;cropW=1836&amp;xPos=322&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Jobs market 'running out of steam' despite steady unemployment rate</title>
+      <link>https://www.abc.net.au/news/2025-09-18/unemployment-steady-august-2025-abs-labour-force-data/105788046</link>
+      <description>
+        <![CDATA[Australia's unemployment rate remains steady at 4.2 per cent in August, despite more than 5,000 jobs being lost last month.]]>
+      </description>
+      <dc:creator>Michael Janda</dc:creator>
+      <pubDate>Thu, 18 Sep 2025 01:41:52 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-09-18/unemployment-steady-august-2025-abs-labour-force-data/105788046</guid>
+      <category>Economic Trends and Indicators</category>
+      <category>Unemployment</category>
+      <category>Labour Market</category>
+      <media:group>
+        <media:description>It comes despite more than 5,000 jobs being lost last month.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=2813&amp;cropW=5000&amp;xPos=0&amp;yPos=500&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3329&amp;cropW=3329&amp;xPos=1671&amp;yPos=4&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=5000&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=2238&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=4444&amp;xPos=556&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=1875&amp;xPos=2550&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/44356cd8ea2f7dd01bec5523910914cd?impolicy=wcms_crop_resize&amp;cropH=3333&amp;cropW=2500&amp;xPos=2238&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Net zero transition at risk of stalling amid shortfall of 42,000 workers</title>
+      <link>https://www.abc.net.au/news/2025-08-28/net-zero-transition-at-risk-of-stalling-amid-worker-shortfall/105704400</link>
+      <description>
+        <![CDATA[The Powering Skills Organisation warns the current energy workforce of 300,000 energy, gas and renewables sector workers will not be sufficient to meet demand and further investment in training will be needed.]]>
+      </description>
+      <dc:creator>Nicole Hegarty</dc:creator>
+      <pubDate>Wed, 27 Aug 2025 18:46:54 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-08-28/net-zero-transition-at-risk-of-stalling-amid-worker-shortfall/105704400</guid>
+      <category>Energy Policy</category>
+      <category>Federal Government</category>
+      <category>Government and Politics</category>
+      <category>Federal Parliament</category>
+      <category>Energy Industry</category>
+      <category>Unemployment</category>
+      <category>Apprenticeships</category>
+      <media:group>
+        <media:description>The government has introduced fee-free TAFE and invested $91 million towards skilling up the clean energy workforce.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=576&amp;cropW=1024&amp;xPos=0&amp;yPos=53&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=683&amp;xPos=171&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=1024&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=512&amp;xPos=256&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=911&amp;xPos=57&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=384&amp;xPos=320&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/b17d2d5cc04dae116355239548f81e25?impolicy=wcms_crop_resize&amp;cropH=683&amp;cropW=512&amp;xPos=256&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Commonwealth Bank backtracks on AI job cuts, apologises for 'error'</title>
+      <link>https://www.abc.net.au/news/2025-08-21/cba-backtracks-on-ai-job-cuts-as-chatbot-lifts-call-volumes/105679492</link>
+      <description>
+        <![CDATA[CBA has apologised to 45 affected employees after finding customer service roles were not redundant despite introducing an AI-powered "voice-bot", but the union says the damage is done.]]>
+      </description>
+      <dc:creator>Stephanie Chalmers</dc:creator>
+      <pubDate>Thu, 21 Aug 2025 00:37:14 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-08-21/cba-backtracks-on-ai-job-cuts-as-chatbot-lifts-call-volumes/105679492</guid>
+      <category>AI</category>
+      <category>Banking</category>
+      <category>Unemployment</category>
+      <category>Labour Market</category>
+      <media:group>
+        <media:description>CBA has apologised to 45 employees who were made redundant before the banking giant backflipped.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1407&amp;cropW=2500&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=1667&amp;xPos=416&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=2498&amp;xPos=1&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=1249&amp;xPos=625&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=2222&amp;xPos=139&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=937&amp;xPos=782&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/4d3b925da1c3f9951e1a476695051ad7?impolicy=wcms_crop_resize&amp;cropH=1667&amp;cropW=1249&amp;xPos=625&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>Unemployment rate improvement tipped to keep RBA 'on sidelines'</title>
+      <link>https://www.abc.net.au/news/2025-08-14/abs-labour-force-unemployment-rate-4-2pc-25k-jobs/105651886</link>
+      <description>
+        <![CDATA[Employment increased by nearly 25,000 people, driven by 60,000 full-time jobs, and the number of unemployed people also fell in the month.]]>
+      </description>
+      <dc:creator>Stephanie Chalmers</dc:creator>
+      <pubDate>Thu, 14 Aug 2025 01:38:28 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-08-14/abs-labour-force-unemployment-rate-4-2pc-25k-jobs/105651886</guid>
+      <category>Labour Market</category>
+      <category>Unemployment</category>
+      <category>Economic Trends and Indicators</category>
+      <media:group>
+        <media:description>The RBA is forecasting the unemployment rate to sit at 4.3 per cent at the end of 2025.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=1688&amp;cropW=3000&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=2151&amp;cropW=2151&amp;xPos=0&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=1997&amp;cropW=3000&amp;xPos=0&amp;yPos=25&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=2151&amp;cropW=1611&amp;xPos=317&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=2151&amp;cropW=2863&amp;xPos=77&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=2164&amp;cropW=1217&amp;xPos=892&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/65435187c0f987003d2db179d8409226?impolicy=wcms_crop_resize&amp;cropH=2151&amp;cropW=1611&amp;xPos=317&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+    <item>
+      <title>St John WA ambulance service axing 90 staff due to economic pressures</title>
+      <link>https://www.abc.net.au/news/2025-07-18/st-john-wa-ambulance-job-losses-restructure/105546952</link>
+      <description>
+        <![CDATA[WA's ambulance provider announces 90 job cuts as part of a "targeted reset" to ensure the sustainability of services, but says paramedics will not affected.]]>
+      </description>
+      <dc:creator>Irena Ceranic and Nicolas Perpitch</dc:creator>
+      <pubDate>Fri, 18 Jul 2025 03:04:32 +0000</pubDate>
+      <guid isPermaLink="true">https://www.abc.net.au/news/2025-07-18/st-john-wa-ambulance-job-losses-restructure/105546952</guid>
+      <category>Ambulance Service</category>
+      <category>Unemployment</category>
+      <category>Health</category>
+      <media:group>
+        <media:description>St John WA is the state's primary ambulance service provider.</media:description>
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=4686&amp;xPos=263&amp;yPos=0&amp;width=862&amp;height=485"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="485"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=2636&amp;xPos=1272&amp;yPos=0&amp;width=862&amp;height=862"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="862"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=3954&amp;xPos=318&amp;yPos=0&amp;width=862&amp;height=575"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="575"
+            isDefault="true"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=1977&amp;xPos=1842&amp;yPos=0&amp;width=862&amp;height=1149"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1149"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=3515&amp;xPos=482&amp;yPos=0&amp;width=862&amp;height=647"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="647"
+          />
+        <media:content
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=1482&amp;xPos=1759&amp;yPos=0&amp;width=862&amp;height=1533"
+            medium="image"
+            type="image/jpeg"
+            width="862"
+            height="1533"
+          />
+        <media:thumbnail
+            url="https://live-production.wcms.abc-cdn.net.au/023e1e180a102ac1b29c390d2790e90e?impolicy=wcms_crop_resize&amp;cropH=2636&amp;cropW=1977&amp;xPos=1842&amp;yPos=0&amp;width=862&amp;height=1149"
+            width="862"
+            height="1149"
+          />
+      </media:group>
+    </item>
+  </channel>
+</rss>
