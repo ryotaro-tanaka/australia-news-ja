@@ -105,15 +105,6 @@
   overflow: hidden;
 }
 
-footer {
-  text-align: center;
-  margin-top: 4rem;
-  padding: 2rem 0;
-  font-size: 0.8rem;
-  color: #999;
-  border-top: 1px solid #eee;
-}
-
 @media (max-width: 640px) {
   .card-content {
     flex-direction: column;

@@ -9,10 +9,6 @@ function App() {
         <main>
           <NewsList />
         </main>
-
-        <footer>
-          <p>&copy; 2024 豪州生活ニュース</p>
-        </footer>
       </div>
     </NewsProvider>
   )
