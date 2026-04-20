@@ -34,6 +34,16 @@ function extractTagContent(itemXml: string, tagName: string): string {
   return "";
 }
 
+function extractAllCategories(itemXml: string): string[] {
+  const categories: string[] = [];
+  const regex = /<category[^>]*>([\s\S]*?)<\/category>/gi;
+  let match;
+  while ((match = regex.exec(itemXml)) !== null) {
+    categories.push(cleanHtml(match[1]));
+  }
+  return categories;
+}
+
 function extractThumbnail(itemXml: string): string {
   const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
   if (thumbMatch) return thumbMatch[1];
@@ -45,8 +55,6 @@ function extractThumbnail(itemXml: string): string {
 export const onRequest: PagesFunction = async (context) => {
   const cache = (caches as any).default;
   const url = new URL(context.request.url);
-  
-  // キャッシュキーの正規化（nocacheパラメータを除去）
   const isNoCache = url.searchParams.has('nocache');
   const cacheUrl = new URL(url.toString());
   cacheUrl.searchParams.delete('nocache');
@@ -55,9 +63,7 @@ export const onRequest: PagesFunction = async (context) => {
   if (!isNoCache) {
     try {
       let cachedResponse = await cache.match(cacheKey);
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
     } catch (e) {
       console.warn("Cache match failed:", e);
     }
@@ -67,6 +73,10 @@ export const onRequest: PagesFunction = async (context) => {
     "https://www.abc.net.au/news/feed/51892/rss.xml", // Business
     "https://www.abc.net.au/news/feed/1042/rss.xml"  // Politics
   ];
+
+  // フィルタリング設定
+  const EXCLUDED_KEYWORDS = ["music", "arts", "fiction", "book", "movie", "film", "statue", "entertainment", "culture", "festival", "sculpture", "theatre"];
+  const CRITICAL_KEYWORDS = ["visa", "immigration", "inflation", "rba", "interest rate", "medicare", "housing", "rent", "permanent resid", "working holiday"];
 
   try {
     const rssResponses = await Promise.all(FEEDS.map(f => fetch(f, {
@@ -86,13 +96,26 @@ export const onRequest: PagesFunction = async (context) => {
       const link = extractTagContent(itemXml, "link");
       const descriptionRaw = extractTagContent(itemXml, "description");
       const pubDate = extractTagContent(itemXml, "pubDate");
-      const category = cleanHtml(extractTagContent(itemXml, "category"));
+      const categories = extractAllCategories(itemXml);
       const thumbnail = extractThumbnail(itemXml);
       
       const fullDescription = cleanHtml(descriptionRaw);
-      const firstLine = fullDescription.length > 300 
-        ? fullDescription.substring(0, 300) + "..." 
-        : fullDescription;
+      const firstLine = fullDescription.length > 300 ? fullDescription.substring(0, 300) + "..." : fullDescription;
+
+      // フィルタリングロジック
+      const lowercaseTitle = title.toLowerCase();
+      const lowercaseCats = categories.map(c => c.toLowerCase());
+      
+      // 最重要キーワードがタイトルに含まれる場合は無条件でパス（救済措置）
+      const isCritical = CRITICAL_KEYWORDS.some(k => lowercaseTitle.includes(k));
+      
+      if (!isCritical) {
+        // 除外キーワードがカテゴリのいずれかに含まれる場合はスキップ
+        const isExcluded = EXCLUDED_KEYWORDS.some(k => 
+          lowercaseCats.some(cat => cat.includes(k)) || lowercaseTitle.includes(k)
+        );
+        if (isExcluded) return null;
+      }
 
       return { 
         title, 
@@ -100,15 +123,15 @@ export const onRequest: PagesFunction = async (context) => {
         firstLine, 
         pubDate: new Date(pubDate).getTime(),
         displayDate: pubDate,
-        category,
+        category: categories[0] || "News",
         thumbnail
       };
     })
-    .filter(item => item.title && item.link)
+    .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
     .sort((a, b) => b.pubDate - a.pubDate)
     .slice(0, 15);
 
-    if (parsedItems.length === 0) throw new Error("No items parsed");
+    if (parsedItems.length === 0) throw new Error("No items passed the filter");
 
     const translatedNews = await Promise.all(
       parsedItems.map(async (item) => {
@@ -130,7 +153,6 @@ export const onRequest: PagesFunction = async (context) => {
       })
     );
 
-    // 30分間キャッシュ (1800秒)
     const resultResponse = new Response(JSON.stringify(translatedNews), {
       headers: { 
         "Content-Type": "application/json; charset=utf-8",
@@ -150,7 +172,7 @@ export const onRequest: PagesFunction = async (context) => {
 
   } catch (error) {
     console.error("Backend error:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch news" }), {
+    return new Response(JSON.stringify({ error: "Failed to fetch or filter news" }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
