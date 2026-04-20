@@ -55,3 +55,7 @@
 2. **お金の動き**（経済・物価・雇用）
 3. **将来の不安解消**（移民・ビザ政策）
 4. **身の安全**（事件・災害）
+
+## 参考
+
+https://rss.feedspot.com/australian_news_rss_feeds/?utm_source=chatgpt.com
