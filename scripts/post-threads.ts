@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 interface ThreadsResponse {
   id: string;
+  username?: string;
   error?: {
     message: string;
     type: string;
@@ -21,18 +22,28 @@ async function postToThreads() {
     process.exit(1);
   }
 
-  const token = process.env.THREADS_TOKEN;
-  const userId = process.env.THREADS_USER_ID;
+  const token = process.env.THREADS_LONG_LIVED_TOKEN;
 
-  if (!token || !userId || token === 'your_token_here') {
-    console.error('Error: THREADS_TOKEN and THREADS_USER_ID must be set in .env');
+  if (!token || token === 'your_token_here') {
+    console.error('Error: THREADS_LONG_LIVED_TOKEN must be set in .env');
     process.exit(1);
   }
 
-  console.log(`Posting to Threads: "${text}"${imageUrl ? ` with image: ${imageUrl}` : ''}...`);
-
   try {
-    // 1. Create Media Container
+    // 1. Get Threads user id automatically
+    console.log('Fetching user information...');
+    const meRes = await fetch(`https://graph.threads.net/v1.0/me?fields=id,username&access_token=${token}`);
+    const meData = await meRes.json() as ThreadsResponse;
+
+    if (meData.error) {
+      throw new Error(`Failed to fetch user info: ${JSON.stringify(meData.error)}`);
+    }
+
+    const userId = meData.id;
+    console.log(`Authenticated as ${meData.username} (ID: ${userId})`);
+    console.log(`Posting to Threads: "${text}"${imageUrl ? ` with image: ${imageUrl}` : ''}...`);
+
+    // 2. Create Media Container
     const containerUrl = `https://graph.threads.net/v1.0/${userId}/threads`;
     const params = new URLSearchParams();
     params.append('access_token', token);
@@ -55,7 +66,7 @@ async function postToThreads() {
     const creationId = containerData.id;
     console.log(`Container created (ID: ${creationId}). Publishing...`);
 
-    // 2. Publish Media
+    // 3. Publish Media
     const publishUrl = `https://graph.threads.net/v1.0/${userId}/threads_publish`;
     const publishParams = new URLSearchParams();
     publishParams.append('access_token', token);
