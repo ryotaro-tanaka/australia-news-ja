@@ -14,7 +14,9 @@ interface ThreadsResponse {
 
 async function postToThreads() {
   const text = process.argv[2];
-  const imageUrl = process.argv[3];
+  const rawImageUrl = process.argv[3];
+  // &amp; を & に置換（RSSからコピーした場合などの対策）
+  const imageUrl = rawImageUrl ? rawImageUrl.replace(/&amp;/g, '&') : undefined;
 
   if (!text) {
     console.error('Error: Message text is required.');
