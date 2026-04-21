@@ -3,8 +3,9 @@ async function translateText(text: string): Promise<string> {
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(text)}`;
     const response = await fetch(url);
-    const data = await response.json() as [string[][], null, string];
-    return data[0].map((item) => item[0]).join("") || text;
+    // Explicit type for Google Translate response
+    const data = await response.json() as unknown as [string[][], null, string];
+    return data[0].map((item: string[]) => item[0]).join("") || text;
   } catch (e) {
     console.error("Translation error:", e);
     return text;
