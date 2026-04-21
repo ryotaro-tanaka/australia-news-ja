@@ -115,10 +115,14 @@ export async function postToThreads(text: string, imageUrl?: string, tag?: strin
     const replyContainerData = await replyContainerRes.json() as ThreadsResponse;
     if (replyContainerData.error) throw new Error(`Reply container failed: ${JSON.stringify(replyContainerData.error)}`);
 
+    const replyCreationId = replyContainerData.id;
+    console.log(`Reply container created (ID: ${replyCreationId}). Waiting a moment before publishing...`);
+    await sleep(3000); // 返信コンテナの準備待ち
+
     // 6. Publish Reply Post
     const replyPublishParams = new URLSearchParams();
     replyPublishParams.append('access_token', token);
-    replyPublishParams.append('creation_id', replyContainerData.id);
+    replyPublishParams.append('creation_id', replyCreationId);
 
     const replyPublishRes = await fetch(`${publishUrl}?${replyPublishParams.toString()}`, { method: 'POST' });
     const replyPublishData = await replyPublishRes.json() as ThreadsResponse;
