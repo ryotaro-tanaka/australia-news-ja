@@ -37,9 +37,10 @@ async function postLatestNews() {
 
     // 3. Summarize using gemini CLI
     console.log('Generating summary using Gemini CLI...');
-    const prompt = `以下のオーストラリアのニュース記事を、300文字程度の日本語で分かりやすく要約してください。
+    const prompt = `以下のオーストラリアのニュース記事を、250文字程度の日本語で分かりやすく要約してください。
 PRやワーキングホリデーで滞在している日本人が関心を持つポイントを強調してください。
 最後に、ニュースの元記事URL (${latest.link}) を必ず含めてください。
+全体で400文字以内に収めるようにしてください。
 
 記事内容:
 ${cleanText}`;

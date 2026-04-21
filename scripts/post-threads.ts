@@ -46,6 +46,9 @@ async function waitForPostAvailability(userId: string, token: string, targetPost
 export async function postToThreads(text: string, imageUrl?: string, tag?: string) {
   const token = process.env.THREADS_LONG_LIVED_TOKEN;
 
+  // 500文字制限のチェックと切り詰め
+  const safeText = text.length > 500 ? text.substring(0, 497) + '...' : text;
+
   if (!token || token === 'your_token_here') {
     throw new Error('THREADS_LONG_LIVED_TOKEN must be set in .env');
   }
@@ -63,7 +66,7 @@ export async function postToThreads(text: string, imageUrl?: string, tag?: strin
     const containerUrl = `https://graph.threads.net/v1.0/${userId}/threads`;
     const mainParams = new URLSearchParams();
     mainParams.append('access_token', token);
-    mainParams.append('text', text);
+    mainParams.append('text', safeText);
     
     if (tag) {
       mainParams.append('tag', tag);
