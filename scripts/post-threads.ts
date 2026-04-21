@@ -3,6 +3,7 @@ import 'dotenv/config';
 interface ThreadsResponse {
   id: string;
   username?: string;
+  data?: Array<{ id: string }>;
   error?: {
     message: string;
     type: string;
@@ -14,6 +15,33 @@ interface ThreadsResponse {
 
 const FOOTER_TEXT = `オーストラリアのニュースを日本語で読みたいなら「南半球の朝ごはんニュース」
 https://news-ja.pages.dev/`;
+
+async function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function waitForPostAvailability(userId: string, token: string, targetPostId: string, maxRetries = 10): Promise<boolean> {
+  console.log(`Checking if post ${targetPostId} is available via API...`);
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const res = await fetch(`https://graph.threads.net/v1.0/${userId}/threads?access_token=${token}`);
+      const json = await res.json() as ThreadsResponse;
+      
+      if (json.data && json.data.some(post => post.id === targetPostId)) {
+        console.log(`Post ${targetPostId} is now live and recognized by API.`);
+        return true;
+      }
+    } catch (e) {
+      console.warn('Availability check failed, retrying...', e);
+    }
+    
+    console.log(`Still waiting... (Retry ${i + 1}/${maxRetries})`);
+    await sleep(3000); // 3秒待機
+  }
+  
+  return false;
+}
 
 export async function postToThreads(text: string, imageUrl?: string) {
   const token = process.env.THREADS_LONG_LIVED_TOKEN;
@@ -60,7 +88,14 @@ export async function postToThreads(text: string, imageUrl?: string) {
     const mainPostId = mainPublishData.id;
     console.log(`Main post published! ID: ${mainPostId}`);
 
-    // 4. Create Reply Post Container
+    // 4. Wait for API availability before replying
+    const isAvailable = await waitForPostAvailability(userId, token, mainPostId);
+    if (!isAvailable) {
+      console.warn('Main post was not found in listing after multiple retries. Attempting reply anyway...');
+      await sleep(2000); // 念のための追加待機
+    }
+
+    // 5. Create Reply Post Container
     console.log('Posting automatic reply...');
     const replyParams = new URLSearchParams();
     replyParams.append('access_token', token);
@@ -72,7 +107,7 @@ export async function postToThreads(text: string, imageUrl?: string) {
     const replyContainerData = await replyContainerRes.json() as ThreadsResponse;
     if (replyContainerData.error) throw new Error(`Reply container failed: ${JSON.stringify(replyContainerData.error)}`);
 
-    // 5. Publish Reply Post
+    // 6. Publish Reply Post
     const replyPublishParams = new URLSearchParams();
     replyPublishParams.append('access_token', token);
     replyPublishParams.append('creation_id', replyContainerData.id);
@@ -91,7 +126,7 @@ export async function postToThreads(text: string, imageUrl?: string) {
 }
 
 // 従来の CLI 実行用ロジック
-if (import.meta.url.endsWith(process.argv[1]) || process.argv[1].endsWith('post-threads.ts')) {
+if (import.meta.url.endsWith(process.argv[1]) || (process.argv[1] && process.argv[1].endsWith('post-threads.ts'))) {
   const text = process.argv[2];
   const imageUrl = process.argv[3];
 
