@@ -46,6 +46,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNewsContext() {
   const context = useContext(NewsContext);
   if (!context) throw new Error('useNewsContext must be used within NewsProvider');
