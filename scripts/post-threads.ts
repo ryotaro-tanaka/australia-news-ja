@@ -37,13 +37,13 @@ async function waitForPostAvailability(userId: string, token: string, targetPost
     }
     
     console.log(`Still waiting... (Retry ${i + 1}/${maxRetries})`);
-    await sleep(3000); // 3秒待機
+    await sleep(3000);
   }
   
   return false;
 }
 
-export async function postToThreads(text: string, imageUrl?: string) {
+export async function postToThreads(text: string, imageUrl?: string, tag?: string) {
   const token = process.env.THREADS_LONG_LIVED_TOKEN;
 
   if (!token || token === 'your_token_here') {
@@ -64,6 +64,11 @@ export async function postToThreads(text: string, imageUrl?: string) {
     const mainParams = new URLSearchParams();
     mainParams.append('access_token', token);
     mainParams.append('text', text);
+    
+    if (tag) {
+      mainParams.append('tag', tag);
+    }
+    
     if (imageUrl) {
       mainParams.append('media_type', 'IMAGE');
       mainParams.append('image_url', imageUrl.replace(/&amp;/g, '&'));
@@ -88,11 +93,11 @@ export async function postToThreads(text: string, imageUrl?: string) {
     const mainPostId = mainPublishData.id;
     console.log(`Main post published! ID: ${mainPostId}`);
 
-    // 4. Wait for API availability before replying
+    // 4. Wait for API availability
     const isAvailable = await waitForPostAvailability(userId, token, mainPostId);
     if (!isAvailable) {
-      console.warn('Main post was not found in listing after multiple retries. Attempting reply anyway...');
-      await sleep(2000); // 念のための追加待機
+      console.warn('Main post was not found in listing. Attempting reply anyway...');
+      await sleep(2000);
     }
 
     // 5. Create Reply Post Container
@@ -129,12 +134,13 @@ export async function postToThreads(text: string, imageUrl?: string) {
 if (import.meta.url.endsWith(process.argv[1]) || (process.argv[1] && process.argv[1].endsWith('post-threads.ts'))) {
   const text = process.argv[2];
   const imageUrl = process.argv[3];
+  const tag = process.argv[4];
 
   if (!text) {
     console.error('Error: Message text is required.');
-    console.log('Usage: npm run post:threads "Your message" ["Image URL"]');
+    console.log('Usage: npm run post:threads "Your message" ["Image URL"] ["Tag"]');
     process.exit(1);
   }
 
-  postToThreads(text, imageUrl).catch(() => process.exit(1));
+  postToThreads(text, imageUrl, tag).catch(() => process.exit(1));
 }

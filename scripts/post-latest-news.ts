@@ -59,9 +59,10 @@ ${cleanText}`;
     console.log(summary);
     console.log('---');
 
-    // 4. Post to Threads
+    // 4. Post to Threads with Tag and Hashtag
     console.log('Posting to Threads...');
-    await postToThreads(summary, latest.thumbnail);
+    const finalMessage = `${summary}\n\n#オーストラリア`;
+    await postToThreads(finalMessage, latest.thumbnail, "オーストラリア");
     
     console.log('Done! Successfully posted latest news to Threads.');
 
