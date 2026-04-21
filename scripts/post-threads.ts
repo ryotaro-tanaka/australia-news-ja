@@ -12,10 +12,12 @@ interface ThreadsResponse {
   };
 }
 
+const FOOTER_TEXT = `オーストラリアのニュースを日本語で読みたいなら「南半球の朝ごはんニュース」
+https://news-ja.pages.dev/`;
+
 async function postToThreads() {
   const text = process.argv[2];
   const rawImageUrl = process.argv[3];
-  // &amp; を & に置換（RSSからコピーした場合などの対策）
   const imageUrl = rawImageUrl ? rawImageUrl.replace(/&amp;/g, '&') : undefined;
 
   if (!text) {
@@ -32,57 +34,67 @@ async function postToThreads() {
   }
 
   try {
-    // 1. Get Threads user id automatically
+    // 1. Get Threads user id
     console.log('Fetching user information...');
     const meRes = await fetch(`https://graph.threads.net/v1.0/me?fields=id,username&access_token=${token}`);
     const meData = await meRes.json() as ThreadsResponse;
-
-    if (meData.error) {
-      throw new Error(`Failed to fetch user info: ${JSON.stringify(meData.error)}`);
-    }
+    if (meData.error) throw new Error(`User info failed: ${JSON.stringify(meData.error)}`);
 
     const userId = meData.id;
-    console.log(`Authenticated as ${meData.username} (ID: ${userId})`);
-    console.log(`Posting to Threads: "${text}"${imageUrl ? ` with image: ${imageUrl}` : ''}...`);
+    console.log(`Authenticated as ${meData.username}. Posting main message...`);
 
-    // 2. Create Media Container
+    // 2. Create Main Post Container
     const containerUrl = `https://graph.threads.net/v1.0/${userId}/threads`;
-    const params = new URLSearchParams();
-    params.append('access_token', token);
-    params.append('text', text);
-    
+    const mainParams = new URLSearchParams();
+    mainParams.append('access_token', token);
+    mainParams.append('text', text);
     if (imageUrl) {
-      params.append('media_type', 'IMAGE');
-      params.append('image_url', imageUrl);
+      mainParams.append('media_type', 'IMAGE');
+      mainParams.append('image_url', imageUrl);
     } else {
-      params.append('media_type', 'TEXT');
+      mainParams.append('media_type', 'TEXT');
     }
 
-    const containerRes = await fetch(`${containerUrl}?${params.toString()}`, { method: 'POST' });
-    const containerData = await containerRes.json() as ThreadsResponse;
+    const mainContainerRes = await fetch(`${containerUrl}?${mainParams.toString()}`, { method: 'POST' });
+    const mainContainerData = await mainContainerRes.json() as ThreadsResponse;
+    if (mainContainerData.error) throw new Error(`Main container failed: ${JSON.stringify(mainContainerData.error)}`);
 
-    if (containerData.error) {
-      throw new Error(`Container creation failed: ${JSON.stringify(containerData.error)}`);
-    }
-
-    const creationId = containerData.id;
-    console.log(`Container created (ID: ${creationId}). Publishing...`);
-
-    // 3. Publish Media
+    // 3. Publish Main Post
     const publishUrl = `https://graph.threads.net/v1.0/${userId}/threads_publish`;
-    const publishParams = new URLSearchParams();
-    publishParams.append('access_token', token);
-    publishParams.append('creation_id', creationId);
+    const mainPublishParams = new URLSearchParams();
+    mainPublishParams.append('access_token', token);
+    mainPublishParams.append('creation_id', mainContainerData.id);
 
-    const publishRes = await fetch(`${publishUrl}?${publishParams.toString()}`, { method: 'POST' });
-    const publishData = await publishRes.json() as ThreadsResponse;
+    const mainPublishRes = await fetch(`${publishUrl}?${mainPublishParams.toString()}`, { method: 'POST' });
+    const mainPublishData = await mainPublishRes.json() as ThreadsResponse;
+    if (mainPublishData.error) throw new Error(`Main publish failed: ${JSON.stringify(mainPublishData.error)}`);
 
-    if (publishData.error) {
-      throw new Error(`Publishing failed: ${JSON.stringify(publishData.error)}`);
-    }
+    const mainPostId = mainPublishData.id;
+    console.log(`Main post published! ID: ${mainPostId}`);
 
-    console.log('Successfully posted to Threads!');
-    console.log(`Post ID: ${publishData.id}`);
+    // 4. Create Reply Post Container (Thread Footer)
+    console.log('Posting automatic reply...');
+    const replyParams = new URLSearchParams();
+    replyParams.append('access_token', token);
+    replyParams.append('text', FOOTER_TEXT);
+    replyParams.append('media_type', 'TEXT');
+    replyParams.append('reply_to_id', mainPostId);
+
+    const replyContainerRes = await fetch(`${containerUrl}?${replyParams.toString()}`, { method: 'POST' });
+    const replyContainerData = await replyContainerRes.json() as ThreadsResponse;
+    if (replyContainerData.error) throw new Error(`Reply container failed: ${JSON.stringify(replyContainerData.error)}`);
+
+    // 5. Publish Reply Post
+    const replyPublishParams = new URLSearchParams();
+    replyPublishParams.append('access_token', token);
+    replyPublishParams.append('creation_id', replyContainerData.id);
+
+    const replyPublishRes = await fetch(`${publishUrl}?${replyPublishParams.toString()}`, { method: 'POST' });
+    const replyPublishData = await replyPublishRes.json() as ThreadsResponse;
+    if (replyPublishData.error) throw new Error(`Reply publish failed: ${JSON.stringify(replyPublishData.error)}`);
+
+    console.log('Successfully posted thread with reply!');
+    console.log(`Reply ID: ${replyPublishData.id}`);
 
   } catch (error) {
     console.error('Failed to post to Threads:', error);
