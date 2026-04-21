@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "post:threads": "tsx scripts/post-threads.ts",
+    "post:latest": "tsx scripts/post-latest-news.ts",
     "pr:check": "npm run lint && npm run build",
     "deploy": "npm run build && wrangler pages deploy dist",
     "preview": "npm run build && wrangler pages dev dist"

@@ -15,27 +15,15 @@ interface ThreadsResponse {
 const FOOTER_TEXT = `オーストラリアのニュースを日本語で読みたいなら「南半球の朝ごはんニュース」
 https://news-ja.pages.dev/`;
 
-async function postToThreads() {
-  const text = process.argv[2];
-  const rawImageUrl = process.argv[3];
-  const imageUrl = rawImageUrl ? rawImageUrl.replace(/&amp;/g, '&') : undefined;
-
-  if (!text) {
-    console.error('Error: Message text is required.');
-    console.log('Usage: npm run post:threads "Your message" ["Image URL"]');
-    process.exit(1);
-  }
-
+export async function postToThreads(text: string, imageUrl?: string) {
   const token = process.env.THREADS_LONG_LIVED_TOKEN;
 
   if (!token || token === 'your_token_here') {
-    console.error('Error: THREADS_LONG_LIVED_TOKEN must be set in .env');
-    process.exit(1);
+    throw new Error('THREADS_LONG_LIVED_TOKEN must be set in .env');
   }
 
   try {
     // 1. Get Threads user id
-    console.log('Fetching user information...');
     const meRes = await fetch(`https://graph.threads.net/v1.0/me?fields=id,username&access_token=${token}`);
     const meData = await meRes.json() as ThreadsResponse;
     if (meData.error) throw new Error(`User info failed: ${JSON.stringify(meData.error)}`);
@@ -50,7 +38,7 @@ async function postToThreads() {
     mainParams.append('text', text);
     if (imageUrl) {
       mainParams.append('media_type', 'IMAGE');
-      mainParams.append('image_url', imageUrl);
+      mainParams.append('image_url', imageUrl.replace(/&amp;/g, '&'));
     } else {
       mainParams.append('media_type', 'TEXT');
     }
@@ -72,7 +60,7 @@ async function postToThreads() {
     const mainPostId = mainPublishData.id;
     console.log(`Main post published! ID: ${mainPostId}`);
 
-    // 4. Create Reply Post Container (Thread Footer)
+    // 4. Create Reply Post Container
     console.log('Posting automatic reply...');
     const replyParams = new URLSearchParams();
     replyParams.append('access_token', token);
@@ -94,12 +82,24 @@ async function postToThreads() {
     if (replyPublishData.error) throw new Error(`Reply publish failed: ${JSON.stringify(replyPublishData.error)}`);
 
     console.log('Successfully posted thread with reply!');
-    console.log(`Reply ID: ${replyPublishData.id}`);
+    return { mainPostId, replyId: replyPublishData.id };
 
   } catch (error) {
     console.error('Failed to post to Threads:', error);
-    process.exit(1);
+    throw error;
   }
 }
 
-postToThreads();
+// 従来の CLI 実行用ロジック
+if (import.meta.url.endsWith(process.argv[1]) || process.argv[1].endsWith('post-threads.ts')) {
+  const text = process.argv[2];
+  const imageUrl = process.argv[3];
+
+  if (!text) {
+    console.error('Error: Message text is required.');
+    console.log('Usage: npm run post:threads "Your message" ["Image URL"]');
+    process.exit(1);
+  }
+
+  postToThreads(text, imageUrl).catch(() => process.exit(1));
+}
