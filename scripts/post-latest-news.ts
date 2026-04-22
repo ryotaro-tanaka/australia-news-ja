@@ -45,10 +45,11 @@ PRやワーキングホリデーで滞在している日本人が関心を持つ
 記事内容:
 ${cleanText}`;
 
-    // Execute local gemini command
+    // Execute local gemini command with explicit model specification
     const summary = execSync('gemini', {
       input: prompt,
-      encoding: 'utf-8'
+      encoding: 'utf-8',
+      env: { ...process.env, GEMINI_MODEL: 'gemini-2.5-flash-lite' }
     }).trim();
 
     if (!summary) {
