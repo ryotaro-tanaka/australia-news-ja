@@ -125,13 +125,20 @@ export const onRequest: PagesFunction = async (context) => {
       };
     })
     .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
-    .sort((a, b) => b.pubDate - a.pubDate)
-    .slice(0, 15);
+    .sort((a, b) => b.pubDate - a.pubDate);
 
-    if (parsedItems.length === 0) throw new Error("No items passed the filter");
+    // Duplicate removal: Keep only the first (latest) occurrence of each link
+    const seenLinks = new Set<string>();
+    const uniqueItems = parsedItems.filter(item => {
+      if (seenLinks.has(item.link)) return false;
+      seenLinks.add(item.link);
+      return true;
+    }).slice(0, 15);
+
+    if (uniqueItems.length === 0) throw new Error("No items passed the filter");
 
     const translatedNews = await Promise.all(
-      parsedItems.map(async (item) => {
+      uniqueItems.map(async (item) => {
         const [titleJa, lineJa] = await Promise.all([
           translateText(item.title),
           translateText(item.firstLine)
