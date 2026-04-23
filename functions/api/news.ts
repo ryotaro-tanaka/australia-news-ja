@@ -1,11 +1,24 @@
+import glossary from "./glossary.json";
+
+function applyGlossary(text: string): string {
+  let processed = text;
+  for (const [short, full] of Object.entries(glossary)) {
+    // Use word boundary to avoid partial matches (e.g., AWAY)
+    const regex = new RegExp(`\\b${short}\\b`, 'g');
+    processed = processed.replace(regex, full);
+  }
+  return processed;
+}
+
 async function translateText(text: string): Promise<string> {
   if (!text) return "";
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(text)}`;
+    const expandedText = applyGlossary(text);
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(expandedText)}`;
     const response = await fetch(url);
     // Explicit type for Google Translate response
     const data = await response.json() as unknown as [string[][], null, string];
-    return data[0].map((item: string[]) => item[0]).join("") || text;
+    return data[0].map((item: string[]) => item[0]).join("") || expandedText;
   } catch (e) {
     console.error("Translation error:", e);
     return text;
@@ -125,13 +138,20 @@ export const onRequest: PagesFunction = async (context) => {
       };
     })
     .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
-    .sort((a, b) => b.pubDate - a.pubDate)
-    .slice(0, 15);
+    .sort((a, b) => b.pubDate - a.pubDate);
 
-    if (parsedItems.length === 0) throw new Error("No items passed the filter");
+    // Duplicate removal: Keep only the first (latest) occurrence of each link
+    const seenLinks = new Set<string>();
+    const uniqueItems = parsedItems.filter(item => {
+      if (seenLinks.has(item.link)) return false;
+      seenLinks.add(item.link);
+      return true;
+    }).slice(0, 15);
+
+    if (uniqueItems.length === 0) throw new Error("No items passed the filter");
 
     const translatedNews = await Promise.all(
-      parsedItems.map(async (item) => {
+      uniqueItems.map(async (item) => {
         const [titleJa, lineJa] = await Promise.all([
           translateText(item.title),
           translateText(item.firstLine)
