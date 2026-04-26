@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNews } from '../../hooks/useNews';
 import { NewsCard } from './NewsCard';
-import { NewsItem } from '../../types/news';
+import type { NewsItem } from '../../types/news';
 
 export const NewsList: React.FC = () => {
   const { news, loading, error } = useNews();
