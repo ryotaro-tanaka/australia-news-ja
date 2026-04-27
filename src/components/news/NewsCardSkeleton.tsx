@@ -9,12 +9,11 @@ export const NewsCardSkeleton: React.FC = () => {
         </div>
         <div className="text-container">
           <div className="card-meta">
-            <div className="skeleton skeleton-meta" style={{ width: '80px' }}></div>
+            <div className="skeleton skeleton-meta"></div>
           </div>
           <div className="skeleton skeleton-title"></div>
-          <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
-          <div className="skeleton skeleton-text" style={{ width: '90%' }}></div>
-          <div className="skeleton skeleton-text" style={{ width: '40%' }}></div>
+          <div className="skeleton skeleton-text"></div>
+          <div className="skeleton skeleton-text" style={{ width: '60%' }}></div>
         </div>
       </div>
     </article>
