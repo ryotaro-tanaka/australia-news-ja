@@ -105,8 +105,10 @@ ${cleanText}`;
 
     // 6. Post to Threads (Indonesian)
     console.log('Posting Indonesian version to Threads...');
+    const footerTextId = `Jika Anda ingin membaca berita Australia dalam Bahasa Indonesia, kunjungi "Kabar Sarapan dari Australia"
+https://news-ja.pages.dev/id`;
     const finalMessageId = `${summaryId}\n\n#whvindonesia`;
-    await postToThreads(finalMessageId, latest.thumbnail, "Australia");
+    await postToThreads(finalMessageId, latest.thumbnail, "Australia", footerTextId);
     
     console.log('Done! Successfully posted both Japanese and Indonesian news to Threads.');
 
