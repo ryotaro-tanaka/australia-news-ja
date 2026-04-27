@@ -27,7 +27,7 @@ export const NewsList: React.FC = () => {
   // Native ad for Wise
   const wiseAd: NewsItem = {
     title: "Overseas Remittance with Wise",
-    link: "https://wise.prf.hn/click/camref:1110lEYXk/creativeref:1100l100085",
+    link: "https://wise.prf.hn/click/camref:1110lEYXd",
     firstLine: "Save on fees for money transfers to Japan.",
     title_ja: "海外送金なら Wise (ワイズ) - 手数料を節約",
     firstLine_ja: "銀行よりも安く、速い海外送金。オーストラリアから日本への送金や、外貨管理に最適。現地在住者の必須ツールです。",
