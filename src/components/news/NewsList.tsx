@@ -19,7 +19,10 @@ export const NewsList: React.FC = () => {
     );
   }
   
-  if (error) return <div className="error">エラーが発生しました: {error}</div>;
+  if (error) {
+    const errorPrefix = language === 'id' ? 'Terjadi kesalahan:' : 'エラーが発生しました:';
+    return <div className="error">{errorPrefix} {error}</div>;
+  }
 
   // Native ad for Wise
   const wiseAd: NewsItem = {
@@ -28,7 +31,7 @@ export const NewsList: React.FC = () => {
     firstLine: "Save on fees for money transfers to Japan.",
     title_ja: "海外送金なら Wise (ワイズ) - 手数料を節約",
     firstLine_ja: "銀行よりも安く、速い海外送金。オーストラリアから日本への送金や、外貨管理に最適。現地在住者の必須ツールです。",
-    title_id: "Kirim Uang ke Luar Negeri dengan Wise - Hemat Biaya",
+    title_id: "Kirim Uang ke Luar Negeri with Wise - Hemat Biaya",
     firstLine_id: "Pengiriman uang internasional yang lebih murah dan cepat daripada bank. Ideal untuk mengirim uang dari Australia ke Indonesia.",
     thumbnail: "https://wise-creative.prf.hn/source/camref:1110lEYXk/creativeref:1100l100085",
     category: "PR",
@@ -47,11 +50,6 @@ export const NewsList: React.FC = () => {
     <main className="news-list">
       {displayItems.map((item, index) => (
         <NewsCard key={`${item.link}-${index}`} item={item} />
-      ))}
-    </main>
-  );
-};
-m={item} />
       ))}
     </main>
   );
