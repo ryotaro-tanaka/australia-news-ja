@@ -1,17 +1,24 @@
 import React from 'react';
 import type { NewsItem } from '../../types/news';
+import { useNewsContext } from '../../state/NewsContext';
 
 interface NewsCardProps {
   item: NewsItem;
 }
 
 export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
-  const formattedDate = new Date(item.pubDate).toLocaleDateString('ja-JP', {
+  const { state: { language } } = useNewsContext();
+  const isId = language === 'id';
+
+  const formattedDate = new Date(item.pubDate).toLocaleDateString(isId ? 'id-ID' : 'ja-JP', {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
   });
+
+  const title = isId ? item.title_id : item.title_ja;
+  const description = isId ? item.firstLine_id : item.firstLine_ja;
 
   return (
     <article className="news-card">
@@ -27,8 +34,8 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
               <span className="category-badge">{item.category}</span>
               <time className="pub-date">{formattedDate}</time>
             </div>
-            <h2>{item.title_ja}</h2>
-            <p className="description">{item.firstLine_ja}</p>
+            <h2>{title}</h2>
+            <p className="description">{description}</p>
           </div>
         </div>
       </a>

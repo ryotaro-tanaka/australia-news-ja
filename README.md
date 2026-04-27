@@ -1,5 +1,8 @@
 # 南半球の朝ごはんニュース
 
+![CI](https://github.com/ryotaro-tanaka/australia-news-ja/actions/workflows/ci.yml/badge.svg)
+![Deploy](https://github.com/ryotaro-tanaka/australia-news-ja/actions/workflows/deploy.yml/badge.svg)
+
 URL: https://news-ja.pages.dev/
 
 ## ターゲット
