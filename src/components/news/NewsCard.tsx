@@ -34,7 +34,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
               <span className="category-badge">{item.category}</span>
               <time className="pub-date">{formattedDate}</time>
             </div>
-            <h2 className="news-title">{title}</h2>
+            <h2>{title}</h2>
             <p className="description">{description}</p>
           </div>
         </div>
