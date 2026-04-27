@@ -8,7 +8,7 @@ function NewsApp() {
 
   useEffect(() => {
     const isId = language === 'id';
-    const title = isId ? 'Berita Australia' : '南半球の朝ごはんニュース';
+    const title = isId ? 'Kabar Sarapan dari Australia' : '南半球の朝ごはんニュース';
     const description = isId 
       ? 'Berita terbaru dari Australia dalam Bahasa Indonesia. Informasi penting bagi warga Indonesia yang tinggal di Australia.' 
       : 'オーストラリアの最新ニュースを日本語で。現地在住者向けの情報を毎朝お届けします。';
@@ -38,6 +38,11 @@ function NewsApp() {
 
   return (
     <div className="container">
+      <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '1.8rem', color: '#1a1a1a', margin: '0' }}>
+          {language === 'id' ? 'Kabar Sarapan dari Australia' : '南半球の朝ごはんニュース'}
+        </h1>
+      </header>
       <main>
         <NewsList />
       </main>
