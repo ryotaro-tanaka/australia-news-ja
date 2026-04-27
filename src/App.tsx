@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 import { NewsProvider, useNewsContext } from './state/NewsContext'
 import { NewsList } from './components/news/NewsList'
