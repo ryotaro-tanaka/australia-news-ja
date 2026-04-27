@@ -10,6 +10,7 @@
     "check": "npm run lint && npm run build",
     "post": "tsx scripts/post-latest-news.ts",
     "post:raw": "tsx scripts/post-threads.ts",
+    "list": "tsx scripts/list-news.ts",
     "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
