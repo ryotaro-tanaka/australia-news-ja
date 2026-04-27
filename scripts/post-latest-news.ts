@@ -9,6 +9,14 @@ interface NewsItem {
 
 async function postLatestNews() {
   try {
+    // 0. Parse optional index from command line
+    const argIndex = process.argv[2];
+    const targetIndex = argIndex ? parseInt(argIndex, 10) : 0;
+
+    if (isNaN(targetIndex)) {
+      throw new Error(`Invalid index provided: ${argIndex}. Please provide a number.`);
+    }
+
     // 1. Get latest news from API
     console.log('Fetching latest news from API...');
     const newsRes = await fetch('https://news-ja.pages.dev/api/news?nocache=1');
@@ -18,8 +26,12 @@ async function postLatestNews() {
       throw new Error('No news found from API');
     }
 
-    const latest = newsData[0];
-    console.log(`Latest news: ${latest.title}`);
+    if (targetIndex < 0 || targetIndex >= newsData.length) {
+      throw new Error(`Target index ${targetIndex} is out of bounds. Available news: 0 to ${newsData.length - 1}`);
+    }
+
+    const latest = newsData[targetIndex];
+    console.log(`Processing news at index ${targetIndex}: ${latest.title}`);
 
     // 2. Fetch article content
     console.log(`Fetching article content from: ${latest.link}...`);
