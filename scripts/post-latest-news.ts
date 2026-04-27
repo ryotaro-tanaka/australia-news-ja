@@ -73,12 +73,42 @@ ${cleanText}`;
     console.log(summary);
     console.log('---');
 
-    // 4. Post to Threads with Tag and Hashtag
-    console.log('Posting to Threads...');
-    const finalMessage = `${summary}\n\n#オーストラリア`;
-    await postToThreads(finalMessage, latest.thumbnail, "オーストラリア");
+    // 4. Post to Threads with Tag and Hashtag (Japanese)
+    console.log('Posting Japanese version to Threads...');
+    const finalMessageJa = `${summary}\n\n#オーストラリア`;
+    await postToThreads(finalMessageJa, latest.thumbnail, "オーストラリア");
+
+    // 5. Summarize in Indonesian using Gemini CLI
+    console.log('Generating Indonesian summary using Gemini CLI...');
+    const promptId = `Tolong ringkas artikel berita Australia berikut ini ke dalam bahasa Indonesia yang mudah dipahami, sekitar 250 karakter.
+Tekankan poin-poin yang menarik bagi orang Indonesia yang sedang tinggal di Australia, seperti pemegang visa PR atau Working Holiday (WHV).
+Sertakan URL sumber berita (${latest.link}) di akhir ringkasan.
+Pastikan total teks tidak lebih dari 400 karakter.
+
+Konten artikel:
+${cleanText}`;
+
+    const summaryId = execSync('gemini', {
+      input: promptId,
+      encoding: 'utf-8',
+      env: { ...process.env, GEMINI_MODEL: 'gemini-2.5-flash-lite' }
+    }).trim();
+
+    if (!summaryId) {
+      throw new Error('Gemini failed to generate Indonesian summary');
+    }
+
+    console.log('Indonesian summary generated successfully:');
+    console.log('---');
+    console.log(summaryId);
+    console.log('---');
+
+    // 6. Post to Threads (Indonesian)
+    console.log('Posting Indonesian version to Threads...');
+    const finalMessageId = `${summaryId}\n\n#whvindonesia`;
+    await postToThreads(finalMessageId, latest.thumbnail, "Australia");
     
-    console.log('Done! Successfully posted latest news to Threads.');
+    console.log('Done! Successfully posted both Japanese and Indonesian news to Threads.');
 
   } catch (error) {
     console.error('Failed to automate news posting:', error);
