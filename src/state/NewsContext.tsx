@@ -6,17 +6,20 @@ interface NewsState {
   items: NewsItem[];
   loading: boolean;
   error: string | null;
+  language: 'ja' | 'id';
 }
 
 type NewsAction =
   | { type: 'FETCH_START' }
   | { type: 'FETCH_SUCCESS'; payload: NewsItem[] }
-  | { type: 'FETCH_ERROR'; payload: string };
+  | { type: 'FETCH_ERROR'; payload: string }
+  | { type: 'SET_LANGUAGE'; payload: 'ja' | 'id' };
 
 const initialState: NewsState = {
   items: [],
   loading: false,
   error: null,
+  language: window.location.pathname.startsWith('/id') ? 'id' : 'ja',
 };
 
 function newsReducer(state: NewsState, action: NewsAction): NewsState {
@@ -27,6 +30,8 @@ function newsReducer(state: NewsState, action: NewsAction): NewsState {
       return { ...state, loading: false, items: action.payload };
     case 'FETCH_ERROR':
       return { ...state, loading: false, error: action.payload };
+    case 'SET_LANGUAGE':
+      return { ...state, language: action.payload };
     default:
       return state;
   }

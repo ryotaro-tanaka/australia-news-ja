@@ -10,17 +10,17 @@ function applyGlossary(text: string): string {
   return processed;
 }
 
-async function translateText(text: string): Promise<string> {
+async function translateText(text: string, targetLang: string = 'ja'): Promise<string> {
   if (!text) return "";
   try {
     const expandedText = applyGlossary(text);
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ja&dt=t&q=${encodeURIComponent(expandedText)}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(expandedText)}`;
     const response = await fetch(url);
     // Explicit type for Google Translate response
     const data = await response.json() as unknown as [string[][], null, string];
     return data[0].map((item: string[]) => item[0]).join("") || expandedText;
   } catch (e) {
-    console.error("Translation error:", e);
+    console.error(`Translation error (${targetLang}):`, e);
     return text;
   }
 }
@@ -152,9 +152,11 @@ export const onRequest: PagesFunction = async (context) => {
 
     const translatedNews = await Promise.all(
       uniqueItems.map(async (item) => {
-        const [titleJa, lineJa] = await Promise.all([
-          translateText(item.title),
-          translateText(item.firstLine)
+        const [titleJa, lineJa, titleId, lineId] = await Promise.all([
+          translateText(item.title, 'ja'),
+          translateText(item.firstLine, 'ja'),
+          translateText(item.title, 'id'),
+          translateText(item.firstLine, 'id')
         ]);
 
         return {
@@ -163,6 +165,8 @@ export const onRequest: PagesFunction = async (context) => {
           firstLine: item.firstLine,
           title_ja: titleJa,
           firstLine_ja: lineJa,
+          title_id: titleId,
+          firstLine_id: lineId,
           thumbnail: item.thumbnail,
           category: item.category,
           pubDate: item.displayDate
