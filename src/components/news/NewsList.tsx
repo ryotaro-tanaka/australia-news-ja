@@ -1,12 +1,22 @@
 import React from 'react';
 import { useNews } from '../../hooks/useNews';
 import { NewsCard } from './NewsCard';
+import { NewsCardSkeleton } from './NewsCardSkeleton';
 import type { NewsItem } from '../../types/news';
 
 export const NewsList: React.FC = () => {
   const { news, loading, error } = useNews();
 
-  if (loading) return <div className="loading">読み込み中...</div>;
+  if (loading) {
+    return (
+      <main className="news-list">
+        {[...Array(5)].map((_, i) => (
+          <NewsCardSkeleton key={i} />
+        ))}
+      </main>
+    );
+  }
+  
   if (error) return <div className="error">エラーが発生しました: {error}</div>;
 
   // Native ad for Wise
