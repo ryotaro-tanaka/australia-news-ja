@@ -17,8 +17,12 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
     minute: '2-digit'
   });
 
-  const title = isId ? item.title_id : item.title_ja;
-  const description = isId ? item.firstLine_id : item.firstLine_ja;
+  const title = isId 
+    ? (item.title_id || item.title) 
+    : (item.title_ja || item.title);
+  const description = isId 
+    ? (item.firstLine_id || item.firstLine) 
+    : (item.firstLine_ja || item.firstLine);
 
   return (
     <article className="news-card">
