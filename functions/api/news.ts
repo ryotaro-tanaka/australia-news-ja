@@ -10,18 +10,17 @@ function applyGlossary(text: string): string {
   return processed;
 }
 
-async function translateText(text: string, targetLang: string = 'ja'): Promise<string> {
-  if (!text) return "";
+async function translateText(text: string, targetLang: string = 'ja'): Promise<string | null> {
+  if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(expandedText)}`;
     const response = await fetch(url);
-    // Explicit type for Google Translate response
     const data = await response.json() as unknown as [string[][], null, string];
-    return data[0].map((item: string[]) => item[0]).join("") || expandedText;
+    return data[0].map((item: string[]) => item[0]).join("") || null;
   } catch (e) {
     console.error(`Translation error (${targetLang}):`, e);
-    return text;
+    return null;
   }
 }
 
@@ -163,10 +162,10 @@ export const onRequest: PagesFunction = async (context) => {
           title: item.title,
           link: item.link,
           firstLine: item.firstLine,
-          title_ja: titleJa,
-          firstLine_ja: lineJa,
-          title_id: titleId,
-          firstLine_id: lineId,
+          title_ja: titleJa || "",
+          firstLine_ja: lineJa || "",
+          title_id: titleId || "",
+          firstLine_id: lineId || "",
           thumbnail: item.thumbnail,
           category: item.category,
           pubDate: item.displayDate
