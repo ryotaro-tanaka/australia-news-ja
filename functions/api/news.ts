@@ -1,9 +1,12 @@
 import glossary from "./glossary.json";
 
+interface Env {
+  NEWS_TRANSLATIONS: KVNamespace;
+}
+
 function applyGlossary(text: string): string {
   let processed = text;
   for (const [short, full] of Object.entries(glossary)) {
-    // Use word boundary to avoid partial matches (e.g., AWAY)
     const regex = new RegExp(`\\b${short}\\b`, 'g');
     processed = processed.replace(regex, full);
   }
@@ -65,7 +68,8 @@ function extractThumbnail(itemXml: string): string {
   return "";
 }
 
-export const onRequest: PagesFunction = async (context) => {
+export const onRequest: PagesFunction<Env> = async (context) => {
+  const { env } = context;
   const cache = (caches as { default: Cache }).default;
   const url = new URL(context.request.url);
   const isNoCache = url.searchParams.has('nocache');
@@ -83,8 +87,8 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const FEEDS = [
-    "https://www.abc.net.au/news/feed/51892/rss.xml", // Business
-    "https://www.abc.net.au/news/feed/1042/rss.xml"  // Politics
+    "https://www.abc.net.au/news/feed/51892/rss.xml",
+    "https://www.abc.net.au/news/feed/1042/rss.xml"
   ];
 
   const EXCLUDED_KEYWORDS = ["music", "arts", "fiction", "book", "movie", "film", "statue", "entertainment", "culture", "festival", "sculpture", "theatre"];
@@ -139,22 +143,15 @@ export const onRequest: PagesFunction = async (context) => {
     .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
     .sort((a, b) => b.pubDate - a.pubDate);
 
-    // Duplicate removal: Keep only the first (latest) occurrence of each link
     const seenLinks = new Set<string>();
     const uniqueItems = parsedItems.filter(item => {
       if (seenLinks.has(item.link)) return false;
       seenLinks.add(item.link);
       return true;
     }).slice(0, 15);
-interface Env {
-  NEWS_TRANSLATIONS: KVNamespace;
-}
 
-// ... inside onRequest ...
-const onRequest: PagesFunction<Env> = async (context) => {
-  const { env } = context;
-  const cache = (caches as { default: Cache }).default;
-// ...
+    if (uniqueItems.length === 0) throw new Error("No items passed the filter");
+
     const translatedNews = await Promise.all(
       uniqueItems.map(async (item) => {
         const cacheKeyJa = `ja:${item.link}`;
@@ -225,5 +222,3 @@ const onRequest: PagesFunction<Env> = async (context) => {
     });
   }
 };
-
-export default onRequest;
