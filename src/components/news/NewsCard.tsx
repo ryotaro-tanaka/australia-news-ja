@@ -17,12 +17,14 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
     minute: '2-digit'
   });
 
+  console.log('NewsCard debug:', { title: item.title, ja: item.title_ja, id: item.title_id });
+
   const title = isId 
-    ? (item.title_id || (console.log('Using English title_id fallback:', item.title), item.title)) 
-    : (item.title_ja || (console.log('Using English title_ja fallback:', item.title), item.title));
+    ? (item.title_id || item.title) 
+    : (item.title_ja || item.title);
   const description = isId 
-    ? (item.firstLine_id || (console.log('Using English firstLine_id fallback:', item.firstLine), item.firstLine)) 
-    : (item.firstLine_ja || (console.log('Using English firstLine_ja fallback:', item.firstLine), item.firstLine));
+    ? (item.firstLine_id || item.firstLine) 
+    : (item.firstLine_ja || item.firstLine);
 
   return (
     <article className="news-card">
