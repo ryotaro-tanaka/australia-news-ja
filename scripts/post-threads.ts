@@ -43,7 +43,7 @@ async function waitForPostAvailability(userId: string, token: string, targetPost
   return false;
 }
 
-export async function postToThreads(text: string, imageUrl?: string, tag?: string) {
+export async function postToThreads(text: string, imageUrl?: string, tag?: string, replyText?: string) {
   const token = process.env.THREADS_LONG_LIVED_TOKEN;
 
   // 500文字制限のチェックと切り詰め
@@ -107,7 +107,7 @@ export async function postToThreads(text: string, imageUrl?: string, tag?: strin
     console.log('Posting automatic reply...');
     const replyParams = new URLSearchParams();
     replyParams.append('access_token', token);
-    replyParams.append('text', FOOTER_TEXT);
+    replyParams.append('text', replyText || FOOTER_TEXT);
     replyParams.append('media_type', 'TEXT');
     replyParams.append('reply_to_id', mainPostId);
 
@@ -142,12 +142,13 @@ if (import.meta.url.endsWith(process.argv[1]) || (process.argv[1] && process.arg
   const text = process.argv[2];
   const imageUrl = process.argv[3];
   const tag = process.argv[4];
+  const replyText = process.argv[5];
 
   if (!text) {
     console.error('Error: Message text is required.');
-    console.log('Usage: npm run post:threads "Your message" ["Image URL"] ["Tag"]');
+    console.log('Usage: npm run post:threads "Your message" ["Image URL"] ["Tag"] ["Reply Text"]');
     process.exit(1);
   }
 
-  postToThreads(text, imageUrl, tag).catch(() => process.exit(1));
+  postToThreads(text, imageUrl, tag, replyText).catch(() => process.exit(1));
 }
