@@ -68,6 +68,10 @@ function extractThumbnail(itemXml: string): string {
   return "";
 }
 
+async function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { env } = context;
   const cache = (caches as { default: Cache }).default;
@@ -152,37 +156,82 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     if (uniqueItems.length === 0) throw new Error("No items passed the filter");
 
-    const translatedNews = await Promise.all(
+    // Phase 1: Parallel KV Lookup
+    const kvData = await Promise.all(
       uniqueItems.map(async (item) => {
         const cacheKeyJa = `ja:${item.link}`;
         const cacheKeyId = `id:${item.link}`;
-
         const [cachedJa, cachedId] = await Promise.all([
           env.NEWS_TRANSLATIONS.get(cacheKeyJa),
           env.NEWS_TRANSLATIONS.get(cacheKeyId)
         ]);
 
-        let titleJa = cachedJa ? JSON.parse(cachedJa).title : null;
-        let lineJa = cachedJa ? JSON.parse(cachedJa).line : null;
-        let titleId = cachedId ? JSON.parse(cachedId).title : null;
-        let lineId = cachedId ? JSON.parse(cachedId).line : null;
+        return {
+          item,
+          ja: cachedJa ? JSON.parse(cachedJa) : null,
+          id: cachedId ? JSON.parse(cachedId) : null
+        };
+      })
+    );
 
+    // Phase 2: Identify items needing translation
+    const results = new Array(uniqueItems.length);
+    const toTranslateIndices: number[] = [];
+
+    kvData.forEach((data, index) => {
+      if (data.ja && data.id) {
+        // Fully cached in KV
+        results[index] = {
+          title: data.item.title,
+          link: data.item.link,
+          firstLine: data.item.firstLine,
+          title_ja: data.ja.title,
+          firstLine_ja: data.ja.line,
+          title_id: data.id.title,
+          firstLine_id: data.id.line,
+          thumbnail: data.item.thumbnail,
+          category: data.item.category,
+          pubDate: data.item.displayDate
+        };
+      } else {
+        toTranslateIndices.push(index);
+      }
+    });
+
+    // Phase 3: Chunked Translation (10 items per chunk)
+    const CHUNK_SIZE = 10;
+    for (let i = 0; i < toTranslateIndices.length; i += CHUNK_SIZE) {
+      const chunk = toTranslateIndices.slice(i, i + CHUNK_SIZE);
+      
+      // Parallel within chunk
+      await Promise.all(chunk.map(async (index) => {
+        const data = kvData[index];
+        const item = data.item;
+
+        let titleJa = data.ja?.title || null;
+        let lineJa = data.ja?.line || null;
+        let titleId = data.id?.title || null;
+        let lineId = data.id?.line || null;
+
+        // Translate JA if missing
         if (!titleJa || !lineJa) {
           titleJa = await translateText(item.title, 'ja');
           lineJa = await translateText(item.firstLine, 'ja');
           if (titleJa && lineJa) {
-            await env.NEWS_TRANSLATIONS.put(cacheKeyJa, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
+            await env.NEWS_TRANSLATIONS.put(`ja:${item.link}`, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
           }
         }
+
+        // Translate ID if missing
         if (!titleId || !lineId) {
           titleId = await translateText(item.title, 'id');
           lineId = await translateText(item.firstLine, 'id');
           if (titleId && lineId) {
-            await env.NEWS_TRANSLATIONS.put(cacheKeyId, JSON.stringify({ title: titleId, line: lineId }), { expirationTtl: 259200 });
+            await env.NEWS_TRANSLATIONS.put(`id:${item.link}`, JSON.stringify({ title: titleId, line: lineId }), { expirationTtl: 259200 });
           }
         }
 
-        return {
+        results[index] = {
           title: item.title,
           link: item.link,
           firstLine: item.firstLine,
@@ -194,17 +243,22 @@ export const onRequest: PagesFunction<Env> = async (context) => {
           category: item.category,
           pubDate: item.displayDate
         };
-      })
-    );
+      }));
 
-    const resultResponse = new Response(JSON.stringify(translatedNews), {
+      // Wait if there are more chunks to process
+      if (i + CHUNK_SIZE < toTranslateIndices.length) {
+        await sleep(1000);
+      }
+    }
+
+    const resultResponse = new Response(JSON.stringify(results), {
       headers: { 
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, s-maxage=1800"
       }
     });
 
-    if (translatedNews.length > 0) {
+    if (results.length > 0) {
       try {
         context.waitUntil(cache.put(cacheKey, resultResponse.clone()));
       } catch (e) {
