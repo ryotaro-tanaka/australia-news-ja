@@ -17,8 +17,6 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
     minute: '2-digit'
   });
 
-  console.log('NewsCard debug:', { title: item.title, ja: item.title_ja, id: item.title_id });
-
   const title = isId 
     ? (item.title_id || item.title) 
     : (item.title_ja || item.title);

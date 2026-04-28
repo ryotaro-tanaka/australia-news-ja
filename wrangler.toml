@@ -4,4 +4,4 @@ pages_build_output_dir = "dist"
 
 [[kv_namespaces]]
 binding = "NEWS_TRANSLATIONS"
-id = "7621495c277b4d1b827e7f5313337060"
+id = "f7b21548e6004b7d87da19264c73ac72"
