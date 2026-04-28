@@ -146,17 +146,44 @@ export const onRequest: PagesFunction = async (context) => {
       seenLinks.add(item.link);
       return true;
     }).slice(0, 15);
+interface Env {
+  NEWS_TRANSLATIONS: KVNamespace;
+}
 
-    if (uniqueItems.length === 0) throw new Error("No items passed the filter");
-
+// ... inside onRequest ...
+export const onRequest: PagesFunction<Env> = async (context) => {
+  const { env } = context;
+  const cache = (caches as { default: Cache }).default;
+// ...
     const translatedNews = await Promise.all(
       uniqueItems.map(async (item) => {
-        const [titleJa, lineJa, titleId, lineId] = await Promise.all([
-          translateText(item.title, 'ja'),
-          translateText(item.firstLine, 'ja'),
-          translateText(item.title, 'id'),
-          translateText(item.firstLine, 'id')
+        const cacheKeyJa = `ja:${item.link}`;
+        const cacheKeyId = `id:${item.link}`;
+
+        const [cachedJa, cachedId] = await Promise.all([
+          env.NEWS_TRANSLATIONS.get(cacheKeyJa),
+          env.NEWS_TRANSLATIONS.get(cacheKeyId)
         ]);
+
+        let titleJa = cachedJa ? JSON.parse(cachedJa).title : null;
+        let lineJa = cachedJa ? JSON.parse(cachedJa).line : null;
+        let titleId = cachedId ? JSON.parse(cachedId).title : null;
+        let lineId = cachedId ? JSON.parse(cachedId).line : null;
+
+        if (!titleJa || !lineJa) {
+          titleJa = await translateText(item.title, 'ja');
+          lineJa = await translateText(item.firstLine, 'ja');
+          if (titleJa && lineJa) {
+            await env.NEWS_TRANSLATIONS.put(cacheKeyJa, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
+          }
+        }
+        if (!titleId || !lineId) {
+          titleId = await translateText(item.title, 'id');
+          lineId = await translateText(item.firstLine, 'id');
+          if (titleId && lineId) {
+            await env.NEWS_TRANSLATIONS.put(cacheKeyId, JSON.stringify({ title: titleId, line: lineId }), { expirationTtl: 259200 });
+          }
+        }
 
         return {
           title: item.title,
