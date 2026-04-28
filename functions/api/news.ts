@@ -198,8 +198,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       }
     });
 
-    // Phase 3: Chunked Translation (10 items per chunk)
-    const CHUNK_SIZE = 10;
+    // Phase 3: Chunked Translation (5 items per chunk to stay within API limits)
+    const CHUNK_SIZE = 5;
     for (let i = 0; i < toTranslateIndices.length; i += CHUNK_SIZE) {
       const chunk = toTranslateIndices.slice(i, i + CHUNK_SIZE);
       
