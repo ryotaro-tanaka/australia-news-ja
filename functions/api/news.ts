@@ -151,7 +151,7 @@ interface Env {
 }
 
 // ... inside onRequest ...
-export const onRequest: PagesFunction<Env> = async (context) => {
+const onRequest: PagesFunction<Env> = async (context) => {
   const { env } = context;
   const cache = (caches as { default: Cache }).default;
 // ...
@@ -225,3 +225,5 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     });
   }
 };
+
+export default onRequest;
