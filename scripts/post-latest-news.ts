@@ -19,7 +19,7 @@ async function postLatestNews() {
 
     // 1. Get latest news from API
     console.log('Fetching latest news from API...');
-    const newsRes = await fetch('https://news-ja.pages.dev/api/news?nocache=1');
+    const newsRes = await fetch('https://news-ja.pages.dev/api/news?limit=20&nocache=1');
     const newsData = await newsRes.json() as NewsItem[];
     
     if (!newsData || newsData.length === 0) {

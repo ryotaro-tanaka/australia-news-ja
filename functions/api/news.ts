@@ -283,11 +283,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
   } catch (error) {
     console.error("Backend error:", error);
-    return new Response(JSON.stringify({ 
-      error: "Failed to fetch or filter news",
-      details: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined
-    }), {
+    return new Response(JSON.stringify({ error: "Failed to fetch or filter news" }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
