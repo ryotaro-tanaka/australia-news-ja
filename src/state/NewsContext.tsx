@@ -5,31 +5,51 @@ import type { NewsItem } from '../types/news';
 interface NewsState {
   items: NewsItem[];
   loading: boolean;
+  loadingMore: boolean;
   error: string | null;
   language: 'ja' | 'id';
+  hasMore: boolean;
 }
 
 type NewsAction =
   | { type: 'FETCH_START' }
+  | { type: 'FETCH_MORE_START' }
   | { type: 'FETCH_SUCCESS'; payload: NewsItem[] }
+  | { type: 'APPEND_NEWS'; payload: NewsItem[] }
   | { type: 'FETCH_ERROR'; payload: string }
   | { type: 'SET_LANGUAGE'; payload: 'ja' | 'id' };
 
 const initialState: NewsState = {
   items: [],
   loading: false,
+  loadingMore: false,
   error: null,
   language: window.location.pathname.startsWith('/id') ? 'id' : 'ja',
+  hasMore: true,
 };
 
 function newsReducer(state: NewsState, action: NewsAction): NewsState {
   switch (action.type) {
     case 'FETCH_START':
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null, hasMore: true };
+    case 'FETCH_MORE_START':
+      return { ...state, loadingMore: true, error: null };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, items: action.payload };
+      return { 
+        ...state, 
+        loading: false, 
+        items: action.payload, 
+        hasMore: action.payload.length >= 5 
+      };
+    case 'APPEND_NEWS':
+      return { 
+        ...state, 
+        loadingMore: false, 
+        items: [...state.items, ...action.payload], 
+        hasMore: action.payload.length >= 5 
+      };
     case 'FETCH_ERROR':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, loadingMore: false, error: action.payload };
     case 'SET_LANGUAGE':
       return { ...state, language: action.payload };
     default:
