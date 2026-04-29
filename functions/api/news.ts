@@ -147,14 +147,27 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
     .sort((a, b) => b.pubDate - a.pubDate);
 
+    const limit = parseInt(url.searchParams.get('limit') || '5', 10);
+    const before = parseInt(url.searchParams.get('before') || '0', 10);
+
     const seenLinks = new Set<string>();
-    const uniqueItems = parsedItems.filter(item => {
+    let pool = parsedItems.filter(item => {
       if (seenLinks.has(item.link)) return false;
       seenLinks.add(item.link);
       return true;
-    }).slice(0, 15);
+    });
 
-    if (uniqueItems.length === 0) throw new Error("No items passed the filter");
+    if (before > 0) {
+      pool = pool.filter(item => item.pubDate < before);
+    }
+
+    const uniqueItems = pool.slice(0, limit);
+
+    if (uniqueItems.length === 0) {
+      return new Response(JSON.stringify([]), {
+        headers: { "Content-Type": "application/json; charset=utf-8" }
+      });
+    }
 
     // Phase 1: Parallel KV Lookup
     const kvData = await Promise.all(
