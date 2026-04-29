@@ -1,27 +1,29 @@
 import glossary from "./glossary.json";
 
+interface Env {
+  NEWS_TRANSLATIONS: KVNamespace;
+}
+
 function applyGlossary(text: string): string {
   let processed = text;
   for (const [short, full] of Object.entries(glossary)) {
-    // Use word boundary to avoid partial matches (e.g., AWAY)
     const regex = new RegExp(`\\b${short}\\b`, 'g');
     processed = processed.replace(regex, full);
   }
   return processed;
 }
 
-async function translateText(text: string, targetLang: string = 'ja'): Promise<string> {
-  if (!text) return "";
+async function translateText(text: string, targetLang: string = 'ja'): Promise<string | null> {
+  if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(expandedText)}`;
     const response = await fetch(url);
-    // Explicit type for Google Translate response
     const data = await response.json() as unknown as [string[][], null, string];
-    return data[0].map((item: string[]) => item[0]).join("") || expandedText;
+    return data[0].map((item: string[]) => item[0]).join("") || null;
   } catch (e) {
     console.error(`Translation error (${targetLang}):`, e);
-    return text;
+    return null;
   }
 }
 
@@ -66,7 +68,12 @@ function extractThumbnail(itemXml: string): string {
   return "";
 }
 
-export const onRequest: PagesFunction = async (context) => {
+async function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const onRequest: PagesFunction<Env> = async (context) => {
+  const { env } = context;
   const cache = (caches as { default: Cache }).default;
   const url = new URL(context.request.url);
   const isNoCache = url.searchParams.has('nocache');
@@ -84,8 +91,8 @@ export const onRequest: PagesFunction = async (context) => {
   }
 
   const FEEDS = [
-    "https://www.abc.net.au/news/feed/51892/rss.xml", // Business
-    "https://www.abc.net.au/news/feed/1042/rss.xml"  // Politics
+    "https://www.abc.net.au/news/feed/51892/rss.xml",
+    "https://www.abc.net.au/news/feed/1042/rss.xml"
   ];
 
   const EXCLUDED_KEYWORDS = ["music", "arts", "fiction", "book", "movie", "film", "statue", "entertainment", "culture", "festival", "sculpture", "theatre"];
@@ -140,7 +147,6 @@ export const onRequest: PagesFunction = async (context) => {
     .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
     .sort((a, b) => b.pubDate - a.pubDate);
 
-    // Duplicate removal: Keep only the first (latest) occurrence of each link
     const seenLinks = new Set<string>();
     const uniqueItems = parsedItems.filter(item => {
       if (seenLinks.has(item.link)) return false;
@@ -150,38 +156,109 @@ export const onRequest: PagesFunction = async (context) => {
 
     if (uniqueItems.length === 0) throw new Error("No items passed the filter");
 
-    const translatedNews = await Promise.all(
+    // Phase 1: Parallel KV Lookup
+    const kvData = await Promise.all(
       uniqueItems.map(async (item) => {
-        const [titleJa, lineJa, titleId, lineId] = await Promise.all([
-          translateText(item.title, 'ja'),
-          translateText(item.firstLine, 'ja'),
-          translateText(item.title, 'id'),
-          translateText(item.firstLine, 'id')
+        const cacheKeyJa = `ja:${item.link}`;
+        const cacheKeyId = `id:${item.link}`;
+        const [cachedJa, cachedId] = await Promise.all([
+          env.NEWS_TRANSLATIONS.get(cacheKeyJa),
+          env.NEWS_TRANSLATIONS.get(cacheKeyId)
         ]);
 
         return {
-          title: item.title,
-          link: item.link,
-          firstLine: item.firstLine,
-          title_ja: titleJa,
-          firstLine_ja: lineJa,
-          title_id: titleId,
-          firstLine_id: lineId,
-          thumbnail: item.thumbnail,
-          category: item.category,
-          pubDate: item.displayDate
+          item,
+          ja: cachedJa ? JSON.parse(cachedJa) : null,
+          id: cachedId ? JSON.parse(cachedId) : null
         };
       })
     );
 
-    const resultResponse = new Response(JSON.stringify(translatedNews), {
+    // Phase 2: Identify items needing translation
+    const results = new Array(uniqueItems.length);
+    const toTranslateIndices: number[] = [];
+
+    kvData.forEach((data, index) => {
+      if (data.ja && data.id) {
+        // Fully cached in KV
+        results[index] = {
+          title: data.item.title,
+          link: data.item.link,
+          firstLine: data.item.firstLine,
+          title_ja: data.ja.title,
+          firstLine_ja: data.ja.line,
+          title_id: data.id.title,
+          firstLine_id: data.id.line,
+          thumbnail: data.item.thumbnail,
+          category: data.item.category,
+          pubDate: data.item.displayDate
+        };
+      } else {
+        toTranslateIndices.push(index);
+      }
+    });
+
+    // Phase 3: Chunked Translation (5 items per chunk to stay within API limits)
+    const CHUNK_SIZE = 5;
+    for (let i = 0; i < toTranslateIndices.length; i += CHUNK_SIZE) {
+      const chunk = toTranslateIndices.slice(i, i + CHUNK_SIZE);
+      
+      // Parallel within chunk
+      await Promise.all(chunk.map(async (index) => {
+        const data = kvData[index];
+        const item = data.item;
+
+        let titleJa = data.ja?.title || null;
+        let lineJa = data.ja?.line || null;
+        let titleId = data.id?.title || null;
+        let lineId = data.id?.line || null;
+
+        // Translate JA if missing
+        if (!titleJa || !lineJa) {
+          titleJa = await translateText(item.title, 'ja');
+          lineJa = await translateText(item.firstLine, 'ja');
+          if (titleJa && lineJa) {
+            await env.NEWS_TRANSLATIONS.put(`ja:${item.link}`, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
+          }
+        }
+
+        // Translate ID if missing
+        if (!titleId || !lineId) {
+          titleId = await translateText(item.title, 'id');
+          lineId = await translateText(item.firstLine, 'id');
+          if (titleId && lineId) {
+            await env.NEWS_TRANSLATIONS.put(`id:${item.link}`, JSON.stringify({ title: titleId, line: lineId }), { expirationTtl: 259200 });
+          }
+        }
+
+        results[index] = {
+          title: item.title,
+          link: item.link,
+          firstLine: item.firstLine,
+          title_ja: titleJa || "",
+          firstLine_ja: lineJa || "",
+          title_id: titleId || "",
+          firstLine_id: lineId || "",
+          thumbnail: item.thumbnail,
+          category: item.category,
+          pubDate: item.displayDate
+        };
+      }));
+
+      // Wait if there are more chunks to process
+      if (i + CHUNK_SIZE < toTranslateIndices.length) {
+        await sleep(1000);
+      }
+    }
+
+    const resultResponse = new Response(JSON.stringify(results), {
       headers: { 
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, s-maxage=1800"
       }
     });
 
-    if (translatedNews.length > 0) {
+    if (results.length > 0) {
       try {
         context.waitUntil(cache.put(cacheKey, resultResponse.clone()));
       } catch (e) {

@@ -1,2 +1,7 @@
 name = "news-ja"
 compatibility_date = "2026-04-16"
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "NEWS_TRANSLATIONS"
+id = "c717d150e9234d63a2229840bffe39ef"
