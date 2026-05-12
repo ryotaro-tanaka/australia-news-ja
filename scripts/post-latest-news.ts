@@ -1,6 +1,9 @@
 import { execSync } from 'child_process';
 import { postToThreads } from './post-threads';
 
+// Configuration: Change model name here
+const GEMINI_MODEL = 'gemini-3.1-flash-lite-preview';
+
 interface NewsItem {
   title: string;
   link: string;
@@ -57,11 +60,10 @@ PRやワーキングホリデーで滞在している日本人が関心を持つ
 記事内容:
 ${cleanText}`;
 
-    // Execute local gemini command with explicit model specification
-    const summary = execSync('gemini', {
-      input: prompt,
+    // Execute local gemini command with explicit model specification and headless mode
+    // Using --prompt avoids automatic workspace analysis which consumes quota
+    const summary = execSync(`gemini -m ${GEMINI_MODEL} --prompt "${prompt.replace(/"/g, '\\"')}"`, {
       encoding: 'utf-8',
-      env: { ...process.env, GEMINI_MODEL: 'gemini-2.5-flash-lite' }
     }).trim();
 
     if (!summary) {
@@ -85,13 +87,13 @@ Tekankan poin-poin yang menarik bagi orang Indonesia yang sedang tinggal di Aust
 Sertakan URL sumber berita (${latest.link}) di akhir ringkasan.
 Pastikan total teks tidak lebih dari 400 karakter.
 
+HANYA berikan teks ringkasan saja. JANGAN sertakan penjelasan, salam, atau kode perintah seperti update_topic.
+
 Konten artikel:
 ${cleanText}`;
 
-    const summaryId = execSync('gemini', {
-      input: promptId,
+    const summaryId = execSync(`gemini -m ${GEMINI_MODEL} --prompt "${promptId.replace(/"/g, '\\"')}"`, {
       encoding: 'utf-8',
-      env: { ...process.env, GEMINI_MODEL: 'gemini-2.5-flash-lite' }
     }).trim();
 
     if (!summaryId) {
