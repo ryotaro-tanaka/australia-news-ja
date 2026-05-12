@@ -87,6 +87,8 @@ Tekankan poin-poin yang menarik bagi orang Indonesia yang sedang tinggal di Aust
 Sertakan URL sumber berita (${latest.link}) di akhir ringkasan.
 Pastikan total teks tidak lebih dari 400 karakter.
 
+HANYA berikan teks ringkasan saja. JANGAN sertakan penjelasan, salam, atau kode perintah seperti update_topic.
+
 Konten artikel:
 ${cleanText}`;
 
