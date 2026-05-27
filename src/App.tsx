@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
-import { NewsProvider, useNewsContext } from './state/NewsContext'
+import { NewsProvider } from './state/NewsContext'
 import { NewsList } from './components/news/NewsList'
 
 function NewsApp() {

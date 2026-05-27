@@ -1,8 +1,12 @@
 import glossary from "./glossary.json";
 
+interface Ai {
+  run(model: string, input: Record<string, unknown>): Promise<{ response?: string }>;
+}
+
 interface Env {
   NEWS_TRANSLATIONS: KVNamespace;
-  AI: any;
+  AI: Ai;
 }
 
 function applyGlossary(text: string): string {
@@ -14,7 +18,7 @@ function applyGlossary(text: string): string {
   return processed;
 }
 
-async function translateText(ai: any, text: string): Promise<string | null> {
+async function translateText(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
