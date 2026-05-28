@@ -11,12 +11,14 @@ export const NewsDetail: React.FC = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`/api/news/detail?id=${id}`);
-        if (!response.ok) throw new Error('Failed to fetch article');
+        const response = await fetch(`/api/news?action=detail&id=${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch article');
+        }
         const data = await response.json();
         setNews(data);
       } catch (error) {
-        console.error(error);
+        console.error("Fetch Error:", error);
       } finally {
         setLoading(false);
       }

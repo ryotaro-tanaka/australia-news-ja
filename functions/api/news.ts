@@ -112,8 +112,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const { env, request } = context;
   const url = new URL(request.url);
 
-  // Detail endpoint
-  if (url.pathname === '/api/news/detail') {
+  // Detail endpoint (parameter-based)
+  if (url.searchParams.get('action') === 'detail') {
     const id = url.searchParams.get('id');
     const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
     if (cached) return new Response(cached, { headers: { "Content-Type": "application/json; charset=utf-8" } });
