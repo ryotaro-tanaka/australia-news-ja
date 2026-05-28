@@ -1,28 +1,20 @@
 import React from 'react';
 import type { NewsItem } from '../../types/news';
-import { useNewsContext } from '../../state/NewsContext';
 
 interface NewsCardProps {
   item: NewsItem;
 }
 
 export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
-  const { state: { language } } = useNewsContext();
-  const isId = language === 'id';
-
-  const formattedDate = new Date(item.pubDate).toLocaleDateString(isId ? 'id-ID' : 'ja-JP', {
+  const formattedDate = new Date(item.pubDate).toLocaleDateString('ja-JP', {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
   });
 
-  const title = isId 
-    ? (item.title_id || item.title) 
-    : (item.title_ja || item.title);
-  const description = isId 
-    ? (item.firstLine_id || item.firstLine) 
-    : (item.firstLine_ja || item.firstLine);
+  const title = item.title_ja || item.title;
+  const description = item.firstLine_ja || item.firstLine;
 
   return (
     <article className="news-card">

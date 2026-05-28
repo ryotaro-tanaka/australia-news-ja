@@ -1,17 +1,12 @@
 import { useEffect } from 'react'
 import './App.css'
-import { NewsProvider, useNewsContext } from './state/NewsContext'
+import { NewsProvider } from './state/NewsContext'
 import { NewsList } from './components/news/NewsList'
 
 function NewsApp() {
-  const { state: { language } } = useNewsContext();
-
   useEffect(() => {
-    const isId = language === 'id';
-    const title = isId ? 'Kabar Sarapan dari Australia' : '南半球の朝ごはんニュース';
-    const description = isId 
-      ? 'Berita terbaru dari Australia dalam Bahasa Indonesia. Informasi penting bagi warga Indonesia yang tinggal di Australia.' 
-      : 'オーストラリアの最新ニュースを日本語で。現地在住者向けの情報を毎朝お届けします。';
+    const title = '南半球の朝ごはんニュース';
+    const description = 'オーストラリアの最新ニュースを日本語で。現地在住者向けの情報を毎朝お届けします。';
 
     // Update Title
     document.title = title;
@@ -34,7 +29,7 @@ function NewsApp() {
     if (twitterTitle) twitterTitle.setAttribute('content', title);
     if (twitterDescription) twitterDescription.setAttribute('content', description);
 
-  }, [language]);
+  }, []);
 
   return (
     <div className="container">

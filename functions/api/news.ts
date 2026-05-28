@@ -1,7 +1,12 @@
 import glossary from "./glossary.json";
 
+interface Ai {
+  run(model: string, input: Record<string, unknown>): Promise<{ response?: string }>;
+}
+
 interface Env {
   NEWS_TRANSLATIONS: KVNamespace;
+  AI: Ai;
 }
 
 function applyGlossary(text: string): string {
@@ -13,16 +18,29 @@ function applyGlossary(text: string): string {
   return processed;
 }
 
-async function translateText(text: string, targetLang: string = 'ja'): Promise<string | null> {
+async function translateText(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(expandedText)}`;
-    const response = await fetch(url);
-    const data = await response.json() as unknown as [string[][], null, string];
-    return data[0].map((item: string[]) => item[0]).join("") || null;
+    const prompt = `Translate the following English news text into natural Japanese suitable for Japanese residents in Australia. 
+Rules:
+- Output ONLY the translated text.
+- DO NOT include any notes, explanations, or meta-comments.
+- DO NOT include the original English text or any other languages.
+- Use only Japanese characters.
+
+Text: ${expandedText}`;
+
+    const response = await ai.run("@cf/meta/llama-3-8b-instruct", {
+      messages: [{ role: "user", content: prompt }]
+    });
+
+    if (response && response.response) {
+      return response.response.trim();
+    }
+    return null;
   } catch (e) {
-    console.error(`Translation error (${targetLang}):`, e);
+    console.error(`Translation error:`, e);
     return null;
   }
 }
@@ -173,16 +191,11 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const kvData = await Promise.all(
       uniqueItems.map(async (item) => {
         const cacheKeyJa = `ja:${item.link}`;
-        const cacheKeyId = `id:${item.link}`;
-        const [cachedJa, cachedId] = await Promise.all([
-          env.NEWS_TRANSLATIONS.get(cacheKeyJa),
-          env.NEWS_TRANSLATIONS.get(cacheKeyId)
-        ]);
+        const cachedJa = await env.NEWS_TRANSLATIONS.get(cacheKeyJa);
 
         return {
           item,
-          ja: cachedJa ? JSON.parse(cachedJa) : null,
-          id: cachedId ? JSON.parse(cachedId) : null
+          ja: cachedJa ? JSON.parse(cachedJa) : null
         };
       })
     );
@@ -192,7 +205,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const toTranslateIndices: number[] = [];
 
     kvData.forEach((data, index) => {
-      if (data.ja && data.id) {
+      if (data.ja) {
         // Fully cached in KV
         results[index] = {
           title: data.item.title,
@@ -200,8 +213,6 @@ export const onRequest: PagesFunction<Env> = async (context) => {
           firstLine: data.item.firstLine,
           title_ja: data.ja.title,
           firstLine_ja: data.ja.line,
-          title_id: data.id.title,
-          firstLine_id: data.id.line,
           thumbnail: data.item.thumbnail,
           category: data.item.category,
           pubDate: data.item.displayDate
@@ -211,7 +222,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       }
     });
 
-    // Phase 3: Chunked Translation (5 items per chunk to stay within API limits)
+    // Phase 3: Chunked Translation (Workers AI limits vary, but 5 is safe)
     const CHUNK_SIZE = 5;
     for (let i = 0; i < toTranslateIndices.length; i += CHUNK_SIZE) {
       const chunk = toTranslateIndices.slice(i, i + CHUNK_SIZE);
@@ -223,24 +234,13 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
         let titleJa = data.ja?.title || null;
         let lineJa = data.ja?.line || null;
-        let titleId = data.id?.title || null;
-        let lineId = data.id?.line || null;
 
         // Translate JA if missing
         if (!titleJa || !lineJa) {
-          titleJa = await translateText(item.title, 'ja');
-          lineJa = await translateText(item.firstLine, 'ja');
+          titleJa = await translateText(env.AI, item.title);
+          lineJa = await translateText(env.AI, item.firstLine);
           if (titleJa && lineJa) {
             await env.NEWS_TRANSLATIONS.put(`ja:${item.link}`, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
-          }
-        }
-
-        // Translate ID if missing
-        if (!titleId || !lineId) {
-          titleId = await translateText(item.title, 'id');
-          lineId = await translateText(item.firstLine, 'id');
-          if (titleId && lineId) {
-            await env.NEWS_TRANSLATIONS.put(`id:${item.link}`, JSON.stringify({ title: titleId, line: lineId }), { expirationTtl: 259200 });
           }
         }
 
@@ -250,8 +250,6 @@ export const onRequest: PagesFunction<Env> = async (context) => {
           firstLine: item.firstLine,
           title_ja: titleJa || "",
           firstLine_ja: lineJa || "",
-          title_id: titleId || "",
-          firstLine_id: lineId || "",
           thumbnail: item.thumbnail,
           category: item.category,
           pubDate: item.displayDate
@@ -260,7 +258,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
       // Wait if there are more chunks to process
       if (i + CHUNK_SIZE < toTranslateIndices.length) {
-        await sleep(1000);
+        await sleep(100); // AI calls can be fast, but let's be gentle
       }
     }
 

@@ -7,7 +7,7 @@ interface NewsState {
   loading: boolean;
   loadingMore: boolean;
   error: string | null;
-  language: 'ja' | 'id';
+  language: 'ja';
   hasMore: boolean;
 }
 
@@ -16,15 +16,14 @@ type NewsAction =
   | { type: 'FETCH_MORE_START' }
   | { type: 'FETCH_SUCCESS'; payload: NewsItem[] }
   | { type: 'APPEND_NEWS'; payload: NewsItem[] }
-  | { type: 'FETCH_ERROR'; payload: string }
-  | { type: 'SET_LANGUAGE'; payload: 'ja' | 'id' };
+  | { type: 'FETCH_ERROR'; payload: string };
 
 const initialState: NewsState = {
   items: [],
   loading: false,
   loadingMore: false,
   error: null,
-  language: window.location.pathname.startsWith('/id') ? 'id' : 'ja',
+  language: 'ja',
   hasMore: true,
 };
 
@@ -50,8 +49,6 @@ function newsReducer(state: NewsState, action: NewsAction): NewsState {
       };
     case 'FETCH_ERROR':
       return { ...state, loading: false, loadingMore: false, error: action.payload };
-    case 'SET_LANGUAGE':
-      return { ...state, language: action.payload };
     default:
       return state;
   }
