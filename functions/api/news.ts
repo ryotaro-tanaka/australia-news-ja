@@ -108,10 +108,6 @@ function extractThumbnail(itemXml: string): string {
   return "";
 }
 
-async function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { env, request } = context;
   const url = new URL(request.url);
@@ -173,7 +169,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     }));
 
     return new Response(JSON.stringify(results), { headers: { "Content-Type": "application/json; charset=utf-8" } });
-  } catch (error) {
+  } catch {
     return new Response(JSON.stringify({ error: "Failed" }), { status: 500 });
   }
 };
