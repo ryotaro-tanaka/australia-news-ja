@@ -23,7 +23,11 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
   try {
     const expandedText = applyGlossary(text);
     const prompt = `Translate the following English news text into natural Japanese suitable for Japanese residents in Australia. 
-Only output the translated text.
+Rules:
+- Output ONLY the translated text.
+- DO NOT include any notes, explanations, or meta-comments.
+- DO NOT include the original English text or any other languages.
+- Use only Japanese characters.
 
 Text: ${expandedText}`;
 
