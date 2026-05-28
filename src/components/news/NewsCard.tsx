@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import type { NewsItem } from '../../types/news';
 
 interface NewsCardProps {
@@ -18,7 +19,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
 
   return (
     <article className="news-card">
-      <a href={item.link} target="_blank" rel="noopener noreferrer">
+      <Link to={`/news/${item.id}`}>
         <div className="card-content">
           {item.thumbnail && (
             <div className="thumbnail-container">
@@ -34,7 +35,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
             <p className="description">{description}</p>
           </div>
         </div>
-      </a>
+      </Link>
     </article>
   );
 };
