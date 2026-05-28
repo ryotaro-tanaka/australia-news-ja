@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { NewsItem } from '../../types/news';
+import './NewsDetail.css';
 
 export const NewsDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,8 +24,8 @@ export const NewsDetail: React.FC = () => {
     fetchNews();
   }, [id]);
 
-  if (loading) return <div className="loading">読み込み中...</div>;
-  if (!news) return <div className="error">記事が見つかりません。</div>;
+  if (loading) return <div className="news-detail"><div className="loading">読み込み中...</div></div>;
+  if (!news) return <div className="news-detail"><div className="error">記事が見つかりません。</div></div>;
 
   return (
     <article className="news-detail">
@@ -32,7 +33,9 @@ export const NewsDetail: React.FC = () => {
       <h1>{news.title_ja || news.title}</h1>
       <div className="summary-body">
         {news.bodyJa ? (
-          <p style={{ whiteSpace: 'pre-wrap' }}>{news.bodyJa}</p>
+          news.bodyJa.split('\n\n').map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))
         ) : (
           <p>要約を生成できませんでした。</p>
         )}
