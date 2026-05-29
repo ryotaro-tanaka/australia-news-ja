@@ -38,11 +38,14 @@ async function extractFullContent(url: string): Promise<string> {
 async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   const truncatedText = text.substring(0, 3000);
+  console.log("--- AI INPUT START ---");
+  console.log(truncatedText);
+  console.log("--- AI INPUT END ---");
   try {
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
       messages: [
         { role: "system", content: "あなたはプロの日本人ニュースライターです。提供された英語のニュース本文を基に、日本のニュースサイトに掲載されるような自然で読みやすい日本語の本文（3〜6段落）を再構成してください。見出しや箇条書き、解説、注釈は一切含めず、本文のみを出力してください。" },
-        { role: "user", content: `以下のニュース本文を自然な日本語ニュースとして再構成してください。文章は途中で切らず、最後まで書き切ること。\n\n本文:\n${truncatedText}` }
+        { role: "user", content: `以下のニュース本文を日本のニュースサイトに掲載される自然な本文として再構成してください。文章は途中で切らず、最後まで書き切ること。\n\n本文:  \n${truncatedText}` }
       ],
       max_tokens: 900
     });
