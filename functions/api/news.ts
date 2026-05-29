@@ -123,7 +123,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   if (url.searchParams.get('action') === 'detail') {
     const id = url.searchParams.get('id');
     const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
-    if (cached) return new Response(cached, { headers: { "Content-Type": "application/json; charset=utf-8" } });
+    if (cached) {
+      return new Response(cached, { headers: { "Content-Type": "application/json; charset=utf-8" } });
+    }
     return new Response(JSON.stringify({ error: "Not found" }), { status: 404 });
   }
 
