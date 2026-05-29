@@ -28,7 +28,11 @@ async function extractFullContent(url: string): Promise<string> {
     })
     .transform(new Response(html))
     .text();
-  return articleContent.trim();
+  
+  const content = articleContent.trim();
+  console.log(`Extracted content length: ${content.length}`);
+  console.log(`Extracted content snippet: ${content.substring(0, 200)}...`);
+  return content;
 }
 
 async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
