@@ -39,20 +39,11 @@ async function generateFullSummary(ai: Ai, text: string): Promise<string | null>
   if (!text) return null;
   const truncatedText = text.substring(0, 3000);
   try {
-    const prompt = `以下のニュース本文を、日本のニュースサイトのような自然な日本語の本文として再構成してください。
-
-ルール:
-- 結論・背景・詳細・コメント・展望を織り交ぜた3〜6段落の自然な文章にすること。
-- 「【結論】」などの見出しや箇条書きは一切使用しないこと。
-- AI特有のテンプレート構造や不自然な翻訳調を避けること。
-- 事実に基づき、自然なニュースの文体で書くこと。
-- 文章は途中で切らず、最後まで書き切ること。
-
-本文:
-${truncatedText}`;
-
-    const response = await ai.run("@cf/meta/llama-3-8b-instruct", {
-      messages: [{ role: "user", content: prompt }],
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
+      messages: [
+        { role: "system", content: "あなたはプロの日本人ニュースライターです。提供された英語のニュース本文を基に、日本のニュースサイトに掲載されるような自然で読みやすい日本語の本文（3〜6段落）を再構成してください。見出しや箇条書き、解説、注釈は一切含めず、本文のみを出力してください。" },
+        { role: "user", content: `以下のニュース本文を自然な日本語ニュースとして再構成してください。文章は途中で切らず、最後まで書き切ること。\n\n本文:\n${truncatedText}` }
+      ],
       max_tokens: 900
     });
 
@@ -76,9 +67,11 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
-    const prompt = `Translate the following English news text into natural Japanese suitable for Japanese residents in Australia. Rules: Output ONLY the translated text. DO NOT include any notes. Text: ${expandedText}`;
-    const response = await ai.run("@cf/meta/llama-3-8b-instruct", {
-      messages: [{ role: "user", content: prompt }],
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
+      messages: [
+        { role: "system", content: "あなたはプロの日本人ニュース翻訳者です。オーストラリア在住の日本人向けに、ニューステキストを自然な日本語に翻訳します。翻訳結果のみを出力し、注釈や元の英語は含めないでください。" },
+        { role: "user", content: `以下のテキストを翻訳してください:\n\n${expandedText}` }
+      ],
       max_tokens: 900
     });
     return response.response?.trim() || null;
