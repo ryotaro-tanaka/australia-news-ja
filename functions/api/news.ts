@@ -16,6 +16,22 @@ async function generateId(url: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+function isNoise(text: string): boolean {
+  const NOISE_KEYWORDS = [
+    "live coverage",
+    "Thank you for joining us",
+    "seen by the ABC",
+    "asked that the ABC use",
+    "Follow our live",
+    "Read more",
+    "More to come",
+    "Loading..."
+  ];
+  if (NOISE_KEYWORDS.some(kw => text.includes(kw))) return true;
+  if (text.length < 20) return true;
+  return false;
+}
+
 async function extractFullContent(url: string): Promise<string> {
   const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
   const html = await response.text();
@@ -27,7 +43,7 @@ async function extractFullContent(url: string): Promise<string> {
       element(el) {
         el.onEndTag(() => {
           const cleaned = currentParagraph.trim().replace(/\s+/g, ' ');
-          if (cleaned) {
+          if (cleaned && !isNoise(cleaned)) {
             paragraphs.push(cleaned);
           }
           currentParagraph = "";
