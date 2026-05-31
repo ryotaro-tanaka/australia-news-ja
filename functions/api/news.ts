@@ -1,5 +1,5 @@
 import glossary from "./glossary.json";
-import { extractFullContent } from "./extractors";
+import { extractFullContent, SOURCES, getThumbnail } from "./extractors";
 import { cleanHtml, smartTruncate } from "./utils";
 
 interface Ai {
@@ -82,14 +82,6 @@ function extractAllCategories(itemXml: string): string[] {
   return categories;
 }
 
-function extractThumbnail(itemXml: string): string {
-  const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
-  if (thumbMatch) return thumbMatch[1];
-  const contentMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["'][^>]*medium=["']image["']/i);
-  if (contentMatch) return contentMatch[1];
-  return "";
-}
-
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { env, request } = context;
   const url = new URL(request.url);
@@ -105,13 +97,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   // List endpoint
-  const FEEDS = [
-    "https://www.abc.net.au/news/feed/51892/rss.xml",
-    "https://www.abc.net.au/news/feed/1042/rss.xml"
-  ];
-
   try {
-    const rssResponses = await Promise.all(FEEDS.map(f => fetch(f, { headers: { "User-Agent": "Mozilla/5.0" } })));
+    const rssResponses = await Promise.all(SOURCES.map(s => fetch(s.url, { headers: { "User-Agent": "Mozilla/5.0" } })));
     const allItemsXml: string[] = [];
     for (const res of rssResponses) {
       if (!res.ok) continue;
@@ -127,7 +114,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       const descriptionRaw = extractTagContent(itemXml, "description");
       const pubDate = extractTagContent(itemXml, "pubDate");
       const category = extractAllCategories(itemXml)[0] || "News";
-      const thumbnail = extractThumbnail(itemXml);
+      const thumbnail = getThumbnail(itemXml, link);
       const firstLine = cleanHtml(descriptionRaw).substring(0, 300);
 
       return { id, title, link, firstLine, pubDate: new Date(pubDate).getTime(), displayDate: pubDate, category, thumbnail };

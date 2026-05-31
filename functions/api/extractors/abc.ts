@@ -19,6 +19,13 @@ function isNoise(text: string): boolean {
 
 export const AbcExtractor: NewsExtractor = {
   canHandle: (url) => url.includes("abc.net.au"),
+  getThumbnail: (itemXml: string) => {
+    const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
+    if (thumbMatch) return thumbMatch[1];
+    const contentMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["'][^>]*medium=["']image["']/i);
+    if (contentMatch) return contentMatch[1];
+    return "";
+  },
   extract: async (url) => {
     const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
     const html = await response.text();
