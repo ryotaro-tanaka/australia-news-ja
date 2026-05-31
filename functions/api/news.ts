@@ -19,17 +19,28 @@ async function generateId(url: string): Promise<string> {
 async function extractFullContent(url: string): Promise<string> {
   const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
   const html = await response.text();
-  let articleContent = "";
+  const paragraphs: string[] = [];
+  let currentParagraph = "";
+
   await new HTMLRewriter()
     .on('p[class*="paragraph_paragraph"]', {
+      element(el) {
+        el.onEndTag(() => {
+          const cleaned = currentParagraph.trim().replace(/\s+/g, ' ');
+          if (cleaned) {
+            paragraphs.push(cleaned);
+          }
+          currentParagraph = "";
+        });
+      },
       text(text) {
-        articleContent += text.text + '\n\n';
+        currentParagraph += text.text;
       }
     })
     .transform(new Response(html))
     .text();
   
-  const content = articleContent.trim();
+  const content = decodeHtmlEntities(paragraphs.join('\n\n'));
   console.log(`Extracted content length: ${content.length}`);
   console.log(`Extracted content snippet: ${content.substring(0, 200)}...`);
   return content;
@@ -84,9 +95,25 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
   }
 }
 
+function decodeHtmlEntities(text: string): string {
+  if (!text) return "";
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+}
+
 function cleanHtml(html: string): string {
   if (!html) return "";
-  return html.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
+  const withoutCdata = html.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
+  const withoutTags = withoutCdata.replace(/<[^>]*>?/gm, '');
+  return decodeHtmlEntities(withoutTags).trim();
 }
 
 function extractTagContent(itemXml: string, tagName: string): string {
