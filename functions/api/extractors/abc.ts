@@ -1,5 +1,21 @@
 import { NewsExtractor } from "./index";
-import { decodeHtmlEntities, isNoise } from "../utils";
+import { decodeHtmlEntities } from "../utils";
+
+function isNoise(text: string): boolean {
+  const NOISE_KEYWORDS = [
+    "live coverage",
+    "Thank you for joining us",
+    "seen by the ABC",
+    "asked that the ABC use",
+    "Follow our live",
+    "Read more",
+    "More to come",
+    "Loading..."
+  ];
+  if (NOISE_KEYWORDS.some(kw => text.includes(kw))) return true;
+  if (text.length < 20) return true;
+  return false;
+}
 
 export const AbcExtractor: NewsExtractor = {
   canHandle: (url) => url.includes("abc.net.au"),
