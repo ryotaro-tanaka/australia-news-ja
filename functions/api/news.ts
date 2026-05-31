@@ -1,4 +1,6 @@
 import glossary from "./glossary.json";
+import { extractFullContent } from "./extractors";
+import { cleanHtml, smartTruncate } from "./utils";
 
 interface Ai {
   run(model: string, input: Record<string, unknown>): Promise<{ response?: string }>;
@@ -14,68 +16,6 @@ async function generateId(url: string): Promise<string> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-function isNoise(text: string): boolean {
-  const NOISE_KEYWORDS = [
-    "live coverage",
-    "Thank you for joining us",
-    "seen by the ABC",
-    "asked that the ABC use",
-    "Follow our live",
-    "Read more",
-    "More to come",
-    "Loading..."
-  ];
-  if (NOISE_KEYWORDS.some(kw => text.includes(kw))) return true;
-  if (text.length < 20) return true;
-  return false;
-}
-
-async function extractFullContent(url: string): Promise<string> {
-  const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
-  const html = await response.text();
-  const paragraphs: string[] = [];
-  let currentParagraph = "";
-
-  await new HTMLRewriter()
-    .on('p[class*="paragraph_paragraph"]', {
-      element(el) {
-        el.onEndTag(() => {
-          const cleaned = currentParagraph.trim().replace(/\s+/g, ' ');
-          if (cleaned && !isNoise(cleaned)) {
-            paragraphs.push(cleaned);
-          }
-          currentParagraph = "";
-        });
-      },
-      text(text) {
-        currentParagraph += text.text;
-      }
-    })
-    .transform(new Response(html))
-    .text();
-  
-  const content = decodeHtmlEntities(paragraphs.join('\n\n'));
-  console.log(`Extracted content length: ${content.length}`);
-  console.log(`Extracted content snippet: ${content.substring(0, 200)}...`);
-  return content;
-}
-
-function smartTruncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  const truncated = text.substring(0, maxLength);
-  const lastSentenceEnd = Math.max(
-    truncated.lastIndexOf(". "),
-    truncated.lastIndexOf("! "),
-    truncated.lastIndexOf("? "),
-    truncated.lastIndexOf("\n")
-  );
-  if (lastSentenceEnd > 0) {
-    return truncated.substring(0, lastSentenceEnd + 1).trim();
-  }
-  const lastSpace = truncated.lastIndexOf(" ");
-  return lastSpace > 0 ? truncated.substring(0, lastSpace).trim() : truncated;
 }
 
 async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
@@ -125,27 +65,6 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
     console.error(`Translation error:`, e);
     return null;
   }
-}
-
-function decodeHtmlEntities(text: string): string {
-  if (!text) return "";
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&#39;/g, "'")
-    .replace(/&#x27;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec))
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-}
-
-function cleanHtml(html: string): string {
-  if (!html) return "";
-  const withoutCdata = html.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
-  const withoutTags = withoutCdata.replace(/<[^>]*>?/gm, '');
-  return decodeHtmlEntities(withoutTags).trim();
 }
 
 function extractTagContent(itemXml: string, tagName: string): string {
