@@ -25,11 +25,29 @@ async function generateFullSummary(ai: Ai, text: string): Promise<string | null>
   console.log(truncatedText);
   console.log("--- AI INPUT END ---");
   try {
+    const prompt = `### 役割
+あなたはプロの日本人ニュースライターです。提供された英語のニュース情報を基に、オーストラリア在住の日本人向けに、日本の大手ニュースサイトに掲載されるような自然な日本語記事を執筆してください。
+
+### 執筆ルール
+1. 段落構成:
+   - 第1段落（リード）：最重要情報・結論を150〜250文字で簡潔に。
+   - 第2〜4段落：背景、具体的な状況、関係者の発言や引用。
+   - 第5段落以降：追加情報、社会的影響、補足説明。
+2. 禁止事項:
+   - 「[1段落]」や「[N段落]」といった段落番号やラベルは一切含めないください。
+   - 見出し、箇条書き、注釈、解説は一切含めないでください。
+3. 出力形式:
+   - 全体の文字数は 1800〜2000 文字を目指して詳細に執筆してください。
+   - 冗長な表現を避け、プロフェッショナルな文体（です・ます調またはだ・である調を自然に使い分ける）で構成してください。
+   - 文章は途中で切らず、必ず最後まで書き切ってください。
+
+### 英語ニュース本文
+${truncatedText}
+
+### 日本語記事執筆結果（本文のみを出力）:`;
+
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
-      messages: [
-        { role: "system", content: "あなたはプロの日本人ニュースライターです。提供された英語のニュース本文を基に、日本のニュースサイトに掲載されるような自然で読みやすい日本語の本文（3〜6段落）を再構成してください。見出しや箇条書き、解説、注釈は一切含めず、本文のみを出力してください。" },
-        { role: "user", content: `以下のニュース本文を日本のニュースサイトに掲載される自然な本文として再構成してください。文章は途中で切らず、最後まで書き切ること。\n\n本文:  \n${truncatedText}` }
-      ],
+      prompt,
       max_tokens: 900
     });
 
@@ -53,11 +71,21 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
+    const prompt = `### 役割
+あなたはプロの日本人ニュース翻訳者です。オーストラリア在住の日本人向けに、ニューステキストを自然な日本語に翻訳します。
+
+### 執筆ルール
+- 翻訳結果のみを出力してください。
+- 注釈や元の英語、メタ情報は一切含めないでください。
+- 日本語として自然で読みやすい表現を心がけてください。
+
+### 対象テキスト
+${expandedText}
+
+### 翻訳結果（本文のみを出力）:`;
+
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
-      messages: [
-        { role: "system", content: "あなたはプロの日本人ニュース翻訳者です。オーストラリア在住の日本人向けに、ニューステキストを自然な日本語に翻訳します。翻訳結果のみを出力し、注釈や元の英語は含めないでください。" },
-        { role: "user", content: `以下のテキストを翻訳してください:\n\n${expandedText}` }
-      ],
+      prompt,
       max_tokens: 900
     });
     return response.response?.trim() || null;
