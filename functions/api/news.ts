@@ -62,9 +62,25 @@ async function extractFullContent(url: string): Promise<string> {
   return content;
 }
 
+function smartTruncate(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  const truncated = text.substring(0, maxLength);
+  const lastSentenceEnd = Math.max(
+    truncated.lastIndexOf(". "),
+    truncated.lastIndexOf("! "),
+    truncated.lastIndexOf("? "),
+    truncated.lastIndexOf("\n")
+  );
+  if (lastSentenceEnd > 0) {
+    return truncated.substring(0, lastSentenceEnd + 1).trim();
+  }
+  const lastSpace = truncated.lastIndexOf(" ");
+  return lastSpace > 0 ? truncated.substring(0, lastSpace).trim() : truncated;
+}
+
 async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
-  const truncatedText = text.substring(0, 3000);
+  const truncatedText = smartTruncate(text, 4000);
   console.log("--- AI INPUT START ---");
   console.log(truncatedText);
   console.log("--- AI INPUT END ---");
