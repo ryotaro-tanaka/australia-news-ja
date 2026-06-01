@@ -28,11 +28,11 @@ async function generateFullSummary(ai: Ai, text: string): Promise<string | null>
     const prompt = `### 役割
 あなたはプロの日本人ニュースライターです。提供された英語のニュース情報を基に、オーストラリア在住の日本人向けに、日本の大手ニュースサイトに掲載されるような自然な日本語記事を執筆してください。
 
-### 執筆ルール（Llama 8B 最適化）
-1. 段落構成（3段落のみ）:
-   - 第1段落（リード）：最重要情報を150〜200文字で簡潔にまとめる。
-   - 第2段落：背景・状況・関係者の短いコメントを250〜300文字で説明する。
-   - 第3段落：影響・今後の見通しを250〜300文字で述べる。
+### 執筆ルール
+1. 段落構成(3段落のみ):
+   - 第1段落(リード):最重要情報を150〜200文字で簡潔にまとめる。
+   - 第2段落:背景・状況・関係者の短いコメントを250〜300文字で説明する。
+   - 第3段落:影響・今後の見通しを250〜300文字で述べる。
 
 2. 禁止事項:
    - 段落番号やラベルを含めない。
@@ -174,11 +174,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
       // New translation & summary
       const title_ja = await translateText(env.AI, item.title) || item.title;
-      const line_ja = await translateText(env.AI, item.firstLine) || item.firstLine;
       const fullText = await extractFullContent(item.link);
       const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
 
-      const newsItem = { id: item.id, title: item.title, link: item.link, firstLine: item.firstLine, title_ja, firstLine_ja: line_ja, bodyJa, thumbnail: item.thumbnail, category: item.category, pubDate: item.displayDate };
+      const newsItem = { id: item.id, title_ja, bodyJa, link: item.link, thumbnail: item.thumbnail, category: item.category, pubDate: item.displayDate };
       await env.NEWS_TRANSLATIONS.put(cacheKey, JSON.stringify(newsItem), { expirationTtl: 259200 });
       return newsItem;
     }));

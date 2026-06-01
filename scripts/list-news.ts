@@ -1,6 +1,5 @@
 interface NewsItem {
-  title: string;
-  title_ja?: string;
+  title_ja: string;
   link: string;
 }
 
@@ -18,8 +17,7 @@ async function listNews() {
     console.log('\nAvailable News Articles:');
     console.log('-------------------------');
     newsData.forEach((item, index) => {
-      const displayTitle = item.title_ja || item.title;
-      console.log(`[${index}] ${displayTitle}`);
+      console.log(`[${index}] ${item.title_ja}`);
     });
     console.log('-------------------------');
     console.log('\nTo post an article, run: npm run post <index>');

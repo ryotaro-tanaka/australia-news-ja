@@ -32,7 +32,7 @@ export const NewsDetail: React.FC = () => {
   return (
     <article className="news-detail">
       <Link to="/" className="back-button">← 一覧へ戻る</Link>
-      <h1>{news.title_ja || news.title}</h1>
+      <h1>{news.title_ja}</h1>
       <div className="summary-body">
         {news.bodyJa ? (
           news.bodyJa.split('\n\n').map((paragraph, index) => (
