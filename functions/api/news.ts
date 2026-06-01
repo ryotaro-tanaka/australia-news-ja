@@ -49,6 +49,12 @@ ${truncatedText}
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
       prompt,
       max_tokens: 900
+    }, {
+      gateway: {
+        id: "default",
+        skipCache: false,
+        cacheTtl: 3600
+      }
     });
 
     return response.response?.trim() || null;
@@ -87,6 +93,12 @@ ${expandedText}
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
       prompt,
       max_tokens: 900
+    }, {
+      gateway: {
+        id: "default",
+        skipCache: false,
+        cacheTtl: 3600
+      }
     });
     return response.response?.trim() || null;
   } catch (e) {
