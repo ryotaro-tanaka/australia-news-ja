@@ -1,9 +1,8 @@
-import { SOURCES, getThumbnail } from "./extractors";
+import { SOURCES } from "./extractors";
 import { 
   Env, 
   generateId, 
-  extractTagContent, 
-  extractAllCategories 
+  extractTagContent 
 } from "./shared";
 import { cleanHtml } from "./utils";
 
