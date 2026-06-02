@@ -8,7 +8,8 @@ import {
 } from "../../functions/api/shared";
 import type { 
   Env, 
-  RawNewsItem
+  RawNewsItem,
+  NewsMetadata
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";
 
@@ -49,7 +50,7 @@ export default {
           .slice(0, 20);
 
         // 3. Process items that are not in KV
-        const processedItems = [];
+        const processedItems: NewsMetadata[] = [];
         for (const item of latestItems) {
           const cacheKey = `ja:id:${item.id}`;
           const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
@@ -66,10 +67,10 @@ export default {
           // Add to metadata list
           processedItems.push({
             id: item.id,
-            title: item.title,
+            title_ja: item.title,
             thumbnail: item.thumbnail,
-            displayDate: item.displayDate,
-            category: item.category
+            category: item.category,
+            displayDate: item.displayDate
           });
         }
         

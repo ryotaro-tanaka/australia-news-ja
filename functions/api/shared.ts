@@ -21,6 +21,14 @@ export interface NewsItem {
   pubDate: string;
 }
 
+export interface NewsMetadata {
+  id: string;
+  title_ja: string;
+  thumbnail: string;
+  category: string;
+  displayDate: string;
+}
+
 export interface RawNewsItem {
   id: string;
   title: string;

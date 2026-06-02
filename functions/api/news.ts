@@ -1,5 +1,6 @@
 import type { 
-  Env
+  Env,
+  NewsMetadata
 } from "./shared";
 
 export const onRequest: PagesFunction<Env> = async (context) => {
@@ -26,7 +27,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       return new Response(JSON.stringify([]), { headers: { "Content-Type": "application/json; charset=utf-8" } });
     }
 
-    const allItems = JSON.parse(cachedList);
+    const allItems: NewsMetadata[] = JSON.parse(cachedList);
     const results = allItems.slice(0, limit);
 
     return new Response(JSON.stringify(results), { headers: { "Content-Type": "application/json; charset=utf-8" } });
