@@ -40,13 +40,16 @@ function newsReducer(state: NewsState, action: NewsAction): NewsState {
         items: action.payload, 
         hasMore: action.payload.length >= 5 
       };
-    case 'APPEND_NEWS':
+    case 'APPEND_NEWS': {
+      const existingIds = new Set(state.items.map(item => item.id));
+      const newItems = action.payload.filter(item => !existingIds.has(item.id));
       return { 
         ...state, 
         loadingMore: false, 
-        items: [...state.items, ...action.payload], 
+        items: [...state.items, ...newItems], 
         hasMore: action.payload.length >= 5 
       };
+    }
     case 'FETCH_ERROR':
       return { ...state, loading: false, loadingMore: false, error: action.payload };
     default:
