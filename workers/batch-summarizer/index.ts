@@ -1,11 +1,13 @@
 import { SOURCES } from "../../functions/api/extractors";
 import { 
-  Env, 
   generateId, 
   extractTagContent, 
   extractAllCategories, 
   getThumbnail, 
-  processNewsItem,
+  processNewsItem
+} from "../../functions/api/shared";
+import type { 
+  Env, 
   RawNewsItem
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";

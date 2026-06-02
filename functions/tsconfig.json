@@ -7,7 +7,9 @@
     "types": ["@cloudflare/workers-types"],
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true
+    "noEmit": true,
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "include": ["**/*.ts"]
 }

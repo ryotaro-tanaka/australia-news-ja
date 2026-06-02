@@ -1,8 +1,10 @@
 import { SOURCES } from "./extractors";
 import { 
-  Env, 
   generateId, 
-  extractTagContent,
+  extractTagContent
+} from "./shared";
+import type { 
+  Env, 
   NewsItem
 } from "./shared";
 
