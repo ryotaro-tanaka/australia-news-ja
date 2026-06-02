@@ -20,7 +20,7 @@ export function useNews() {
     if (state.loadingMore || !state.hasMore || state.items.length === 0) return;
 
     const lastItem = state.items[state.items.length - 1];
-    const cursor = new Date(lastItem.pubDate).getTime();
+    const cursor = new Date(lastItem.displayDate).getTime();
 
     dispatch({ type: 'FETCH_MORE_START' });
     try {
