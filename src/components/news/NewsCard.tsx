@@ -15,7 +15,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
   });
 
   const title = item.title_ja;
-  const description = item.bodyJa.split('\n')[0];
+  const description = item.bodyJa?.split('\n')[0] || '';
 
   return (
     <article className="news-card">
