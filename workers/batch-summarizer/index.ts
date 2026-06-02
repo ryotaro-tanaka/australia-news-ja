@@ -14,6 +14,7 @@ import type {
 import { cleanHtml } from "../../functions/api/utils";
 
 async function runTask(env: Env) {
+  console.log('runTask started');
   try {
     // 1. Fetch RSS from all sources
     const rssResponses = await Promise.all(
@@ -22,9 +23,13 @@ async function runTask(env: Env) {
     
     const allItemsXml: string[] = [];
     for (const res of rssResponses) {
-      if (!res.ok) continue;
+      if (!res.ok) {
+        console.error(`RSS fetch failed for ${res.url}`);
+        continue;
+      }
       const xml = await res.text();
       const items = xml.match(/<item[^>]*>([\s\S]*?)<\/item>/gi) || [];
+      console.log(`Found ${items.length} items`);
       allItemsXml.push(...items);
     }
 
@@ -44,6 +49,8 @@ async function runTask(env: Env) {
     const latestItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
       .sort((a, b) => new Date(b.displayDate).getTime() - new Date(a.displayDate).getTime())
       .slice(0, 20);
+
+    console.log(`Processing ${latestItems.length} latest items`);
 
     // 3. Process items that are not in KV
     const processedItems: NewsMetadata[] = [];
@@ -70,8 +77,15 @@ async function runTask(env: Env) {
       });
     }
     
+    console.log(`Processed ${processedItems.length} items for metadata`);
+    
     // 4. Update metadata list in KV
-    await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
+    if (processedItems.length > 0) {
+      await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
+      console.log('sys:latest-news updated successfully');
+    } else {
+      console.warn('No items to save in sys:latest-news');
+    }
     
     console.log('Batch processing completed successfully.');
   } catch (error) {

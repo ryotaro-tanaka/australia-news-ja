@@ -2,12 +2,15 @@ name = "news-ja-batch"
 main = "index.ts"
 compatibility_date = "2024-04-16"
 
+[observability]
+enabled = true
+
 [ai]
 binding = "AI"
 
 [[kv_namespaces]]
 binding = "NEWS_TRANSLATIONS"
-id = "e7baeeb52d0844ee99f199c39f94d4d1"
+id = "60f52fbd7ad94b7bb79224184d4a8dc6"
 
 [triggers]
 crons = ["0 6 * * *", "0 12 * * *"]
