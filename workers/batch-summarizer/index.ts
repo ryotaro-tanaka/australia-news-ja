@@ -13,21 +13,6 @@ import type {
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";
 
-import { SOURCES } from "../../functions/api/extractors";
-import { 
-  generateId, 
-  extractTagContent, 
-  extractAllCategories, 
-  getThumbnail, 
-  processNewsItem
-} from "../../functions/api/shared";
-import type { 
-  Env, 
-  RawNewsItem,
-  NewsMetadata
-} from "../../functions/api/shared";
-import { cleanHtml } from "../../functions/api/utils";
-
 async function runTask(env: Env) {
   console.log('runTask started');
   try {
