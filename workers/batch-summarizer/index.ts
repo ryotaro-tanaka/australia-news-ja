@@ -1,4 +1,3 @@
-/// <reference types="@cloudflare/workers-types" />
 import { SOURCES } from "../../functions/api/extractors";
 import { 
   Env, 
