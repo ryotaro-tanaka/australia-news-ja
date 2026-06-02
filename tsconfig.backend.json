@@ -7,7 +7,8 @@
     "types": ["@cloudflare/workers-types"],
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true
+    "noEmit": true,
+    "tsBuildInfoFile": "./dist/tsconfig.backend.tsbuildinfo"
   },
   "include": ["functions/**/*.ts", "workers/**/*.ts"]
 }
