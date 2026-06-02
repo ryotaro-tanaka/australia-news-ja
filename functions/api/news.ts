@@ -143,6 +143,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
   // List endpoint
   try {
+    const limit = parseInt(url.searchParams.get('limit') || '5');
+    const before = parseInt(url.searchParams.get('before') || Date.now().toString());
+
     const rssResponses = await Promise.all(SOURCES.map(s => fetch(s.url, { headers: { "User-Agent": "Mozilla/5.0" } })));
     const allItemsXml: string[] = [];
     for (const res of rssResponses) {
@@ -165,7 +168,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       return { id, title, link, firstLine, pubDate: new Date(pubDate).getTime(), displayDate: pubDate, category, thumbnail };
     }));
 
-    const uniqueItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values()).sort((a, b) => b.pubDate - a.pubDate).slice(0, 5);
+    const uniqueItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
+      .sort((a, b) => b.pubDate - a.pubDate)
+      .filter(item => item.pubDate < before)
+      .slice(0, limit);
 
     const results = await Promise.all(uniqueItems.map(async (item) => {
       const cacheKey = `ja:id:${item.id}`;
