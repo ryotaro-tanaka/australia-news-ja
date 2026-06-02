@@ -1,4 +1,6 @@
 import glossary from "./glossary.json";
+import { extractFullContent, SOURCES, getThumbnail } from "./extractors";
+import { cleanHtml, smartTruncate } from "./utils";
 
 interface Ai {
   run(model: string, input: Record<string, unknown>): Promise<{ response?: string }>;
@@ -7,6 +9,63 @@ interface Ai {
 interface Env {
   NEWS_TRANSLATIONS: KVNamespace;
   AI: Ai;
+}
+
+async function generateId(url: string): Promise<string> {
+  const msgUint8 = new TextEncoder().encode(url);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
+  if (!text) return null;
+  const truncatedText = smartTruncate(text, 3000);
+  console.log("--- AI INPUT START ---");
+  console.log(truncatedText);
+  console.log("--- AI INPUT END ---");
+  try {
+    const prompt = `### 役割
+あなたはプロの日本人ニュースライターです。提供された英語のニュース情報を基に、オーストラリア在住の日本人向けに、日本の大手ニュースサイトに掲載されるような自然な日本語記事を執筆してください。
+
+### 執筆ルール
+1. 段落構成(3段落のみ):
+   - 第1段落(リード):最重要情報を150文字で簡潔にまとめる。
+   - 第2段落:背景・状況・関係者の短いコメントを250文字で説明する。
+   - 第3段落:影響・今後の見通しを250文字で述べる。
+
+2. 禁止事項:
+   - 段落番号やラベルを含めない。
+   - 見出し・箇条書き・注釈を含めない。
+   - 同じ内容を繰り返さない。
+   - 引用は1文以内にする。
+
+3. 出力形式:
+   - 全体の文字数は **650文字** に収める。
+   - 文体は簡潔で事実ベース。
+   - 文章は途中で切らず、最後まで書き切る。
+
+### 英語ニュース本文
+${truncatedText}
+
+### 日本語記事執筆結果（本文のみを出力）:`;
+
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
+      prompt,
+      max_tokens: 800
+    }, {
+      gateway: {
+        id: "default",
+        skipCache: false,
+        cacheTtl: 3600
+      }
+    });
+
+    return response.response?.trim() || null;
+  } catch (e) {
+    console.error("Summary generation error:", e);
+    return null;
+  }
 }
 
 function applyGlossary(text: string): string {
@@ -22,49 +81,41 @@ async function translateText(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
-    const prompt = `Translate the following English news text into natural Japanese suitable for Japanese residents in Australia. 
-Rules:
-- Output ONLY the translated text.
-- DO NOT include any notes, explanations, or meta-comments.
-- DO NOT include the original English text or any other languages.
-- Use only Japanese characters.
+    const prompt = `### 役割
+あなたはプロのニュースエディターです。提供された英語のニュースタイトルを基に、日本のニュースサイト（Yahoo!ニュース等）で目を引くような、簡潔でインパクトのある日本語の見出しを作成してください。
 
-Text: ${expandedText}`;
+### 執筆ルール
+- 30〜40文字程度の「見出し」として作成してください。
+- 翻訳調を避け、ニュースらしい体言止めや力強い表現を用いてください。
+- 説明的な文章（〜ました、〜困っている等）ではなく、事実や核心を突く表現にしてください。
+- 見出しのみを出力し、注釈やメタ情報は一切含めないでください。
 
-    const response = await ai.run("@cf/meta/llama-3-8b-instruct", {
-      messages: [{ role: "user", content: prompt }]
+### 対象タイトル
+${expandedText}
+
+### 日本語見出し（見出しのみを出力）:`;
+
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
+      prompt,
+      max_tokens: 300
+    }, {
+      gateway: {
+        id: "default",
+        skipCache: false,
+        cacheTtl: 3600
+      }
     });
-
-    if (response && response.response) {
-      return response.response.trim();
-    }
-    return null;
+    return response.response?.trim() || null;
   } catch (e) {
     console.error(`Translation error:`, e);
     return null;
   }
 }
 
-function cleanHtml(html: string): string {
-  if (!html) return "";
-  return html
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]*>?/gm, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&#39;/g, "'")
-    .trim();
-}
-
 function extractTagContent(itemXml: string, tagName: string): string {
   const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
   const match = itemXml.match(regex);
-  if (match) {
-    return match[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
-  }
+  if (match) return match[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
   return "";
 }
 
@@ -72,55 +123,27 @@ function extractAllCategories(itemXml: string): string[] {
   const categories: string[] = [];
   const regex = /<category[^>]*>([\s\S]*?)<\/category>/gi;
   let match;
-  while ((match = regex.exec(itemXml)) !== null) {
-    categories.push(cleanHtml(match[1]));
-  }
+  while ((match = regex.exec(itemXml)) !== null) categories.push(cleanHtml(match[1]));
   return categories;
 }
 
-function extractThumbnail(itemXml: string): string {
-  const thumbMatch = itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i);
-  if (thumbMatch) return thumbMatch[1];
-  const contentMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["'][^>]*medium=["']image["']/i);
-  if (contentMatch) return contentMatch[1];
-  return "";
-}
-
-async function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export const onRequest: PagesFunction<Env> = async (context) => {
-  const { env } = context;
-  const cache = (caches as { default: Cache }).default;
-  const url = new URL(context.request.url);
-  const isNoCache = url.searchParams.has('nocache');
-  const cacheUrl = new URL(url.toString());
-  cacheUrl.searchParams.delete('nocache');
-  const cacheKey = new Request(cacheUrl.toString(), context.request);
-  
-  if (!isNoCache) {
-    try {
-      const cachedResponse = await cache.match(cacheKey);
-      if (cachedResponse) return cachedResponse;
-    } catch (e) {
-      console.warn("Cache match failed:", e);
+  const { env, request } = context;
+  const url = new URL(request.url);
+
+  // Detail endpoint (parameter-based)
+  if (url.searchParams.get('action') === 'detail') {
+    const id = url.searchParams.get('id');
+    const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
+    if (cached) {
+      return new Response(cached, { headers: { "Content-Type": "application/json; charset=utf-8" } });
     }
+    return new Response(JSON.stringify({ error: "Not found" }), { status: 404 });
   }
 
-  const FEEDS = [
-    "https://www.abc.net.au/news/feed/51892/rss.xml",
-    "https://www.abc.net.au/news/feed/1042/rss.xml"
-  ];
-
-  const EXCLUDED_KEYWORDS = ["music", "arts", "fiction", "book", "movie", "film", "statue", "entertainment", "culture", "festival", "sculpture", "theatre"];
-  const CRITICAL_KEYWORDS = ["visa", "immigration", "inflation", "rba", "interest rate", "medicare", "housing", "rent", "permanent resid", "working holiday"];
-
+  // List endpoint
   try {
-    const rssResponses = await Promise.all(FEEDS.map(f => fetch(f, {
-      headers: { "User-Agent": "Mozilla/5.0" }
-    })));
-
+    const rssResponses = await Promise.all(SOURCES.map(s => fetch(s.url, { headers: { "User-Agent": "Mozilla/5.0" } })));
     const allItemsXml: string[] = [];
     for (const res of rssResponses) {
       if (!res.ok) continue;
@@ -129,161 +152,39 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       allItemsXml.push(...items);
     }
 
-    const parsedItems = allItemsXml.map(itemXml => {
+    const parsedItems = await Promise.all(allItemsXml.map(async itemXml => {
       const title = cleanHtml(extractTagContent(itemXml, "title"));
       const link = extractTagContent(itemXml, "link");
+      const id = await generateId(link);
       const descriptionRaw = extractTagContent(itemXml, "description");
       const pubDate = extractTagContent(itemXml, "pubDate");
-      const categories = extractAllCategories(itemXml);
-      const thumbnail = extractThumbnail(itemXml);
+      const category = extractAllCategories(itemXml)[0] || "News";
+      const thumbnail = getThumbnail(itemXml, link);
+      const firstLine = cleanHtml(descriptionRaw).substring(0, 300);
+
+      return { id, title, link, firstLine, pubDate: new Date(pubDate).getTime(), displayDate: pubDate, category, thumbnail };
+    }));
+
+    const uniqueItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values()).sort((a, b) => b.pubDate - a.pubDate).slice(0, 5);
+
+    const results = await Promise.all(uniqueItems.map(async (item) => {
+      const cacheKey = `ja:id:${item.id}`;
+      const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
       
-      const fullDescription = cleanHtml(descriptionRaw);
-      const firstLine = fullDescription.length > 300 ? fullDescription.substring(0, 300) + "..." : fullDescription;
+      if (cached) return JSON.parse(cached);
 
-      const lowercaseTitle = title.toLowerCase();
-      const lowercaseCats = categories.map(c => c.toLowerCase());
-      
-      const isCritical = CRITICAL_KEYWORDS.some(k => lowercaseTitle.includes(k));
-      
-      if (!isCritical) {
-        const isExcluded = EXCLUDED_KEYWORDS.some(k => 
-          lowercaseCats.some(cat => cat.includes(k)) || lowercaseTitle.includes(k)
-        );
-        if (isExcluded) return null;
-      }
+      // New translation & summary
+      const title_ja = await translateText(env.AI, item.title) || item.title;
+      const fullText = await extractFullContent(item.link);
+      const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
 
-      return { 
-        title, 
-        link, 
-        firstLine, 
-        pubDate: new Date(pubDate).getTime(),
-        displayDate: pubDate,
-        category: categories[0] || "News",
-        thumbnail
-      };
-    })
-    .filter((item): item is NonNullable<typeof item> => item !== null && item.title !== "" && item.link !== "")
-    .sort((a, b) => b.pubDate - a.pubDate);
+      const newsItem = { id: item.id, title_ja, bodyJa, link: item.link, thumbnail: item.thumbnail, category: item.category, pubDate: item.displayDate };
+      await env.NEWS_TRANSLATIONS.put(cacheKey, JSON.stringify(newsItem), { expirationTtl: 259200 });
+      return newsItem;
+    }));
 
-    const limit = parseInt(url.searchParams.get('limit') || '5', 10);
-    const before = parseInt(url.searchParams.get('before') || '0', 10);
-
-    const seenLinks = new Set<string>();
-    let pool = parsedItems.filter(item => {
-      if (seenLinks.has(item.link)) return false;
-      seenLinks.add(item.link);
-      return true;
-    });
-
-    if (before > 0) {
-      pool = pool.filter(item => item.pubDate < before);
-    }
-
-    const uniqueItems = pool.slice(0, limit);
-
-    if (uniqueItems.length === 0) {
-      return new Response(JSON.stringify([]), {
-        headers: { "Content-Type": "application/json; charset=utf-8" }
-      });
-    }
-
-    // Phase 1: Parallel KV Lookup
-    const kvData = await Promise.all(
-      uniqueItems.map(async (item) => {
-        const cacheKeyJa = `ja:${item.link}`;
-        const cachedJa = await env.NEWS_TRANSLATIONS.get(cacheKeyJa);
-
-        return {
-          item,
-          ja: cachedJa ? JSON.parse(cachedJa) : null
-        };
-      })
-    );
-
-    // Phase 2: Identify items needing translation
-    const results = new Array(uniqueItems.length);
-    const toTranslateIndices: number[] = [];
-
-    kvData.forEach((data, index) => {
-      if (data.ja) {
-        // Fully cached in KV
-        results[index] = {
-          title: data.item.title,
-          link: data.item.link,
-          firstLine: data.item.firstLine,
-          title_ja: data.ja.title,
-          firstLine_ja: data.ja.line,
-          thumbnail: data.item.thumbnail,
-          category: data.item.category,
-          pubDate: data.item.displayDate
-        };
-      } else {
-        toTranslateIndices.push(index);
-      }
-    });
-
-    // Phase 3: Chunked Translation (Workers AI limits vary, but 5 is safe)
-    const CHUNK_SIZE = 5;
-    for (let i = 0; i < toTranslateIndices.length; i += CHUNK_SIZE) {
-      const chunk = toTranslateIndices.slice(i, i + CHUNK_SIZE);
-      
-      // Parallel within chunk
-      await Promise.all(chunk.map(async (index) => {
-        const data = kvData[index];
-        const item = data.item;
-
-        let titleJa = data.ja?.title || null;
-        let lineJa = data.ja?.line || null;
-
-        // Translate JA if missing
-        if (!titleJa || !lineJa) {
-          titleJa = await translateText(env.AI, item.title);
-          lineJa = await translateText(env.AI, item.firstLine);
-          if (titleJa && lineJa) {
-            await env.NEWS_TRANSLATIONS.put(`ja:${item.link}`, JSON.stringify({ title: titleJa, line: lineJa }), { expirationTtl: 259200 });
-          }
-        }
-
-        results[index] = {
-          title: item.title,
-          link: item.link,
-          firstLine: item.firstLine,
-          title_ja: titleJa || "",
-          firstLine_ja: lineJa || "",
-          thumbnail: item.thumbnail,
-          category: item.category,
-          pubDate: item.displayDate
-        };
-      }));
-
-      // Wait if there are more chunks to process
-      if (i + CHUNK_SIZE < toTranslateIndices.length) {
-        await sleep(100); // AI calls can be fast, but let's be gentle
-      }
-    }
-
-    const resultResponse = new Response(JSON.stringify(results), {
-      headers: { 
-        "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "public, s-maxage=1800"
-      }
-    });
-
-    if (results.length > 0) {
-      try {
-        context.waitUntil(cache.put(cacheKey, resultResponse.clone()));
-      } catch (e) {
-        console.warn("Cache put failed:", e);
-      }
-    }
-
-    return resultResponse;
-
-  } catch (error) {
-    console.error("Backend error:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch or filter news" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return new Response(JSON.stringify(results), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed" }), { status: 500 });
   }
 };

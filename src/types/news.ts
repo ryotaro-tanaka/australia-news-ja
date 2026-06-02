@@ -1,10 +1,9 @@
 export interface NewsItem {
-  title: string;
-  link: string;
-  firstLine: string;
+  id: string;
   title_ja: string;
-  firstLine_ja: string;
+  bodyJa: string;
+  link: string;
   thumbnail: string;
   category: string;
-  pubDate: string; // ISO形式などのタイムスタンプ
+  pubDate: string;
 }
