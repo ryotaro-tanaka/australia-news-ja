@@ -11,7 +11,9 @@
     "post": "tsx scripts/post-latest-news.ts",
     "post:raw": "tsx scripts/post-threads.ts",
     "list": "tsx scripts/list-news.ts",
-    "deploy": "npm run build && wrangler pages deploy dist"
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:batch": "cd workers/batch-summarizer && wrangler deploy",
+    "deploy:all": "npm run deploy && npm run deploy:batch"
   },
   "dependencies": {
     "react": "^19.2.4",
