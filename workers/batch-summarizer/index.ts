@@ -49,6 +49,7 @@ export default {
           .slice(0, 20);
 
         // 3. Process items that are not in KV
+        const processedItems = [];
         for (const item of latestItems) {
           const cacheKey = `ja:id:${item.id}`;
           const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
@@ -61,7 +62,19 @@ export default {
               console.error(`Error processing item ${item.id}:`, e);
             }
           }
+          
+          // Add to metadata list
+          processedItems.push({
+            id: item.id,
+            title: item.title,
+            thumbnail: item.thumbnail,
+            displayDate: item.displayDate,
+            category: item.category
+          });
         }
+        
+        // 4. Update metadata list in KV
+        await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
         
         console.log('Batch processing completed successfully.');
       } catch (error) {
