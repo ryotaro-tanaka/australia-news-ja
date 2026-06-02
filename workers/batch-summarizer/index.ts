@@ -1,3 +1,4 @@
+/// <reference types="@cloudflare/workers-types" />
 import { SOURCES } from "../../functions/api/extractors";
 import { 
   Env, 
@@ -5,12 +6,13 @@ import {
   extractTagContent, 
   extractAllCategories, 
   getThumbnail, 
-  processNewsItem 
+  processNewsItem,
+  RawNewsItem
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";
 
 export default {
-  async scheduled(event: any, env: Env, ctx: any) {
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
     console.log(`Running scheduled task: ${event.cron}`);
     
     ctx.waitUntil((async () => {
@@ -29,7 +31,7 @@ export default {
         }
 
         // 2. Parse and filter items
-        const parsedItems = await Promise.all(allItemsXml.map(async itemXml => {
+        const parsedItems: RawNewsItem[] = await Promise.all(allItemsXml.map(async itemXml => {
           const title = cleanHtml(extractTagContent(itemXml, "title"));
           const link = extractTagContent(itemXml, "link");
           const id = await generateId(link);
@@ -37,12 +39,12 @@ export default {
           const category = extractAllCategories(itemXml)[0] || "News";
           const thumbnail = getThumbnail(itemXml, link);
 
-          return { id, title, link, pubDate: new Date(pubDate).getTime(), displayDate: pubDate, category, thumbnail };
+          return { id, title, link, category, thumbnail, displayDate: pubDate };
         }));
 
         // Sort by date and take latest 20 to check
         const latestItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
-          .sort((a, b) => b.pubDate - a.pubDate)
+          .sort((a, b) => new Date(b.displayDate).getTime() - new Date(a.displayDate).getTime())
           .slice(0, 20);
 
         // 3. Process items that are not in KV

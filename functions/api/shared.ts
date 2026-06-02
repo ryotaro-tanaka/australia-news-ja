@@ -3,12 +3,31 @@ import { extractFullContent, getThumbnail } from "./extractors";
 import { cleanHtml, smartTruncate } from "./utils";
 
 export interface Ai {
-  run(model: string, input: Record<string, unknown>, options?: any): Promise<{ response?: string }>;
+  run(model: string, input: Record<string, unknown>, options?: { gateway?: { id: string; skipCache: boolean; cacheTtl: number } }): Promise<{ response?: string }>;
 }
 
 export interface Env {
   NEWS_TRANSLATIONS: KVNamespace;
   AI: Ai;
+}
+
+export interface NewsItem {
+  id: string;
+  title_ja: string;
+  bodyJa: string;
+  link: string;
+  thumbnail: string;
+  category: string;
+  pubDate: string;
+}
+
+export interface RawNewsItem {
+  id: string;
+  title: string;
+  link: string;
+  thumbnail: string;
+  category: string;
+  displayDate: string;
 }
 
 export async function generateId(url: string): Promise<string> {
@@ -124,12 +143,12 @@ export function extractAllCategories(itemXml: string): string[] {
   return categories;
 }
 
-export async function processNewsItem(item: any, env: Env) {
+export async function processNewsItem(item: RawNewsItem, env: Env): Promise<NewsItem> {
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
   const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
 
-  const newsItem = { 
+  const newsItem: NewsItem = { 
     id: item.id, 
     title_ja, 
     bodyJa, 

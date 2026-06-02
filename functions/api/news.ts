@@ -1,10 +1,11 @@
+/// <reference types="@cloudflare/workers-types" />
 import { SOURCES } from "./extractors";
 import { 
   Env, 
   generateId, 
-  extractTagContent 
+  extractTagContent,
+  NewsItem
 } from "./shared";
-import { cleanHtml } from "./utils";
 
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { env, request } = context;
@@ -49,13 +50,13 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       .filter(item => item.pubDate < before);
 
     // 4. Fetch from KV (Only return what has been batch-processed)
-    const results: any[] = [];
+    const results: NewsItem[] = [];
     for (const item of uniqueItems) {
       if (results.length >= limit) break;
       
       const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${item.id}`);
       if (cached) {
-        results.push(JSON.parse(cached));
+        results.push(JSON.parse(cached) as NewsItem);
       }
     }
 
