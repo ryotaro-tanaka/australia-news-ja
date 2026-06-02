@@ -12,5 +12,14 @@ binding = "AI"
 binding = "NEWS_TRANSLATIONS"
 id = "60f52fbd7ad94b7bb79224184d4a8dc6"
 
+[[queues.producers]]
+binding = "NEWS_QUEUE"
+queue = "news-queue"
+
+[[queues.consumers]]
+queue = "news-queue"
+max_batch_size = 1
+max_batch_timeout = 1
+
 [triggers]
 crons = ["0 6 * * *", "0 12 * * *"]

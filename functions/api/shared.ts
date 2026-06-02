@@ -9,6 +9,7 @@ export interface Ai {
 export interface Env {
   NEWS_TRANSLATIONS: KVNamespace;
   AI: Ai;
+  NEWS_QUEUE: Queue;
 }
 
 export interface NewsItem {

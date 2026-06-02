@@ -13,6 +13,21 @@ import type {
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";
 
+import { SOURCES } from "../../functions/api/extractors";
+import { 
+  generateId, 
+  extractTagContent, 
+  extractAllCategories, 
+  getThumbnail, 
+  processNewsItem
+} from "../../functions/api/shared";
+import type { 
+  Env, 
+  RawNewsItem,
+  NewsMetadata
+} from "../../functions/api/shared";
+import { cleanHtml } from "../../functions/api/utils";
+
 async function runTask(env: Env) {
   console.log('runTask started');
   try {
@@ -64,24 +79,15 @@ async function runTask(env: Env) {
     await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
     console.log('sys:latest-news updated successfully');
 
-    // 4. その後、詳細記事（要約）を生成・保存
+    // 4. キューへ詳細記事生成ジョブを投入
     for (const item of latestItems) {
-      const cacheKey = `ja:id:${item.id}`;
-      const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
-      
-      if (!cached) {
-        console.log(`Processing new article: ${item.title}`);
-        try {
-          await processNewsItem(item, env);
-        } catch (e) {
-          console.error(`Error processing item ${item.id}:`, e);
-        }
-      }
+        await env.NEWS_QUEUE.send(item);
+        console.log(`Queued article for processing: ${item.id}`);
     }
     
-    console.log('Batch processing completed successfully.');
+    console.log('Batch Producer completed successfully.');
   } catch (error) {
-    console.error('Batch processing failed:', error);
+    console.error('Batch Producer failed:', error);
   }
 }
 
@@ -97,5 +103,25 @@ export default {
       return new Response('Batch triggered', { status: 202 });
     }
     return new Response('Not found', { status: 404 });
+  },
+  async queue(batch: MessageBatch<RawNewsItem>, env: Env, ctx: ExecutionContext): Promise<void> {
+    for (const message of batch.messages) {
+      const item = message.body;
+      const cacheKey = `ja:id:${item.id}`;
+      const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
+      
+      if (!cached) {
+        console.log(`Processing new article from queue: ${item.title}`);
+        try {
+          await processNewsItem(item, env);
+          message.ack();
+        } catch (e) {
+          console.error(`Error processing queued item ${item.id}:`, e);
+          message.retry(); // 失敗したらリトライ
+        }
+      } else {
+        message.ack();
+      }
+    }
   }
 };
