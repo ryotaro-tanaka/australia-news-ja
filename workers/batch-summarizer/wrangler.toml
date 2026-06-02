@@ -14,10 +14,10 @@ id = "60f52fbd7ad94b7bb79224184d4a8dc6"
 
 [[queues.producers]]
 binding = "NEWS_QUEUE"
-queue = "news-queue"
+queue = "news-ja-summarizer"
 
 [[queues.consumers]]
-queue = "news-queue"
+queue = "news-ja-summarizer"
 max_batch_size = 1
 max_batch_timeout = 1
 
