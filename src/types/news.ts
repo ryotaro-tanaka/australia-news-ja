@@ -4,7 +4,6 @@ export interface NewsMetadata {
   thumbnail: string;
   category: string;
   displayDate: string;
-  bodyJa?: string;
 }
 
 export interface NewsItem {
