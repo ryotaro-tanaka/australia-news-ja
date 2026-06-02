@@ -52,8 +52,19 @@ async function runTask(env: Env) {
 
     console.log(`Processing ${latestItems.length} latest items`);
 
-    // 3. Process items that are not in KV
-    const processedItems: NewsMetadata[] = [];
+    // 3. 先にメタデータリストを構築・保存
+    const processedItems: NewsMetadata[] = latestItems.map(item => ({
+        id: item.id,
+        title_ja: item.title,
+        thumbnail: item.thumbnail,
+        category: item.category,
+        displayDate: item.displayDate
+    }));
+    
+    await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
+    console.log('sys:latest-news updated successfully');
+
+    // 4. その後、詳細記事（要約）を生成・保存
     for (const item of latestItems) {
       const cacheKey = `ja:id:${item.id}`;
       const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
@@ -66,25 +77,6 @@ async function runTask(env: Env) {
           console.error(`Error processing item ${item.id}:`, e);
         }
       }
-      
-      // Add to metadata list
-      processedItems.push({
-        id: item.id,
-        title_ja: item.title,
-        thumbnail: item.thumbnail,
-        category: item.category,
-        displayDate: item.displayDate
-      });
-    }
-    
-    console.log(`Processed ${processedItems.length} items for metadata`);
-    
-    // 4. Update metadata list in KV
-    if (processedItems.length > 0) {
-      await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
-      console.log('sys:latest-news updated successfully');
-    } else {
-      console.warn('No items to save in sys:latest-news');
     }
     
     console.log('Batch processing completed successfully.');
