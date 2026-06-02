@@ -49,7 +49,8 @@ export const NewsList: React.FC = () => {
     title_ja: "海外送金なら Wise (ワイズ) - 手数料を節約",
     thumbnail: "https://wise-creative.prf.hn/source/camref:1110lEYXk/creativeref:1100l100085",
     category: "PR",
-    displayDate: new Date().toISOString()
+    displayDate: new Date().toISOString(),
+    bodyJa: "https://wise.prf.hn/click/camref:1110lEYXd\n銀行よりも安く、速い海外送金。オーストラリアから日本への送金や、外貨管理に最適。現地在住者の必須ツールです。"
   };
 
   // Insert ad after 7th item (index 7) only if we have enough items
