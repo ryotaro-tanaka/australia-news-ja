@@ -1,0 +1,13 @@
+name = "news-ja-batch"
+main = "index.ts"
+compatibility_date = "2024-04-16"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "NEWS_TRANSLATIONS"
+id = "e7baeeb52d0844ee99f199c39f94d4d1"
+
+[triggers]
+crons = ["0 6 * * *", "0 12 * * *"]
