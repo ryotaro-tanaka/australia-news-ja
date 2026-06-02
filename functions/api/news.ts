@@ -20,7 +20,7 @@ async function generateId(url: string): Promise<string> {
 
 async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
   if (!text) return null;
-  const truncatedText = smartTruncate(text, 4000);
+  const truncatedText = smartTruncate(text, 3000);
   console.log("--- AI INPUT START ---");
   console.log(truncatedText);
   console.log("--- AI INPUT END ---");
@@ -30,9 +30,9 @@ async function generateFullSummary(ai: Ai, text: string): Promise<string | null>
 
 ### 執筆ルール
 1. 段落構成(3段落のみ):
-   - 第1段落(リード):最重要情報を150〜200文字で簡潔にまとめる。
-   - 第2段落:背景・状況・関係者の短いコメントを250〜300文字で説明する。
-   - 第3段落:影響・今後の見通しを250〜300文字で述べる。
+   - 第1段落(リード):最重要情報を150文字で簡潔にまとめる。
+   - 第2段落:背景・状況・関係者の短いコメントを250文字で説明する。
+   - 第3段落:影響・今後の見通しを250文字で述べる。
 
 2. 禁止事項:
    - 段落番号やラベルを含めない。
@@ -41,7 +41,7 @@ async function generateFullSummary(ai: Ai, text: string): Promise<string | null>
    - 引用は1文以内にする。
 
 3. 出力形式:
-   - 全体の文字数は **750〜850文字** に収める。
+   - 全体の文字数は **650文字** に収める。
    - 文体は簡潔で事実ベース。
    - 文章は途中で切らず、最後まで書き切る。
 
@@ -52,7 +52,7 @@ ${truncatedText}
 
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
       prompt,
-      max_tokens: 900
+      max_tokens: 800
     }, {
       gateway: {
         id: "default",
@@ -97,7 +97,7 @@ ${expandedText}
 
     const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
       prompt,
-      max_tokens: 900
+      max_tokens: 300
     }, {
       gateway: {
         id: "default",
