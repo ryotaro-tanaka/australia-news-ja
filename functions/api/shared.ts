@@ -50,8 +50,7 @@ export async function generateFullSummary(ai: Ai, text: string): Promise<string 
   if (!text) return null;
   const truncatedText = smartTruncate(text, 3000);
   try {
-    const prompt = `### 役割
-あなたはプロの日本人ニュースライターです。提供された英語のニュース情報を基に、オーストラリア在住の日本人向けに、日本の大手ニュースサイトに掲載されるような自然な日本語記事を執筆してください。
+    const systemPrompt = `あなたはプロの日本人ニュースライターです。提供された英語のニュース情報を基に、オーストラリア在住の日本人向けに、日本の大手ニュースサイトに掲載されるような自然な日本語記事を執筆してください。
 
 ### 執筆ルール
 1. 段落構成(3段落のみ):
@@ -68,15 +67,18 @@ export async function generateFullSummary(ai: Ai, text: string): Promise<string 
 3. 出力形式:
    - 全体の文字数は **650文字** に収める。
    - 文体は簡潔で事実ベース。
-   - 文章は途中で切らず、最後まで書き切る。
+   - 文章は途中で切らず、最後まで書き切る。`;
 
-### 英語ニュース本文
+    const userPrompt = `### 英語ニュース本文
 ${truncatedText}
 
 ### 日本語記事執筆結果（本文のみを出力）:`;
 
-    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
-      prompt,
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
       max_tokens: 800
     }, {
       gateway: {
@@ -86,7 +88,7 @@ ${truncatedText}
       }
     });
 
-    return response.response?.trim() || null;
+    return (response.response as string)?.trim() || null;
   } catch (e) {
     console.error("Summary generation error:", e);
     return null;
@@ -106,22 +108,24 @@ export async function translateText(ai: Ai, text: string): Promise<string | null
   if (!text) return null;
   try {
     const expandedText = applyGlossary(text);
-    const prompt = `### 役割
-あなたはプロのニュースエディターです。提供された英語のニュースタイトルを基に、日本のニュースサイト（Yahoo!ニュース等）で目を引くような、簡潔でインパクトのある日本語の見出しを作成してください。
+    const systemPrompt = `あなたはプロのニュースエディターです。提供された英語のニュースタイトルを基に、日本のニュースサイト（Yahoo!ニュース等）で目を引くような、簡潔でインパクトのある日本語の見出しを作成してください。
 
 ### 執筆ルール
 - 30〜40文字程度の「見出し」として作成してください。
 - 翻訳調を避け、ニュースらしい体言止めや力強い表現を用いてください。
 - 説明的な文章（〜ました、〜困っている等）ではなく、事実や核心を突く表現にしてください。
-- 見出しのみを出力し、注釈やメタ情報は一切含めないでください。
+- 見出しのみを出力し、注釈やメタ情報は一切含めないでください。`;
 
-### 対象タイトル
+    const userPrompt = `### 対象タイトル
 ${expandedText}
 
 ### 日本語見出し（見出しのみを出力）:`;
 
-    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
-      prompt,
+    const response = await ai.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
       max_tokens: 300
     }, {
       gateway: {
@@ -130,7 +134,7 @@ ${expandedText}
         cacheTtl: 3600
       }
     });
-    return response.response?.trim() || null;
+    return (response.response as string)?.trim() || null;
   } catch (e) {
     console.error(`Translation error:`, e);
     return null;
