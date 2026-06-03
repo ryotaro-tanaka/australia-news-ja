@@ -1,8 +1,9 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useNewsContext } from '../state/NewsContext';
 
 export function useNews() {
   const { state, dispatch } = useNewsContext();
+  const isInitialized = useRef(false);
 
   const fetchNews = useCallback(async () => {
     dispatch({ type: 'FETCH_START' });
@@ -34,10 +35,11 @@ export function useNews() {
   }, [dispatch, state.items, state.hasMore, state.loadingMore]);
 
   useEffect(() => {
-    if (state.items.length === 0 && !state.loading && !state.error) {
+    if (!isInitialized.current) {
+      isInitialized.current = true;
       fetchNews();
     }
-  }, [fetchNews, state.items.length, state.loading, state.error]);
+  }, [fetchNews]);
 
   return {
     news: state.items,
