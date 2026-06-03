@@ -4,6 +4,7 @@ import { useNewsContext } from '../state/NewsContext';
 export function useNews() {
   const { state, dispatch } = useNewsContext();
   const isInitialized = useRef(false);
+  const lastFetchTime = useRef(0);
 
   const fetchNews = useCallback(async () => {
     dispatch({ type: 'FETCH_START' });
@@ -18,8 +19,11 @@ export function useNews() {
   }, [dispatch]);
 
   const loadMore = useCallback(async () => {
+    const now = Date.now();
+    if (now - lastFetchTime.current < 2000) return;
     if (state.loadingMore || !state.hasMore || state.items.length === 0) return;
 
+    lastFetchTime.current = now;
     const lastItem = state.items[state.items.length - 1];
     const cursor = new Date(lastItem.displayDate).getTime();
 
