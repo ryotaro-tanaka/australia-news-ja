@@ -28,9 +28,22 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     }
 
     const allItems: NewsMetadata[] = JSON.parse(cachedList);
-    const results = allItems.slice(0, limit);
+    
+    // Pagination logic (numeric cursor)
+    const before = url.searchParams.get('before');
+    let results = allItems;
+    
+    if (before) {
+      const cursorTime = parseInt(before);
+      if (!isNaN(cursorTime)) {
+        // Filter: only items older than the cursor time
+        results = allItems.filter(item => item.pubDate < cursorTime);
+      }
+    }
 
-    return new Response(JSON.stringify(results), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+    const pagedResults = results.slice(0, limit);
+
+    return new Response(JSON.stringify(pagedResults), { headers: { "Content-Type": "application/json; charset=utf-8" } });
   } catch (error) {
     console.error("API Error:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch news list" }), { status: 500 });
