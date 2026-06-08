@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.btn-secondary {
+  margin-bottom: 2rem;
+}
+
 .news-meta {
   display: flex;
   align-items: center;

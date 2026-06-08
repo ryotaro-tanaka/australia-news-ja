@@ -38,7 +38,7 @@ export const NewsDetail: React.FC = () => {
 
   return (
     <article className="news-detail">
-      <Link to="/" className="btn btn-secondary">← 一覧へ戻る</Link>
+      <Link to="/" className="btn btn-secondary">一覧へ戻る</Link>
       
       <div className="news-meta">
         <span className="category-badge">{news.category}</span>
