@@ -4,7 +4,7 @@ import { useNewsContext } from '../state/NewsContext';
 export function useNews() {
   const { state, dispatch } = useNewsContext();
   const isInitialized = useRef(false);
-  const lastFetchTime = useRef(0);
+  const isFetchingMoreRef = useRef(false);
 
   const fetchNews = useCallback(async () => {
     dispatch({ type: 'FETCH_START' });
@@ -19,11 +19,9 @@ export function useNews() {
   }, [dispatch]);
 
   const loadMore = useCallback(async () => {
-    const now = Date.now();
-    if (now - lastFetchTime.current < 2000) return;
-    if (state.loadingMore || !state.hasMore || state.items.length === 0) return;
+    if (isFetchingMoreRef.current || !state.hasMore || state.items.length === 0) return;
 
-    lastFetchTime.current = now;
+    isFetchingMoreRef.current = true;
     const lastItem = state.items[state.items.length - 1];
     const cursor = lastItem.pubDate;
 
@@ -35,8 +33,10 @@ export function useNews() {
       dispatch({ type: 'APPEND_NEWS', payload: data });
     } catch (error) {
       dispatch({ type: 'FETCH_ERROR', payload: error instanceof Error ? error.message : 'Failed to load more' });
+    } finally {
+      isFetchingMoreRef.current = false;
     }
-  }, [dispatch, state.items, state.hasMore, state.loadingMore]);
+  }, [dispatch, state.items, state.hasMore]);
 
   useEffect(() => {
     if (!isInitialized.current) {
