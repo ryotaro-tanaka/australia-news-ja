@@ -3,7 +3,7 @@ export interface NewsMetadata {
   title_ja: string;
   thumbnail: string;
   category: string;
-  displayDate: string;
+  pubDate: string;
 }
 
 export interface NewsItem {

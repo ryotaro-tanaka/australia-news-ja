@@ -27,7 +27,7 @@ export interface NewsMetadata {
   title_ja: string;
   thumbnail: string;
   category: string;
-  displayDate: string;
+  pubDate: string;
 }
 
 export interface RawNewsItem {
@@ -36,7 +36,7 @@ export interface RawNewsItem {
   link: string;
   thumbnail: string;
   category: string;
-  displayDate: string;
+  pubDate: string;
 }
 
 export async function generateId(url: string): Promise<string> {
@@ -44,6 +44,11 @@ export async function generateId(url: string): Promise<string> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+export function cleanThumbnailUrl(url: string): string {
+  if (!url) return "";
+  return url.split('?')[0];
 }
 
 export async function generateFullSummary(ai: Ai, text: string): Promise<string | null> {
@@ -166,9 +171,9 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<News
     title_ja, 
     bodyJa, 
     link: item.link, 
-    thumbnail: item.thumbnail, 
+    thumbnail: cleanThumbnailUrl(item.thumbnail), 
     category: item.category, 
-    pubDate: item.displayDate 
+    pubDate: item.pubDate 
   };
   
   await env.NEWS_TRANSLATIONS.put(`ja:id:${item.id}`, JSON.stringify(newsItem), { expirationTtl: 259200 });

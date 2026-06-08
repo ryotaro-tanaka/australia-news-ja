@@ -7,7 +7,7 @@ interface NewsCardProps {
 }
 
 export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
-  const formattedDate = new Date(item.displayDate).toLocaleDateString('ja-JP', {
+  const formattedDate = new Date(item.pubDate).toLocaleDateString('ja-JP', {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',

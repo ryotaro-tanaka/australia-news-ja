@@ -4,7 +4,8 @@ import {
   extractTagContent, 
   extractAllCategories, 
   getThumbnail, 
-  processNewsItem
+  processNewsItem,
+  cleanThumbnailUrl
 } from "../../functions/api/shared";
 import type { 
   Env, 
@@ -40,14 +41,14 @@ async function runTask(env: Env) {
       const id = await generateId(link);
       const pubDate = extractTagContent(itemXml, "pubDate");
       const category = extractAllCategories(itemXml)[0] || "News";
-      const thumbnail = getThumbnail(itemXml, link);
+      const thumbnail = cleanThumbnailUrl(getThumbnail(itemXml, link));
 
-      return { id, title, link, category, thumbnail, displayDate: pubDate };
+      return { id, title, link, category, thumbnail, pubDate };
     }));
 
     // Sort by date and take latest 20 to check
     const latestItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
-      .sort((a, b) => new Date(b.displayDate).getTime() - new Date(a.displayDate).getTime())
+      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
       .slice(0, 20);
 
     console.log(`Processing ${latestItems.length} latest items`);
@@ -55,10 +56,10 @@ async function runTask(env: Env) {
     // 3. 先にメタデータリストを構築・保存
     const processedItems: NewsMetadata[] = latestItems.map(item => ({
         id: item.id,
-        title_ja: item.title,
+        title_ja: item.title, // Note: This will be translated in detail page generation, but here we use original for metadata? No, wait.
         thumbnail: item.thumbnail,
         category: item.category,
-        displayDate: item.displayDate
+        pubDate: item.pubDate
     }));
     
     await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
