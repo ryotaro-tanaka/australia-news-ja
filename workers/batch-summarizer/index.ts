@@ -10,7 +10,8 @@ import {
 import type { 
   Env, 
   RawNewsItem,
-  NewsMetadata
+  NewsMetadata,
+  NewsItem
 } from "../../functions/api/shared";
 import { cleanHtml } from "../../functions/api/utils";
 
@@ -54,33 +55,21 @@ async function runTask(env: Env) {
 
     console.log(`Processing ${latestItems.length} latest items`);
 
-    // 3. 先にメタデータリストを構築・保存
-    // 既存の翻訳がある場合はそれを流用し、ない場合は暫定で英語タイトルを入れる
-    const processedItems: NewsMetadata[] = await Promise.all(latestItems.map(async item => {
-        const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${item.id}`);
-        let title_ja = item.title;
-        if (cached) {
-            try {
-                const detail = JSON.parse(cached);
-                title_ja = detail.title_ja || item.title;
-            } catch (e) {
-                console.error(`Failed to parse cached detail for ${item.id}`);
-            }
+    // 3. 既存のリストのメンテナンス（3日以上前の記事を除去）
+    const threeDaysAgo = Date.now() - (259200 * 1000);
+    const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
+    if (listRaw) {
+        let currentList: NewsMetadata[] = JSON.parse(listRaw);
+        const filteredList = currentList.filter(item => item.pubDate > threeDaysAgo);
+        if (filteredList.length !== currentList.length) {
+            await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(filteredList));
+            console.log('Maintained sys:latest-news: removed expired items');
         }
-        
-        return {
-            id: item.id,
-            title_ja,
-            thumbnail: item.thumbnail,
-            category: item.category,
-            pubDate: item.pubDate
-        };
-    }));
-    
-    await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
-    console.log('sys:latest-news updated successfully');
+    }
 
     // 4. キューへ詳細記事生成ジョブを投入
+    // ここでは一覧(sys:latest-news)の更新は行わない。
+    // 日本語化が完了した記事から順次、queueハンドラ内で一覧へ追加される。
     for (const item of latestItems) {
         await env.NEWS_QUEUE.send(item);
         console.log(`Queued article for processing: ${item.id}`);
@@ -116,17 +105,28 @@ export default {
         try {
           const newsItem = await processNewsItem(item, env);
           
-          // 詳細生成が完了したら一覧(sys:latest-news)のタイトルを日本語に更新する
+          // 日本語化が完了した記事を一覧(sys:latest-news)にデビューさせる
+          const threeDaysAgo = Date.now() - (259200 * 1000);
           const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          if (listRaw) {
-            const list: NewsMetadata[] = JSON.parse(listRaw);
-            const index = list.findIndex(m => m.id === newsItem.id);
-            if (index !== -1) {
-              list[index].title_ja = newsItem.title_ja;
-              await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(list));
-              console.log(`Updated list title for ${newsItem.id}`);
-            }
-          }
+          let list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+          
+          // メタデータの作成
+          const metadata: NewsMetadata = {
+            id: newsItem.id,
+            title_ja: newsItem.title_ja,
+            thumbnail: newsItem.thumbnail,
+            category: newsItem.category,
+            pubDate: newsItem.pubDate
+          };
+
+          // マージ、重複排除、フィルタリング、ソート
+          const newList = [metadata, ...list];
+          const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
+            .filter(m => m.pubDate > threeDaysAgo)
+            .sort((a, b) => b.pubDate - a.pubDate);
+
+          await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
+          console.log(`Article debuted in list: ${newsItem.id}`);
           
           message.ack();
         } catch (e) {
@@ -134,7 +134,31 @@ export default {
           message.retry(); // 失敗したらリトライ
         }
       } else {
-        message.ack();
+        // すでに詳細がある場合でも、一覧に含まれていない可能性（再構築中など）を考慮してマージを試みる
+        try {
+          const newsItem: NewsItem = JSON.parse(cached);
+          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
+          let list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+          
+          if (!list.some(m => m.id === newsItem.id)) {
+            const metadata: NewsMetadata = {
+              id: newsItem.id,
+              title_ja: newsItem.title_ja,
+              thumbnail: newsItem.thumbnail,
+              category: newsItem.category,
+              pubDate: newsItem.pubDate
+            };
+            const newList = [metadata, ...list]
+              .filter(m => m.pubDate > (Date.now() - 259200 * 1000))
+              .sort((a, b) => b.pubDate - a.pubDate);
+            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values());
+            await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
+            console.log(`Existing article added back to list: ${newsItem.id}`);
+          }
+          message.ack();
+        } catch (e) {
+          message.ack(); // パースエラーなどは無視
+        }
       }
     }
   }
