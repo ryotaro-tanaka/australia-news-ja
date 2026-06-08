@@ -25,7 +25,7 @@ export function useNews() {
 
     lastFetchTime.current = now;
     const lastItem = state.items[state.items.length - 1];
-    const cursor = new Date(lastItem.pubDate).getTime();
+    const cursor = lastItem.pubDate;
 
     dispatch({ type: 'FETCH_MORE_START' });
     try {

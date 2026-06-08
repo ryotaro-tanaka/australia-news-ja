@@ -19,7 +19,7 @@ export interface NewsItem {
   link: string;
   thumbnail: string;
   category: string;
-  pubDate: string;
+  pubDate: number;
 }
 
 export interface NewsMetadata {
@@ -27,7 +27,7 @@ export interface NewsMetadata {
   title_ja: string;
   thumbnail: string;
   category: string;
-  pubDate: string;
+  pubDate: number;
 }
 
 export interface RawNewsItem {
@@ -36,7 +36,7 @@ export interface RawNewsItem {
   link: string;
   thumbnail: string;
   category: string;
-  pubDate: string;
+  pubDate: number;
 }
 
 export async function generateId(url: string): Promise<string> {

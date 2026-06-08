@@ -39,7 +39,8 @@ async function runTask(env: Env) {
       const title = cleanHtml(extractTagContent(itemXml, "title"));
       const link = extractTagContent(itemXml, "link");
       const id = await generateId(link);
-      const pubDate = extractTagContent(itemXml, "pubDate");
+      const pubDateStr = extractTagContent(itemXml, "pubDate");
+      const pubDate = new Date(pubDateStr).getTime();
       const category = extractAllCategories(itemXml)[0] || "News";
       const thumbnail = cleanThumbnailUrl(getThumbnail(itemXml, link));
 
@@ -48,7 +49,7 @@ async function runTask(env: Env) {
 
     // Sort by date and take latest 20 to check
     const latestItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+      .sort((a, b) => b.pubDate - a.pubDate)
       .slice(0, 20);
 
     console.log(`Processing ${latestItems.length} latest items`);
