@@ -55,12 +55,26 @@ async function runTask(env: Env) {
     console.log(`Processing ${latestItems.length} latest items`);
 
     // 3. 先にメタデータリストを構築・保存
-    const processedItems: NewsMetadata[] = latestItems.map(item => ({
-        id: item.id,
-        title_ja: item.title, // Note: This will be translated in detail page generation, but here we use original for metadata? No, wait.
-        thumbnail: item.thumbnail,
-        category: item.category,
-        pubDate: item.pubDate
+    // 既存の翻訳がある場合はそれを流用し、ない場合は暫定で英語タイトルを入れる
+    const processedItems: NewsMetadata[] = await Promise.all(latestItems.map(async item => {
+        const cached = await env.NEWS_TRANSLATIONS.get(`ja:id:${item.id}`);
+        let title_ja = item.title;
+        if (cached) {
+            try {
+                const detail = JSON.parse(cached);
+                title_ja = detail.title_ja || item.title;
+            } catch (e) {
+                console.error(`Failed to parse cached detail for ${item.id}`);
+            }
+        }
+        
+        return {
+            id: item.id,
+            title_ja,
+            thumbnail: item.thumbnail,
+            category: item.category,
+            pubDate: item.pubDate
+        };
     }));
     
     await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(processedItems));
@@ -100,7 +114,20 @@ export default {
       if (!cached) {
         console.log(`Processing new article from queue: ${item.title}`);
         try {
-          await processNewsItem(item, env);
+          const newsItem = await processNewsItem(item, env);
+          
+          // 詳細生成が完了したら一覧(sys:latest-news)のタイトルを日本語に更新する
+          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
+          if (listRaw) {
+            const list: NewsMetadata[] = JSON.parse(listRaw);
+            const index = list.findIndex(m => m.id === newsItem.id);
+            if (index !== -1) {
+              list[index].title_ja = newsItem.title_ja;
+              await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(list));
+              console.log(`Updated list title for ${newsItem.id}`);
+            }
+          }
+          
           message.ack();
         } catch (e) {
           console.error(`Error processing queued item ${item.id}:`, e);
