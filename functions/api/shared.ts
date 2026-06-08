@@ -43,7 +43,8 @@ export async function generateId(url: string): Promise<string> {
   const msgUint8 = new TextEncoder().encode(url);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const fullHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return fullHash.slice(0, 16);
 }
 
 export function cleanThumbnailUrl(url: string): string {
