@@ -48,10 +48,11 @@ async function runTask(env: Env) {
       return { id, title, link, category, thumbnail, pubDate };
     }));
 
-    // Sort by date and take latest 20 to check
+    // Sort by date and take latest to check
+    // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
     const latestItems = Array.from(new Map(parsedItems.map(item => [item.link, item])).values())
       .sort((a, b) => b.pubDate - a.pubDate)
-      .slice(0, 20);
+      .slice(0, 100);
 
     console.log(`Processing ${latestItems.length} latest items`);
 
@@ -120,10 +121,12 @@ export default {
           };
 
           // マージ、重複排除、フィルタリング、ソート
+          // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
           const newList = [metadata, ...list];
           const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
             .filter(m => m.pubDate > threeDaysAgo)
-            .sort((a, b) => b.pubDate - a.pubDate);
+            .sort((a, b) => b.pubDate - a.pubDate)
+            .slice(0, 100);
 
           await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
           console.log(`Article debuted in list: ${newsItem.id}`);
@@ -148,10 +151,12 @@ export default {
               category: newsItem.category,
               pubDate: newsItem.pubDate
             };
+            // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
             const newList = [metadata, ...list]
               .filter(m => m.pubDate > (Date.now() - 259200 * 1000))
               .sort((a, b) => b.pubDate - a.pubDate);
-            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values());
+            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
+              .slice(0, 100);
             await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
             console.log(`Existing article added back to list: ${newsItem.id}`);
           }
