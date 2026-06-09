@@ -95,7 +95,7 @@ export default {
     }
     return new Response('Not found', { status: 404 });
   },
-  async queue(batch: MessageBatch<RawNewsItem>, env: Env, ctx: ExecutionContext): Promise<void> {
+  async queue(batch: MessageBatch<RawNewsItem>, env: Env, _ctx: ExecutionContext): Promise<void> {
     for (const message of batch.messages) {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
@@ -132,8 +132,8 @@ export default {
           console.log(`Article debuted in list: ${newsItem.id}`);
           
           message.ack();
-        } catch (_e) {
-          console.error(`Error processing queued item ${item.id}:`, _e);
+        } catch (_) {
+          console.error(`Error processing queued item ${item.id}:`, _);
           message.retry(); // 失敗したらリトライ
         }
       } else {
@@ -161,7 +161,7 @@ export default {
             console.log(`Existing article added back to list: ${newsItem.id}`);
           }
           message.ack();
-        } catch (_e) {
+        } catch (_) {
           message.ack(); // パースエラーなどは無視
         }
       }
