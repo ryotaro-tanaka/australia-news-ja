@@ -60,7 +60,7 @@ async function runTask(env: Env) {
     const threeDaysAgo = Date.now() - (259200 * 1000);
     const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
     if (listRaw) {
-        let currentList: NewsMetadata[] = JSON.parse(listRaw);
+        const currentList: NewsMetadata[] = JSON.parse(listRaw);
         const filteredList = currentList.filter(item => item.pubDate > threeDaysAgo);
         if (filteredList.length !== currentList.length) {
             await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(filteredList));
@@ -83,14 +83,14 @@ async function runTask(env: Env) {
 }
 
 export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+  async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext) {
     console.log(`Running scheduled task: ${event.cron}`);
-    ctx.waitUntil(runTask(env));
+    _ctx.waitUntil(runTask(env));
   },
-  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
     const url = new URL(request.url);
     if (url.pathname === '/run-batch') {
-      ctx.waitUntil(runTask(env));
+      _ctx.waitUntil(runTask(env));
       return new Response('Batch triggered', { status: 202 });
     }
     return new Response('Not found', { status: 404 });
@@ -109,7 +109,7 @@ export default {
           // 日本語化が完了した記事を一覧(sys:latest-news)にデビューさせる
           const threeDaysAgo = Date.now() - (259200 * 1000);
           const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          let list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
           
           // メタデータの作成
           const metadata: NewsMetadata = {
@@ -132,8 +132,8 @@ export default {
           console.log(`Article debuted in list: ${newsItem.id}`);
           
           message.ack();
-        } catch (e) {
-          console.error(`Error processing queued item ${item.id}:`, e);
+        } catch (_e) {
+          console.error(`Error processing queued item ${item.id}:`, _e);
           message.retry(); // 失敗したらリトライ
         }
       } else {
@@ -141,7 +141,7 @@ export default {
         try {
           const newsItem: NewsItem = JSON.parse(cached);
           const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          let list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
           
           if (!list.some(m => m.id === newsItem.id)) {
             const metadata: NewsMetadata = {
@@ -161,7 +161,7 @@ export default {
             console.log(`Existing article added back to list: ${newsItem.id}`);
           }
           message.ack();
-        } catch (e) {
+        } catch (_e) {
           message.ack(); // パースエラーなどは無視
         }
       }
