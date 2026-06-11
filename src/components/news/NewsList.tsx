@@ -57,10 +57,6 @@ export const NewsList: React.FC = () => {
           </div>
         )}
       </div>
-
-      {!hasMore && news.length > 0 && (
-        <p style={{ textAlign: 'center', color: '#888', margin: '2rem 0' }}>これ以上のニュースはありません。</p>
-      )}
     </main>
   );
 };
