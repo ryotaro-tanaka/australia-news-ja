@@ -83,21 +83,19 @@ async function runTask(env: Env) {
 }
 
 export default {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext) {
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
     console.log(`Running scheduled task: ${event.cron}`);
-    _ctx.waitUntil(runTask(env));
+    ctx.waitUntil(runTask(env));
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
     if (url.pathname === '/run-batch') {
-      _ctx.waitUntil(runTask(env));
+      ctx.waitUntil(runTask(env));
       return new Response('Batch triggered', { status: 202 });
     }
     return new Response('Not found', { status: 404 });
   },
-  async queue(batch: MessageBatch<RawNewsItem>, env: Env, _ctx: ExecutionContext): Promise<void> {
+  async queue(batch: MessageBatch<RawNewsItem>, env: Env): Promise<void> {
     for (const message of batch.messages) {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
