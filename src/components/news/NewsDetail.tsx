@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { NewsItem } from '../../types/news';
+import { NewsDetailSkeleton } from './NewsDetailSkeleton';
 import './NewsDetail.css';
 
 export const NewsDetail: React.FC = () => {
@@ -26,7 +27,7 @@ export const NewsDetail: React.FC = () => {
     fetchNews();
   }, [id]);
 
-  if (loading) return <div className="news-detail"><div className="loading">読み込み中...</div></div>;
+  if (loading) return <NewsDetailSkeleton />;
   if (!news) return <div className="news-detail"><div className="error">記事が見つかりません。</div></div>;
 
   const formattedDate = new Date(news.pubDate).toLocaleDateString('ja-JP', {
