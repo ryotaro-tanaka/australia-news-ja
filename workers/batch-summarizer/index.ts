@@ -83,10 +83,12 @@ async function runTask(env: Env) {
 }
 
 export default {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext) {
     console.log(`Running scheduled task: ${event.cron}`);
     _ctx.waitUntil(runTask(env));
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
     const url = new URL(request.url);
     if (url.pathname === '/run-batch') {
@@ -132,8 +134,8 @@ export default {
           console.log(`Article debuted in list: ${newsItem.id}`);
           
           message.ack();
-        } catch (_) {
-          console.error(`Error processing queued item ${item.id}:`, _);
+        } catch {
+          console.error(`Error processing queued item ${item.id}`);
           message.retry(); // 失敗したらリトライ
         }
       } else {
@@ -161,7 +163,7 @@ export default {
             console.log(`Existing article added back to list: ${newsItem.id}`);
           }
           message.ack();
-        } catch (_) {
+        } catch {
           message.ack(); // パースエラーなどは無視
         }
       }
