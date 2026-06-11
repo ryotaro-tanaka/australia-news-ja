@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNews } from '../../hooks/useNews';
 import { NewsCard } from './NewsCard';
 import { NewsCardSkeleton } from './NewsCardSkeleton';
+import { WiseCard } from './WiseCard';
 
 export const NewsList: React.FC = () => {
   const { news, loading, loadingMore, hasMore, error, loadMore } = useNews();
@@ -46,7 +47,10 @@ export const NewsList: React.FC = () => {
   return (
     <main className="news-list">
       {news.map((item, index) => (
-        <NewsCard key={`${item.id}-${index}`} item={item} />
+        <React.Fragment key={`${item.id}-${index}`}>
+          <NewsCard item={item} />
+          {index === 6 && <WiseCard />}
+        </React.Fragment>
       ))}
 
       {/* Sentinel for Infinite Scroll */}
