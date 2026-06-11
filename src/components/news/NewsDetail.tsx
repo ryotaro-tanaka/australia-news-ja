@@ -38,8 +38,6 @@ export const NewsDetail: React.FC = () => {
 
   return (
     <article className="news-detail">
-      <Link to="/" className="btn btn-secondary">一覧へ戻る</Link>
-      
       <div className="news-meta">
         <span className="category-badge">{news.category}</span>
         <time className="pub-date">{formattedDate}</time>
@@ -62,9 +60,15 @@ export const NewsDetail: React.FC = () => {
           <p>要約を生成できませんでした。</p>
         )}
       </div>
-      <a href={news.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-        元記事を読む (英語)
-      </a>
+
+      <div className="action-buttons">
+        <Link to="/" className="btn btn-secondary">
+          一覧へ戻る
+        </Link>
+        <a href={news.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+          元記事を読む (英語)
+        </a>
+      </div>
     </article>
   );
 };

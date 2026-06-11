@@ -5,7 +5,20 @@
 }
 
 .btn-secondary {
-  margin-bottom: 2rem;
+  /* Removed top margin margin-bottom: 2rem; */
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.action-buttons .btn {
+  flex: 1;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .news-meta {
