@@ -5,6 +5,7 @@ import { NewsProvider } from './state/NewsContext'
 import { NewsList } from './components/news/NewsList'
 import { NewsDetail } from './components/news/NewsDetail'
 import { Footer } from './components/ui/Footer'
+import { ScrollToTop } from './components/ui/ScrollToTop'
 
 function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -45,6 +46,7 @@ function App() {
   return (
     <NewsProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<NewsList />} />
