@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { NewsItem } from '../../types/news';
+import { NewsDetailSkeleton } from './NewsDetailSkeleton';
 import './NewsDetail.css';
 
 export const NewsDetail: React.FC = () => {
@@ -26,7 +27,7 @@ export const NewsDetail: React.FC = () => {
     fetchNews();
   }, [id]);
 
-  if (loading) return <div className="news-detail"><div className="loading">読み込み中...</div></div>;
+  if (loading) return <NewsDetailSkeleton />;
   if (!news) return <div className="news-detail"><div className="error">記事が見つかりません。</div></div>;
 
   const formattedDate = new Date(news.pubDate).toLocaleDateString('ja-JP', {
@@ -38,8 +39,6 @@ export const NewsDetail: React.FC = () => {
 
   return (
     <article className="news-detail">
-      <Link to="/" className="btn btn-secondary">一覧へ戻る</Link>
-      
       <div className="news-meta">
         <span className="category-badge">{news.category}</span>
         <time className="pub-date">{formattedDate}</time>
@@ -62,9 +61,15 @@ export const NewsDetail: React.FC = () => {
           <p>要約を生成できませんでした。</p>
         )}
       </div>
-      <a href={news.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-        元記事を読む (英語)
-      </a>
+
+      <div className="action-buttons">
+        <Link to="/" className="btn btn-secondary">
+          一覧へ戻る
+        </Link>
+        <a href={news.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+          元記事を読む (英語)
+        </a>
+      </div>
     </article>
   );
 };

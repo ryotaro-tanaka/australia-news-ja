@@ -1,0 +1,28 @@
+.footer {
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted, #64748b);
+  transition: color 0.2s ease;
+  opacity: 0.6;
+}
+
+.github-link:hover {
+  color: var(--color-text-main, #1a1a1a);
+  opacity: 1;
+}
+
+.github-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}

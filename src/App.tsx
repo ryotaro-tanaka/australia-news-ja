@@ -4,6 +4,7 @@ import './App.css'
 import { NewsProvider } from './state/NewsContext'
 import { NewsList } from './components/news/NewsList'
 import { NewsDetail } from './components/news/NewsDetail'
+import { Footer } from './components/ui/Footer'
 
 function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -35,6 +36,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="container">
       <main>{children}</main>
+      <Footer />
     </div>
   );
 }
