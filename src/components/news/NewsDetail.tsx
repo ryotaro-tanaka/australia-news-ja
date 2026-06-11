@@ -11,12 +11,22 @@ export const NewsDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchNews = async () => {
+      const cacheKey = `news_detail_${id}`;
+      const cachedData = sessionStorage.getItem(cacheKey);
+
+      if (cachedData) {
+        setNews(JSON.parse(cachedData));
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(`/api/news?action=detail&id=${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch article');
         }
         const data = await response.json();
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
         setNews(data);
       } catch (error) {
         console.error("Fetch Error:", error);
