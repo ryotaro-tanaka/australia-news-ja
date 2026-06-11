@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import type { ReactNode } from 'react';
-import type { NewsItem } from '../types/news';
+import type { NewsMetadata } from '../types/news';
 
 interface NewsState {
-  items: NewsItem[];
+  items: NewsMetadata[];
   loading: boolean;
   loadingMore: boolean;
   error: string | null;
@@ -14,8 +14,8 @@ interface NewsState {
 type NewsAction =
   | { type: 'FETCH_START' }
   | { type: 'FETCH_MORE_START' }
-  | { type: 'FETCH_SUCCESS'; payload: NewsItem[] }
-  | { type: 'APPEND_NEWS'; payload: NewsItem[] }
+  | { type: 'FETCH_SUCCESS'; payload: NewsMetadata[] }
+  | { type: 'APPEND_NEWS'; payload: NewsMetadata[] }
   | { type: 'FETCH_ERROR'; payload: string };
 
 const initialState: NewsState = {

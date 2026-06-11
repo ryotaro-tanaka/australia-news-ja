@@ -1,4 +1,4 @@
-import { NewsExtractor } from "./index";
+import type { NewsExtractor } from "./index";
 import { decodeHtmlEntities } from "../utils";
 
 function isNoise(text: string): boolean {

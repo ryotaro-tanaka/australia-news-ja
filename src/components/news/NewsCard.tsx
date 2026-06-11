@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { NewsItem } from '../../types/news';
+import type { NewsMetadata } from '../../types/news';
 
 interface NewsCardProps {
-  item: NewsItem;
+  item: NewsMetadata;
 }
 
 export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
@@ -13,9 +13,6 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
     hour: '2-digit',
     minute: '2-digit'
   });
-
-  const title = item.title_ja;
-  const description = item.bodyJa.split('\n')[0];
 
   return (
     <article className="news-card">
@@ -31,8 +28,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
               <span className="category-badge">{item.category}</span>
               <time className="pub-date">{formattedDate}</time>
             </div>
-            <h2>{title}</h2>
-            <p className="description">{description}</p>
+            <h2>{item.title_ja}</h2>
           </div>
         </div>
       </Link>

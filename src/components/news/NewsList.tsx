@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useNews } from '../../hooks/useNews';
 import { NewsCard } from './NewsCard';
 import { NewsCardSkeleton } from './NewsCardSkeleton';
-import type { NewsItem } from '../../types/news';
 
 export const NewsList: React.FC = () => {
   const { news, loading, loadingMore, hasMore, error, loadMore } = useNews();
@@ -44,30 +43,10 @@ export const NewsList: React.FC = () => {
     return <div className="error">エラーが発生しました: {error}</div>;
   }
 
-  // Native ad for Wise
-  const wiseAd: NewsItem = {
-    id: "wise-ad",
-    link: "https://wise.prf.hn/click/camref:1110lEYXd",
-    title_ja: "海外送金なら Wise (ワイズ) - 手数料を節約",
-    bodyJa: "銀行よりも安く、速い海外送金。オーストラリアから日本への送金や、外貨管理に最適。現地在住者の必須ツールです。",
-    thumbnail: "https://wise-creative.prf.hn/source/camref:1110lEYXk/creativeref:1100l100085",
-    category: "PR",
-    pubDate: new Date().toISOString()
-  };
-
-  // Insert ad after 7th item (index 7) only if we have enough items
-  const displayItems = [...news];
-  if (displayItems.length >= 7) {
-    displayItems.splice(7, 0, wiseAd);
-  } else if (displayItems.length > 0 && !hasMore) {
-    // If no more items to load and we never reached 7, push it to the end
-    displayItems.push(wiseAd);
-  }
-
   return (
     <main className="news-list">
-      {displayItems.map((item, index) => (
-        <NewsCard key={`${item.link}-${index}`} item={item} />
+      {news.map((item, index) => (
+        <NewsCard key={`${item.id}-${index}`} item={item} />
       ))}
 
       {/* Sentinel for Infinite Scroll */}

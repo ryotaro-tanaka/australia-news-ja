@@ -1,3 +1,11 @@
+export interface NewsMetadata {
+  id: string;
+  title_ja: string;
+  thumbnail: string;
+  category: string;
+  pubDate: number;
+}
+
 export interface NewsItem {
   id: string;
   title_ja: string;
@@ -5,5 +13,5 @@ export interface NewsItem {
   link: string;
   thumbnail: string;
   category: string;
-  pubDate: string;
+  pubDate: number;
 }

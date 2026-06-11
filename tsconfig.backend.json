@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["esnext"],
+    "types": ["@cloudflare/workers-types"],
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "tsBuildInfoFile": "./dist/tsconfig.backend.tsbuildinfo"
+  },
+  "include": ["functions/**/*.ts", "workers/**/*.ts"]
+}

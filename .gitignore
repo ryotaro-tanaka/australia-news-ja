@@ -32,3 +32,5 @@ notes/
 
 # Cloudflare Wrangler
 .wrangler
+
+*.tsbuildinfo

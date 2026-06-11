@@ -1,8 +1,10 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useNewsContext } from '../state/NewsContext';
 
 export function useNews() {
   const { state, dispatch } = useNewsContext();
+  const isInitialized = useRef(false);
+  const isFetchingMoreRef = useRef(false);
 
   const fetchNews = useCallback(async () => {
     dispatch({ type: 'FETCH_START' });
@@ -17,10 +19,11 @@ export function useNews() {
   }, [dispatch]);
 
   const loadMore = useCallback(async () => {
-    if (state.loadingMore || !state.hasMore || state.items.length === 0) return;
+    if (isFetchingMoreRef.current || !state.hasMore || state.items.length === 0) return;
 
+    isFetchingMoreRef.current = true;
     const lastItem = state.items[state.items.length - 1];
-    const cursor = new Date(lastItem.pubDate).getTime();
+    const cursor = lastItem.pubDate;
 
     dispatch({ type: 'FETCH_MORE_START' });
     try {
@@ -30,14 +33,17 @@ export function useNews() {
       dispatch({ type: 'APPEND_NEWS', payload: data });
     } catch (error) {
       dispatch({ type: 'FETCH_ERROR', payload: error instanceof Error ? error.message : 'Failed to load more' });
+    } finally {
+      isFetchingMoreRef.current = false;
     }
-  }, [dispatch, state.items, state.hasMore, state.loadingMore]);
+  }, [dispatch, state.items, state.hasMore]);
 
   useEffect(() => {
-    if (state.items.length === 0 && !state.loading && !state.error) {
+    if (!isInitialized.current) {
+      isInitialized.current = true;
       fetchNews();
     }
-  }, [fetchNews, state.items.length, state.loading, state.error]);
+  }, [fetchNews]);
 
   return {
     news: state.items,
