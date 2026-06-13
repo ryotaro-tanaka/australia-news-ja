@@ -15,5 +15,4 @@ export interface NewsItem {
   thumbnail: string;
   category: string;
   pubDate: number;
-  snippet_ja: string;
 }

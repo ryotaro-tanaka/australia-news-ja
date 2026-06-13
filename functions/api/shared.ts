@@ -20,7 +20,6 @@ export interface NewsItem {
   thumbnail: string;
   category: string;
   pubDate: number;
-  snippet_ja: string;
 }
 
 export interface NewsMetadata {
@@ -150,7 +149,7 @@ ${expandedText}
 }
 
 export function extractTagContent(itemXml: string, tagName: string): string {
-  const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
+  const regex = new RegExp `<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
   const match = itemXml.match(regex);
   if (match) return match[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
   return "";
@@ -164,7 +163,7 @@ export function extractAllCategories(itemXml: string): string[] {
   return categories;
 }
 
-export async function processNewsItem(item: RawNewsItem, env: Env): Promise<NewsItem> {
+export async function processNewsItem(item: RawNewsItem, env: Env): Promise<{ newsItem: NewsItem, snippet_ja: string }> {
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
   const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
@@ -174,7 +173,6 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<News
     id: item.id, 
     title_ja, 
     bodyJa, 
-    snippet_ja,
     link: item.link, 
     thumbnail: cleanThumbnailUrl(item.thumbnail), 
     category: item.category, 
@@ -182,7 +180,7 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<News
   };
   
   await env.NEWS_TRANSLATIONS.put(`ja:id:${item.id}`, JSON.stringify(newsItem), { expirationTtl: 259200 });
-  return newsItem;
+  return { newsItem, snippet_ja };
 }
 
 export { getThumbnail };
