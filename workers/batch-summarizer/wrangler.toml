@@ -10,7 +10,7 @@ binding = "AI"
 
 [[kv_namespaces]]
 binding = "NEWS_TRANSLATIONS"
-id = "60f52fbd7ad94b7bb79224184d4a8dc6"
+id = "5153c3cb172e445bb293d258ad1d4a0f"
 
 [[queues.producers]]
 binding = "NEWS_QUEUE"

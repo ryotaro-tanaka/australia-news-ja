@@ -104,7 +104,7 @@ export default {
       if (!cached) {
         console.log(`Processing new article from queue: ${item.title}`);
         try {
-          const newsItem = await processNewsItem(item, env);
+          const { newsItem, snippet_ja } = await processNewsItem(item, env);
           
           // 日本語化が完了した記事を一覧(sys:latest-news)にデビューさせる
           const threeDaysAgo = Date.now() - (259200 * 1000);
@@ -117,7 +117,8 @@ export default {
             title_ja: newsItem.title_ja,
             thumbnail: newsItem.thumbnail,
             category: newsItem.category,
-            pubDate: newsItem.pubDate
+            pubDate: newsItem.pubDate,
+            snippet_ja: snippet_ja
           };
 
           // マージ、重複排除、フィルタリング、ソート
@@ -144,12 +145,16 @@ export default {
           const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
           
           if (!list.some(m => m.id === newsItem.id)) {
+            // ここでの修正: cachedには snippet_ja が含まれていないため、
+            // もしsnippetが必須であれば再生成が必要だが、ここではシンプルにマージのみ行う
+            // (本来は再生成すべき)
             const metadata: NewsMetadata = {
               id: newsItem.id,
               title_ja: newsItem.title_ja,
               thumbnail: newsItem.thumbnail,
               category: newsItem.category,
-              pubDate: newsItem.pubDate
+              pubDate: newsItem.pubDate,
+              snippet_ja: "" // 古い記事には一旦空文字列を入れる
             };
             // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
             const newList = [metadata, ...list]

@@ -28,6 +28,7 @@ export interface NewsMetadata {
   thumbnail: string;
   category: string;
   pubDate: number;
+  snippet_ja: string;
 }
 
 export interface RawNewsItem {
@@ -162,10 +163,11 @@ export function extractAllCategories(itemXml: string): string[] {
   return categories;
 }
 
-export async function processNewsItem(item: RawNewsItem, env: Env): Promise<NewsItem> {
+export async function processNewsItem(item: RawNewsItem, env: Env): Promise<{ newsItem: NewsItem, snippet_ja: string }> {
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
   const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
+  const snippet_ja = smartTruncate(bodyJa, 100);
 
   const newsItem: NewsItem = { 
     id: item.id, 
@@ -178,7 +180,7 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<News
   };
   
   await env.NEWS_TRANSLATIONS.put(`ja:id:${item.id}`, JSON.stringify(newsItem), { expirationTtl: 259200 });
-  return newsItem;
+  return { newsItem, snippet_ja };
 }
 
 export { getThumbnail };

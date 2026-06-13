@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # KV Namespace ID (From wrangler.toml)
-NAMESPACE_ID="60f52fbd7ad94b7bb79224184d4a8dc6"
+NAMESPACE_ID="5153c3cb172e445bb293d258ad1d4a0f"
 
 echo "Listing keys with prefix 'ja:id:'..."
 # jq is required to parse the output
