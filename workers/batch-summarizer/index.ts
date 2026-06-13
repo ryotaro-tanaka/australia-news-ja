@@ -117,7 +117,8 @@ export default {
             title_ja: newsItem.title_ja,
             thumbnail: newsItem.thumbnail,
             category: newsItem.category,
-            pubDate: newsItem.pubDate
+            pubDate: newsItem.pubDate,
+            snippet_ja: newsItem.snippet_ja
           };
 
           // マージ、重複排除、フィルタリング、ソート
@@ -149,7 +150,8 @@ export default {
               title_ja: newsItem.title_ja,
               thumbnail: newsItem.thumbnail,
               category: newsItem.category,
-              pubDate: newsItem.pubDate
+              pubDate: newsItem.pubDate,
+              snippet_ja: newsItem.snippet_ja
             };
             // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
             const newList = [metadata, ...list]

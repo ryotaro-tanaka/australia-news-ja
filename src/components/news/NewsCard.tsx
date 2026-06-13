@@ -29,6 +29,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item }) => {
               <time className="pub-date">{formattedDate}</time>
             </div>
             <h2>{item.title_ja}</h2>
+            {item.snippet_ja && <p className="description">{item.snippet_ja}</p>}
           </div>
         </div>
       </Link>

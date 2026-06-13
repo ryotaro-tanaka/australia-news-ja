@@ -20,6 +20,7 @@ export interface NewsItem {
   thumbnail: string;
   category: string;
   pubDate: number;
+  snippet_ja: string;
 }
 
 export interface NewsMetadata {
@@ -28,6 +29,7 @@ export interface NewsMetadata {
   thumbnail: string;
   category: string;
   pubDate: number;
+  snippet_ja: string;
 }
 
 export interface RawNewsItem {
@@ -166,11 +168,13 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<News
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
   const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
+  const snippet_ja = smartTruncate(bodyJa, 100);
 
   const newsItem: NewsItem = { 
     id: item.id, 
     title_ja, 
     bodyJa, 
+    snippet_ja,
     link: item.link, 
     thumbnail: cleanThumbnailUrl(item.thumbnail), 
     category: item.category, 
