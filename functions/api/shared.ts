@@ -149,7 +149,7 @@ ${expandedText}
 }
 
 export function extractTagContent(itemXml: string, tagName: string): string {
-  const regex = new RegExp `<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
+  const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
   const match = itemXml.match(regex);
   if (match) return match[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
   return "";
