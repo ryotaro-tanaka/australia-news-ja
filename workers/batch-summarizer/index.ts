@@ -69,8 +69,8 @@ async function runTask(env: Env) {
     }
 
     // 4. キューへ詳細記事生成ジョブを投入
-    // ここでは一覧(sys:latest-news)の更新は行わない。
-    // 日本語化が完了した記事から順次、queueハンドラ内で一覧へ追加される。
+    // バッチプロデューサーは一覧 (`sys:latest-news`) の更新を行わず、
+    // 完了した記事はキュー処理側で一覧にデビューさせる。
     for (const item of latestItems) {
         await env.NEWS_QUEUE.send(item);
         console.log(`Queued article for processing: ${item.id}`);
