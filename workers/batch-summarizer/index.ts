@@ -137,39 +137,7 @@ export default {
           console.error(`Error processing queued item ${item.id}`);
           message.retry(); // 失敗したらリトライ
         }
-      } else {
-        // すでに詳細がある場合でも、一覧に含まれていない可能性（再構築中など）を考慮してマージを試みる
-        try {
-          const newsItem: NewsItem = JSON.parse(cached);
-          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
-          
-          if (!list.some(m => m.id === newsItem.id)) {
-            // ここでの修正: cachedには snippet_ja が含まれていないため、
-            // もしsnippetが必須であれば再生成が必要だが、ここではシンプルにマージのみ行う
-            // (本来は再生成すべき)
-            const metadata: NewsMetadata = {
-              id: newsItem.id,
-              title_ja: newsItem.title_ja,
-              thumbnail: newsItem.thumbnail,
-              category: newsItem.category,
-              pubDate: newsItem.pubDate,
-              snippet_ja: "" // 古い記事には一旦空文字列を入れる
-            };
-            // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
-            const newList = [metadata, ...list]
-              .filter(m => m.pubDate > (Date.now() - 259200 * 1000))
-              .sort((a, b) => b.pubDate - a.pubDate);
-            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
-              .slice(0, 100);
-            await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
-            console.log(`Existing article added back to list: ${newsItem.id}`);
-          }
-          message.ack();
-        } catch {
-          message.ack(); // パースエラーなどは無視
-        }
-      }
+
     }
   }
 };
