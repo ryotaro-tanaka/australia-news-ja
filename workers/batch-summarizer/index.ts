@@ -133,11 +133,45 @@ export default {
           console.log(`Article debuted in list: ${newsItem.id}`);
           
           message.ack();
-        } catch {
-          console.error(`Error processing queued item ${item.id}`);
-          message.retry(); // 失敗したらリトライ
+        } catch (e) {
+          console.error(`Error processing queued item ${item.id}`, e);
+          message.retry(); // 失敗したらリトリ	
         }
+      } else {
+        // Cache hit: ensure snippet_ja is present in the list metadata
+        console.log(`Cache hit for article ${item.id}`);
+        try {
+          const threeDaysAgo = Date.now() - (259200 * 1000);
+          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
+          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
 
+          const existing = list.find(m => m.id === item.id);
+          // If metadata exists but lacks snippet_ja, generate it
+          if (existing && !("snippet_ja" in existing)) {
+            const { snippet_ja } = await processNewsItem(item, env);
+            const updatedMeta: NewsMetadata = {
+              id: item.id,
+              title_ja: existing.title_ja,
+              thumbnail: existing.thumbnail,
+              category: existing.category,
+              pubDate: existing.pubDate,
+              snippet_ja,
+            };
+            const newList = [updatedMeta, ...list.filter(m => m.id !== item.id)];
+            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
+              .filter(m => m.pubDate > threeDaysAgo)
+              .sort((a, b) => b.pubDate - a.pubDate)
+              .slice(0, 100);
+            await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
+            console.log(`補完: snippet_ja for ${item.id}`);
+          }
+          // Acknowledge message regardless of whether we updated or not
+          message.ack();
+        } catch (e) {
+          console.error(`Error handling cache hit for ${item.id}`, e);
+          message.retry();
+        }
+      }
     }
   }
 };
