@@ -94,6 +94,9 @@ export default {
     const threeDaysAgo = Date.now() - (259200 * 1000);
     const pendingUpdates: NewsMetadata[] = [];
 
+    // Collect ids that hit cache so we can check snippet_ja presence in one KV GET
+    const idsToCheck = new Map<string, RawNewsItem>();
+
     for (const message of batch.messages) {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
@@ -104,42 +107,54 @@ export default {
         try {
           const { newsItem, snippet_ja } = await processNewsItem(item, env);
           // Prepare metadata for later batch update
-            pendingUpdates.push({
-              id: newsItem.id,
-              title_ja: newsItem.title_ja,
-              thumbnail: newsItem.thumbnail,
-              category: newsItem.category,
-              pubDate: newsItem.pubDate,
-              snippet_ja,
-            });
-            message.ack();
+          pendingUpdates.push({
+            id: newsItem.id,
+            title_ja: newsItem.title_ja,
+            thumbnail: newsItem.thumbnail,
+            category: newsItem.category,
+            pubDate: newsItem.pubDate,
+            snippet_ja,
+          });
+          message.ack();
         } catch (e) {
           console.error(`Error processing queued item ${item.id}`, e);
           message.retry();
           continue;
         }
       } else {
-        // Cache hit: ensure snippet_ja is present in the list metadata
+        // Cache hit: defer snippet presence checks until after loop to avoid repeated KV GET
         console.log(`Cache hit for article ${item.id}`);
-        try {
-          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
-          const existing = list.find(m => m.id === item.id);
-          if (existing && !("snippet_ja" in existing)) {
-            const { snippet_ja } = await processNewsItem(item, env);
-            pendingUpdates.push({ ...(existing as NewsMetadata), snippet_ja });
-            message.ack();
-          }
-        } catch (e) {
-          console.error(`Error handling cache hit for ${item.id}`, e);
-          message.retry();
-        }
+        idsToCheck.set(item.id, item);
+        message.ack();
       }
     }
-    // After processing all messages, merge pending updates into KV
+
+    // After processing all messages, perform a single sys:latest-news GET and fill missing snippets
     try {
       const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
       const currentList: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+
+      if (idsToCheck.size > 0) {
+        for (const [id, item] of idsToCheck) {
+          const existing = currentList.find(m => m.id === id);
+          if (!existing || !("snippet_ja" in existing)) {
+            try {
+              const { newsItem, snippet_ja } = await processNewsItem(item, env);
+              pendingUpdates.push({
+                id: newsItem.id,
+                title_ja: newsItem.title_ja,
+                thumbnail: newsItem.thumbnail,
+                category: newsItem.category,
+                pubDate: newsItem.pubDate,
+                snippet_ja,
+              });
+            } catch (e) {
+              console.error(`Error generating snippet for cached article ${id}`, e);
+            }
+          }
+        }
+      }
+
       const merged = [...pendingUpdates, ...currentList];
       const uniqueList = Array.from(new Map(merged.map(m => [m.id, m])).values())
         .filter(m => m.pubDate > threeDaysAgo)
