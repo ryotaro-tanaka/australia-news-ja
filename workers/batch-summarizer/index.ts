@@ -7,8 +7,8 @@ import {
   processNewsItem,
   cleanThumbnailUrl
 } from "../../functions/api/shared";
-import type { Env, RawNewsItem, NewsMetadata } from "../../functions/api/shared";
-import { cleanHtml } from "../../functions/api/utils";
+import type { Env, RawNewsItem, NewsMetadata, NewsDetail } from "../../functions/api/shared";
+import { cleanHtml, smartTruncate } from "../../functions/api/utils";
 
 async function runTask(env: Env) {
   console.log('runTask started');
@@ -122,7 +122,7 @@ export default {
           continue;
         }
       } else {
-        // Cache hit: defer snippet presence checks until after loop to avoid repeated KV GET
+        // Cache hit: use cached detail if possible, but still update metadata later if snippet is missing.
         console.log(`Cache hit for article ${item.id}`);
         idsToCheck.set(item.id, item);
         message.ack();
@@ -138,6 +138,27 @@ export default {
         for (const [id, item] of idsToCheck) {
           const existing = currentList.find(m => m.id === id);
           if (!existing || !("snippet_ja" in existing)) {
+            const cachedDetailRaw = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
+            if (cachedDetailRaw) {
+              try {
+                const cachedDetail = JSON.parse(cachedDetailRaw) as NewsDetail;
+                if (cachedDetail.bodyJa) {
+                  const snippet_ja = smartTruncate(cachedDetail.bodyJa, 100);
+                  pendingUpdates.push({
+                    id: cachedDetail.id,
+                    title_ja: cachedDetail.title_ja,
+                    thumbnail: cachedDetail.thumbnail,
+                    category: cachedDetail.category,
+                    pubDate: cachedDetail.pubDate,
+                    snippet_ja,
+                  });
+                  continue;
+                }
+              } catch (e) {
+                console.error(`Failed to parse cached detail for ${id}`, e);
+              }
+            }
+
             try {
               const { newsItem, snippet_ja } = await processNewsItem(item, env);
               pendingUpdates.push({
