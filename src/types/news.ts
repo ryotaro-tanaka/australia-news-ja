@@ -7,7 +7,7 @@ export interface NewsMetadata {
   snippet_ja: string;
 }
 
-export interface NewsItem {
+export interface NewsDetail {
   id: string;
   title_ja: string;
   bodyJa: string;
@@ -16,3 +16,5 @@ export interface NewsItem {
   category: string;
   pubDate: number;
 }
+
+export type NewsItem = NewsDetail;

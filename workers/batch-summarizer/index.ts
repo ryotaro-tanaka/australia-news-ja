@@ -7,13 +7,8 @@ import {
   processNewsItem,
   cleanThumbnailUrl
 } from "../../functions/api/shared";
-import type { 
-  Env, 
-  RawNewsItem,
-  NewsMetadata,
-  NewsItem
-} from "../../functions/api/shared";
-import { cleanHtml } from "../../functions/api/utils";
+import type { Env, RawNewsItem, NewsMetadata, NewsDetail } from "../../functions/api/shared";
+import { cleanHtml, smartTruncate } from "../../functions/api/utils";
 
 async function runTask(env: Env) {
   console.log('runTask started');
@@ -69,8 +64,8 @@ async function runTask(env: Env) {
     }
 
     // 4. キューへ詳細記事生成ジョブを投入
-    // ここでは一覧(sys:latest-news)の更新は行わない。
-    // 日本語化が完了した記事から順次、queueハンドラ内で一覧へ追加される。
+    // バッチプロデューサーは一覧 (`sys:latest-news`) の更新を行わず、
+    // 完了した記事はキュー処理側で一覧にデビューさせる。
     for (const item of latestItems) {
         await env.NEWS_QUEUE.send(item);
         console.log(`Queued article for processing: ${item.id}`);
@@ -96,80 +91,100 @@ export default {
     return new Response('Not found', { status: 404 });
   },
   async queue(batch: MessageBatch<RawNewsItem>, env: Env): Promise<void> {
+    const threeDaysAgo = Date.now() - (259200 * 1000);
+    const pendingUpdates: NewsMetadata[] = [];
+
+    // Collect ids that hit cache so we can check snippet_ja presence in one KV GET
+    const idsToCheck = new Map<string, RawNewsItem>();
+
     for (const message of batch.messages) {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
       const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
-      
+
       if (!cached) {
         console.log(`Processing new article from queue: ${item.title}`);
         try {
           const { newsItem, snippet_ja } = await processNewsItem(item, env);
-          
-          // 日本語化が完了した記事を一覧(sys:latest-news)にデビューさせる
-          const threeDaysAgo = Date.now() - (259200 * 1000);
-          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
-          
-          // メタデータの作成
-          const metadata: NewsMetadata = {
+          // Prepare metadata for later batch update
+          pendingUpdates.push({
             id: newsItem.id,
             title_ja: newsItem.title_ja,
             thumbnail: newsItem.thumbnail,
             category: newsItem.category,
             pubDate: newsItem.pubDate,
-            snippet_ja: snippet_ja
-          };
-
-          // マージ、重複排除、フィルタリング、ソート
-          // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
-          const newList = [metadata, ...list];
-          const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
-            .filter(m => m.pubDate > threeDaysAgo)
-            .sort((a, b) => b.pubDate - a.pubDate)
-            .slice(0, 100);
-
-          await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
-          console.log(`Article debuted in list: ${newsItem.id}`);
-          
+            snippet_ja,
+          });
           message.ack();
-        } catch {
-          console.error(`Error processing queued item ${item.id}`);
-          message.retry(); // 失敗したらリトライ
+        } catch (e) {
+          console.error(`Error processing queued item ${item.id}`, e);
+          message.retry();
+          continue;
         }
       } else {
-        // すでに詳細がある場合でも、一覧に含まれていない可能性（再構築中など）を考慮してマージを試みる
-        try {
-          const newsItem: NewsItem = JSON.parse(cached);
-          const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
-          const list: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
-          
-          if (!list.some(m => m.id === newsItem.id)) {
-            // ここでの修正: cachedには snippet_ja が含まれていないため、
-            // もしsnippetが必須であれば再生成が必要だが、ここではシンプルにマージのみ行う
-            // (本来は再生成すべき)
-            const metadata: NewsMetadata = {
-              id: newsItem.id,
-              title_ja: newsItem.title_ja,
-              thumbnail: newsItem.thumbnail,
-              category: newsItem.category,
-              pubDate: newsItem.pubDate,
-              snippet_ja: "" // 古い記事には一旦空文字列を入れる
-            };
-            // Keep only latest 100 items as a safety cap to stay well within 1MB KV limit and maintain frontend performance.
-            const newList = [metadata, ...list]
-              .filter(m => m.pubDate > (Date.now() - 259200 * 1000))
-              .sort((a, b) => b.pubDate - a.pubDate);
-            const uniqueList = Array.from(new Map(newList.map(m => [m.id, m])).values())
-              .slice(0, 100);
-            await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
-            console.log(`Existing article added back to list: ${newsItem.id}`);
+        // Cache hit: use cached detail if possible, but still update metadata later if snippet is missing.
+        console.log(`Cache hit for article ${item.id}`);
+        idsToCheck.set(item.id, item);
+        message.ack();
+      }
+    }
+
+    // After processing all messages, perform a single sys:latest-news GET and fill missing snippets
+    try {
+      const listRaw = await env.NEWS_TRANSLATIONS.get("sys:latest-news");
+      const currentList: NewsMetadata[] = listRaw ? JSON.parse(listRaw) : [];
+
+      if (idsToCheck.size > 0) {
+        for (const [id, item] of idsToCheck) {
+          const existing = currentList.find(m => m.id === id);
+          if (!existing || !("snippet_ja" in existing)) {
+            const cachedDetailRaw = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
+            if (cachedDetailRaw) {
+              try {
+                const cachedDetail = JSON.parse(cachedDetailRaw) as NewsDetail;
+                if (cachedDetail.bodyJa) {
+                  const snippet_ja = smartTruncate(cachedDetail.bodyJa, 100);
+                  pendingUpdates.push({
+                    id: cachedDetail.id,
+                    title_ja: cachedDetail.title_ja,
+                    thumbnail: cachedDetail.thumbnail,
+                    category: cachedDetail.category,
+                    pubDate: cachedDetail.pubDate,
+                    snippet_ja,
+                  });
+                  continue;
+                }
+              } catch (e) {
+                console.error(`Failed to parse cached detail for ${id}`, e);
+              }
+            }
+
+            try {
+              const { newsItem, snippet_ja } = await processNewsItem(item, env);
+              pendingUpdates.push({
+                id: newsItem.id,
+                title_ja: newsItem.title_ja,
+                thumbnail: newsItem.thumbnail,
+                category: newsItem.category,
+                pubDate: newsItem.pubDate,
+                snippet_ja,
+              });
+            } catch (e) {
+              console.error(`Error generating snippet for cached article ${id}`, e);
+            }
           }
-          message.ack();
-        } catch {
-          message.ack(); // パースエラーなどは無視
         }
       }
+
+      const merged = [...pendingUpdates, ...currentList];
+      const uniqueList = Array.from(new Map(merged.map(m => [m.id, m])).values())
+        .filter(m => m.pubDate > threeDaysAgo)
+        .sort((a, b) => b.pubDate - a.pubDate)
+        .slice(0, 100);
+      await env.NEWS_TRANSLATIONS.put("sys:latest-news", JSON.stringify(uniqueList));
+      console.log(`Batch metadata update completed with ${pendingUpdates.length} items`);
+    } catch (e) {
+      console.error("Error updating latest-news list after batch processing", e);
     }
   }
 };

@@ -12,7 +12,7 @@ export interface Env {
   NEWS_QUEUE: Queue;
 }
 
-export interface NewsItem {
+export interface NewsDetail {
   id: string;
   title_ja: string;
   bodyJa: string;
@@ -21,6 +21,8 @@ export interface NewsItem {
   category: string;
   pubDate: number;
 }
+
+export type NewsItem = NewsDetail;
 
 export interface NewsMetadata {
   id: string;
