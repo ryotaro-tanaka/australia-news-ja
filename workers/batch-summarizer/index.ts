@@ -5,7 +5,8 @@ import {
   extractAllCategories, 
   getThumbnail, 
   processNewsItem,
-  cleanThumbnailUrl
+  cleanThumbnailUrl,
+  PLACEHOLDER_SUMMARY
 } from "../../functions/api/shared";
 import type { Env, RawNewsItem, NewsMetadata, NewsDetail } from "../../functions/api/shared";
 import { cleanHtml, smartTruncate } from "../../functions/api/utils";
@@ -91,6 +92,7 @@ export default {
     return new Response('Not found', { status: 404 });
   },
   async queue(batch: MessageBatch<RawNewsItem>, env: Env): Promise<void> {
+    const RETRY_LIMIT = 3;
     const threeDaysAgo = Date.now() - (259200 * 1000);
     const pendingUpdates: NewsMetadata[] = [];
 
@@ -101,9 +103,10 @@ export default {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
       const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
+      const attempts = message.attempts ?? 1;
 
       if (!cached) {
-        console.log(`Processing new article from queue: ${item.title}`);
+        console.log(`Processing new article from queue: ${item.title} (attempt ${attempts}/${RETRY_LIMIT})`);
         try {
           const { newsItem, snippet_ja } = await processNewsItem(item, env);
           // Prepare metadata for later batch update
@@ -117,8 +120,25 @@ export default {
           });
           message.ack();
         } catch (e) {
-          console.error(`Error processing queued item ${item.id}`, e);
-          message.retry();
+          if (attempts < RETRY_LIMIT) {
+            console.error(`Error processing queued item ${item.id} (attempt ${attempts}/${RETRY_LIMIT}), retrying`, e);
+            message.retry();
+          } else {
+            console.error(`Max retries exceeded for item ${item.id} after ${attempts} attempts`, e);
+            await env.NEWS_TRANSLATIONS.put(
+              `failed:${item.id}`,
+              JSON.stringify({
+                id: item.id,
+                title: item.title,
+                link: item.link,
+                error: String(e),
+                attempts,
+                timestamp: Date.now()
+              }),
+              { expirationTtl: 604800 }  // 7 days
+            );
+            message.ack();
+          }
           continue;
         }
       } else {
@@ -137,12 +157,14 @@ export default {
       if (idsToCheck.size > 0) {
         for (const [id, item] of idsToCheck) {
           const existing = currentList.find(m => m.id === id);
-          if (!existing || !("snippet_ja" in existing)) {
+          const existingSnippet = existing?.snippet_ja;
+          const needsReprocess = !existing || !("snippet_ja" in existing) || existingSnippet === "";
+          if (needsReprocess) {
             const cachedDetailRaw = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
             if (cachedDetailRaw) {
               try {
                 const cachedDetail = JSON.parse(cachedDetailRaw) as NewsDetail;
-                if (cachedDetail.bodyJa) {
+                if (cachedDetail.bodyJa && cachedDetail.bodyJa.trim() !== PLACEHOLDER_SUMMARY) {
                   const snippet_ja = smartTruncate(cachedDetail.bodyJa, 100);
                   pendingUpdates.push({
                     id: cachedDetail.id,
@@ -154,6 +176,10 @@ export default {
                   });
                   continue;
                 }
+
+                console.warn(`Cached detail has invalid bodyJa for ${id}`, {
+                  bodyJa: cachedDetail.bodyJa?.slice(0, 120)
+                });
               } catch (e) {
                 console.error(`Failed to parse cached detail for ${id}`, e);
               }

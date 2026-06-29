@@ -22,6 +22,8 @@ export interface NewsDetail {
   pubDate: number;
 }
 
+export const PLACEHOLDER_SUMMARY = "要約を生成できませんでした。";
+
 export type NewsItem = NewsDetail;
 
 export interface NewsMetadata {
@@ -97,7 +99,9 @@ ${truncatedText}
       }
     });
 
-    return (response.response as string)?.trim() || null;
+    const result = (response.response as string)?.trim() || null;
+    console.log(`[generateFullSummary] inputLength=${truncatedText.length} resultLength=${result?.length ?? 0} first100=${result?.slice(0, 100) ?? ""}`);
+    return result;
   } catch (e) {
     console.error("Summary generation error:", e);
     return null;
@@ -168,8 +172,22 @@ export function extractAllCategories(itemXml: string): string[] {
 export async function processNewsItem(item: RawNewsItem, env: Env): Promise<{ newsItem: NewsItem, snippet_ja: string }> {
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
-  const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
-  const snippet_ja = smartTruncate(bodyJa, 100);
+
+  if (!fullText) {
+    throw new Error(`Empty extracted content for ${item.link}`);
+  }
+
+  let bodyJa = await generateFullSummary(env.AI, fullText);
+  let snippet_ja = "";
+
+  if (!bodyJa || bodyJa.trim() === PLACEHOLDER_SUMMARY) {
+    console.warn(`Summary generation failed for ${item.link}`, { id: item.id });
+    // Persist empty string when AI fails instead of placeholder
+    bodyJa = "";
+    snippet_ja = "";
+  } else {
+    snippet_ja = smartTruncate(bodyJa, 100);
+  }
 
   const newsItem: NewsItem = { 
     id: item.id, 
