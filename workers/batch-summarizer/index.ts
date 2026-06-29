@@ -92,6 +92,7 @@ export default {
     return new Response('Not found', { status: 404 });
   },
   async queue(batch: MessageBatch<RawNewsItem>, env: Env): Promise<void> {
+    const RETRY_LIMIT = 3;
     const threeDaysAgo = Date.now() - (259200 * 1000);
     const pendingUpdates: NewsMetadata[] = [];
 
@@ -102,9 +103,10 @@ export default {
       const item = message.body;
       const cacheKey = `ja:id:${item.id}`;
       const cached = await env.NEWS_TRANSLATIONS.get(cacheKey);
+      const attempts = message.attempts ?? 1;
 
       if (!cached) {
-        console.log(`Processing new article from queue: ${item.title}`);
+        console.log(`Processing new article from queue: ${item.title} (attempt ${attempts}/${RETRY_LIMIT})`);
         try {
           const { newsItem, snippet_ja } = await processNewsItem(item, env);
           // Prepare metadata for later batch update
@@ -118,8 +120,25 @@ export default {
           });
           message.ack();
         } catch (e) {
-          console.error(`Error processing queued item ${item.id}`, e);
-          message.retry();
+          if (attempts < RETRY_LIMIT) {
+            console.error(`Error processing queued item ${item.id} (attempt ${attempts}/${RETRY_LIMIT}), retrying`, e);
+            message.retry();
+          } else {
+            console.error(`Max retries exceeded for item ${item.id} after ${attempts} attempts`, e);
+            await env.NEWS_TRANSLATIONS.put(
+              `failed:${item.id}`,
+              JSON.stringify({
+                id: item.id,
+                title: item.title,
+                link: item.link,
+                error: String(e),
+                attempts,
+                timestamp: Date.now()
+              }),
+              { expirationTtl: 604800 }  // 7 days
+            );
+            message.ack();
+          }
           continue;
         }
       } else {
