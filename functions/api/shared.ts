@@ -99,7 +99,9 @@ ${truncatedText}
       }
     });
 
-    return (response.response as string)?.trim() || null;
+    const result = (response.response as string)?.trim() || null;
+    console.log(`[generateFullSummary] inputLength=${truncatedText.length} resultLength=${result?.length ?? 0} first100=${result?.slice(0, 100) ?? ""}`);
+    return result;
   } catch (e) {
     console.error("Summary generation error:", e);
     return null;
