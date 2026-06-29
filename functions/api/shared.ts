@@ -177,13 +177,17 @@ export async function processNewsItem(item: RawNewsItem, env: Env): Promise<{ ne
     throw new Error(`Empty extracted content for ${item.link}`);
   }
 
-  const bodyJa = await generateFullSummary(env.AI, fullText);
-  if (!bodyJa || bodyJa.trim() === PLACEHOLDER_SUMMARY) {
-    console.error(`Invalid summary result for ${item.link}`, { id: item.id, bodyJa });
-    throw new Error(`Failed to generate Japanese summary for ${item.link}`);
-  }
+  let bodyJa = await generateFullSummary(env.AI, fullText);
+  let snippet_ja = "";
 
-  const snippet_ja = smartTruncate(bodyJa, 100);
+  if (!bodyJa || bodyJa.trim() === PLACEHOLDER_SUMMARY) {
+    console.warn(`Summary generation failed for ${item.link}`, { id: item.id });
+    // Persist empty string when AI fails instead of placeholder
+    bodyJa = "";
+    snippet_ja = "";
+  } else {
+    snippet_ja = smartTruncate(bodyJa, 100);
+  }
 
   const newsItem: NewsItem = { 
     id: item.id, 

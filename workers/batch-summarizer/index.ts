@@ -157,7 +157,9 @@ export default {
       if (idsToCheck.size > 0) {
         for (const [id, item] of idsToCheck) {
           const existing = currentList.find(m => m.id === id);
-          if (!existing || !("snippet_ja" in existing)) {
+          const existingSnippet = existing?.snippet_ja;
+          const needsReprocess = !existing || !("snippet_ja" in existing) || existingSnippet === PLACEHOLDER_SUMMARY || existingSnippet === "";
+          if (needsReprocess) {
             const cachedDetailRaw = await env.NEWS_TRANSLATIONS.get(`ja:id:${id}`);
             if (cachedDetailRaw) {
               try {
