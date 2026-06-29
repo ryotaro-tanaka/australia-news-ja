@@ -22,6 +22,8 @@ export interface NewsDetail {
   pubDate: number;
 }
 
+export const PLACEHOLDER_SUMMARY = "要約を生成できませんでした。";
+
 export type NewsItem = NewsDetail;
 
 export interface NewsMetadata {
@@ -168,7 +170,17 @@ export function extractAllCategories(itemXml: string): string[] {
 export async function processNewsItem(item: RawNewsItem, env: Env): Promise<{ newsItem: NewsItem, snippet_ja: string }> {
   const title_ja = await translateText(env.AI, item.title) || item.title;
   const fullText = await extractFullContent(item.link);
-  const bodyJa = await generateFullSummary(env.AI, fullText) || "要約を生成できませんでした。";
+
+  if (!fullText) {
+    throw new Error(`Empty extracted content for ${item.link}`);
+  }
+
+  const bodyJa = await generateFullSummary(env.AI, fullText);
+  if (!bodyJa || bodyJa.trim() === PLACEHOLDER_SUMMARY) {
+    console.error(`Invalid summary result for ${item.link}`, { id: item.id, bodyJa });
+    throw new Error(`Failed to generate Japanese summary for ${item.link}`);
+  }
+
   const snippet_ja = smartTruncate(bodyJa, 100);
 
   const newsItem: NewsItem = { 

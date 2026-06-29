@@ -5,7 +5,8 @@ import {
   extractAllCategories, 
   getThumbnail, 
   processNewsItem,
-  cleanThumbnailUrl
+  cleanThumbnailUrl,
+  PLACEHOLDER_SUMMARY
 } from "../../functions/api/shared";
 import type { Env, RawNewsItem, NewsMetadata, NewsDetail } from "../../functions/api/shared";
 import { cleanHtml, smartTruncate } from "../../functions/api/utils";
@@ -142,7 +143,7 @@ export default {
             if (cachedDetailRaw) {
               try {
                 const cachedDetail = JSON.parse(cachedDetailRaw) as NewsDetail;
-                if (cachedDetail.bodyJa) {
+                if (cachedDetail.bodyJa && cachedDetail.bodyJa.trim() !== PLACEHOLDER_SUMMARY) {
                   const snippet_ja = smartTruncate(cachedDetail.bodyJa, 100);
                   pendingUpdates.push({
                     id: cachedDetail.id,
@@ -154,6 +155,10 @@ export default {
                   });
                   continue;
                 }
+
+                console.warn(`Cached detail has invalid bodyJa for ${id}`, {
+                  bodyJa: cachedDetail.bodyJa?.slice(0, 120)
+                });
               } catch (e) {
                 console.error(`Failed to parse cached detail for ${id}`, e);
               }
